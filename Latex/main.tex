@@ -158,19 +158,20 @@ Three compression methods each target a different axis:
 \textbf{(ii)}~structured pruning removes neurons or attention heads, shrinking~$N$~\citep{llmpruner};
 \textbf{(iii)}~token/KV eviction drops sequence entries, reducing~$M$~\citep{h2o,pyramidkv}.
 All three optimize \emph{size vs.\ accuracy} without checking whether the resulting dimensions satisfy GPU alignment constraints (e.g., whether $d \bmod 8 = 0$).
-The problem is pervasive: ASVD~\cite{asvd} produces 95\% misaligned dimensions, and even LLM-Pruner~\cite{llmpruner}---whose pruning granularity is relatively coarse---still leaves 17\% of weights misaligned (Table~\ref{tab:main_results}).
+The problem is pervasive: ASVD~\citep{asvd} produces 95\% misaligned dimensions, and even LLM-Pruner~\citep{llmpruner}---whose pruning granularity is relatively coarse---still leaves 17\% of weights misaligned (Table~\ref{tab:main_results}).
 Prior hardware-aware methods~\citep{halp2021,haloc2023} treat latency as a black-box, tying solutions on specific architectures such as CNNs without isolating root causes or providing parameter-budget guarantees.
 
 We propose \textbf{GAC} (GPU-Aligned Compression), a compression \emph{paradigm} that imposes hardware alignment constraints on any dimension-reducing compressor.
 GAC first identifies \emph{why} certain dimensions are slow via a full-stack analysis (\S\ref{sec:analysis}); next, it constrains a multi-choice knapsack optimizer to re-select aligned dimensions under the same parameter budget.
 GAC is a compressor-agnostic framework that restores speed without changing the upstream compressor's design.
 
-\noindent \textbf{Contributions.}\\
-\textbf{(1)}~We identify the \emph{dimensional misalignment} problem and demonstrate its prevalence across compressors (\S\ref{sec:misalignment}).\\
-\textbf{(2)}~We conduct a systematic full-stack analysis tracing root causes at the framework, library, and hardware levels (\S\ref{sec:analysis}).\\
-\textbf{(3)}~We formalize dimension selection as a constrained optimization and provide a dynamic programming solver (\S\ref{sec:gac}).\\
-\textbf{(4)}~Preliminary evaluation on Llama-3-8B achieves up to 1.5$\times$ speedup without sacrificing accuracy (\S\ref{sec:eval}).
-
+\paragraph{Contributions.}
+\begin{itemize}
+    \item We identify the \emph{dimensional misalignment} problem in compressed LLMs and demonstrate its prevalence across compressors (\S\ref{sec:misalignment}).
+    \item We conduct a systematic full-stack analysis to trace the root causes and categories them into three layers: framework, library, and hardware(\S\ref{sec:analysis}).
+    \item We formalize the dimension selection as a constrained optimization and provide a dynamic programming solver to guarantee the alignment (\S\ref{sec:gac}).
+    \item Preliminary evaluation on Llama-3-8B~\citep{llama3} achieves up to 1.5$\times$ speedup without sacrificing accuracy (\S\ref{sec:eval}).
+\end{itemize}
 
 %% ===========================================
 %% 2. DIMENSIONAL MISALIGNMENT
@@ -280,7 +281,7 @@ We observed a staircase pattern (Figure~\ref{fig:sdpa_latency}).
 First, multiples of 8 are faster: e.g., $d{=}129$ incurs $\sim$90\% higher latency than $d{=}128$.
 Profiling shows that PyTorch uses FlashAttention only when $d \bmod 8 = 0$; otherwise it falls back to the Math kernel.
 Second, among 8-aligned dimensions, latency rises in a staircase at every 32-dimension boundary.
-This is caused by FlashAttention-2(FA2)'s template mechanism: FA2 selects the smallest template $t \geq d$ and assigns a tile shape $B_r {\times} B_c$ accordingly (Table~\ref{tab:fa2_templates}).
+This is caused by FlashAttention-2 (FA2)'s template mechanism: FA2 selects the smallest template $t \geq d$ and assigns a tile shape $B_r {\times} B_c$ accordingly (Table~\ref{tab:fa2_templates}).
 Crossing a template boundary (e.g., $d{=}128 \to 129$) halves $B_c$ and increases latency.
 In Figure~\ref{fig:sdpa_latency}, alternating shades mark template regions; labels such as ``$t{=}96$, $B_r {\times} B_c{=}128{\times}64$'' show the template and tile shape.
 \begin{figure}[t]
