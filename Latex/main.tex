@@ -158,12 +158,12 @@ Three compression methods each target a different axis:
 \textbf{(i)}~low-rank factorization replaces $W$ with two factors $A{\cdot}B$, introducing a reduced rank $r$ as the inner dimension of two smaller GEMMs~\citep{asvd,palu,svdllm2024};
 \textbf{(ii)}~structured pruning removes neurons or attention heads, shrinking~$N$~\citep{llmpruner};
 \textbf{(iii)}~token/KV eviction drops sequence entries, reducing~$M$~\citep{h2o,pyramidkv}.
-All three optimize \emph{size vs.\ accuracy} without checking whether the resulting dimensions satisfy GPU alignment constraints (e.g., $d \bmod 8 = 0$).
+All three optimize \emph{size vs.\ accuracy} without checking whether the resulting dimensions satisfy GPU alignment constraints (e.g., whether $d \bmod 8 = 0$).
 The problem is pervasive: ASVD~\cite{asvd} produces 95\% misaligned dimensions, and even LLM-Pruner~\cite{llmpruner}---whose pruning granularity is relatively coarse---still leaves 17\% of weights misaligned (Table~\ref{tab:main_results}).
 Prior hardware-aware methods~\citep{halp2021,haloc2023} treat latency as a black-box, tying solutions on specific architectures such as CNNs without isolating root causes or providing parameter-budget guarantees.
 
 We propose \textbf{GAC} (GPU-Aligned Compression), a compression \emph{paradigm} that imposes hardware alignment constraints on any dimension-reducing compressor.
-GAC first identifies \emph{why} certain dimensions are slow via a full-stack analysis (\S\ref{sec:analysis}), then constrains a multi-choice knapsack optimizer to re-select aligned dimensions under the same parameter budget.
+GAC first identifies \emph{why} certain dimensions are slow via a full-stack analysis (\S\ref{sec:analysis}); next, it constrains a multi-choice knapsack optimizer to re-select aligned dimensions under the same parameter budget.
 GAC is a compressor-agnostic framework that restores speed without changing the upstream compressor's design.
 
 \noindent \textbf{Contributions.}\\
@@ -502,7 +502,7 @@ In practice, the DP runs in under one second on CPU---negligible compared to the
 \subsection{Setup}
 
 We evaluate on Llama-3-8B with $\rho=15\%$, using PyTorch~2.9.1, CUDA~12.8, and FP16. Experiments were conducted on two architectures: NVIDIA Ampere (A100-80GB) and Hopper (H100-80GB). Unless stated otherwise, the results are collected from A100.
-We also repeated some experiments on H100, which confirmed similar patterns (see Appendix~\ref{app:h100}).
+We also repeated a subset of the experiments (due to costs) on H100, which confirmed similar patterns (see Appendix~\ref{app:h100}).
 We select two representative compressors that alter tensor dimensions in orthogonal ways:
 \textbf{(1)~ASVD}~\citep{asvd}: activation-aware SVD ($W \to A \cdot B$) across all projection weights\footnote{All 32 layers $\times$ 7 projections (Q, K, V, O, gate, up, down) = 224 weights.}.
 \textbf{(2)~LLM-Pruner}~\citep{llmpruner}: structured pruning of MLP weights\footnote{Layers 3--31 (29/32 layers); gate\_proj as pruning root, propagating to up\_proj and down\_proj.}.
