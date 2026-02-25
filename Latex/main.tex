@@ -114,7 +114,7 @@ We evaluate GAC on Llama-3-8B with ASVD and LLM-Pruner, achieving 100\% alignmen
 Large Language Models (LLMs) deliver strong capabilities, but their scale hinders deployment.
 Post-training compression reduces model size and can be categorized into three families: \emph{quantization}~\cite{gptq,awq}, \emph{sparsification}~\cite{sparsegpt,wanda}, and \emph{dimension reduction}~\cite{asvd,palu,pyramidkv}.
 Quantization and sparsification preserve tensor shapes and are therefore compatible with existing GPU kernels.
-Pretrained model comes with carefully designed dimensions that are GPU-friendly, such as 8-aligned dimensions for FlashAttention.
+Pretrained model comes with carefully designed dimensions that are GPU-friendly, such as 8-aligned dimensions for FlashAttention~\cite{flashattention}.
 Dimension reduction, however, alters the tensor shapes, often producing \emph{irregular} dimensions (e.g., dimension reduced from 128 to 107), which conflict with GPU execution primitives---Tensor Core tiles, cuBLAS kernels, and framework backend selection---causing a counterintuitive outcome: \emph{models with \textbf{fewer} parameters run \textbf{slower} than uncompressed ones}.
 We term this phenomenon \textbf{dimensional misalignment}.
 
@@ -153,7 +153,7 @@ $W{\in}\mathbb{R}^{K \times N}$.}
 \label{fig:GEMM_dims}
 \end{figure}
 
-To see why, consider one of the core operators in LLMs, GEMM (General Matrix Multiply) $Y{=}X{\cdot}W$ (Figure~\ref{fig:GEMM_dims}), with sequence dimension~$M$, inner dimension~$K$, and output dimension~$N$.
+To see why, consider one of the core operators in LLMs, GEMM (General Matrix Multiply) in the expression: $Y{=}X{\cdot}W$ (Figure~\ref{fig:GEMM_dims}), with sequence dimension~$M$, inner dimension~$K$, and output dimension~$N$.
 Three compression methods each target a different axis:
 \textbf{(i)}~low-rank factorization replaces $W$ with two factors $A{\cdot}B$, introducing a reduced rank $r$ as the inner dimension of two smaller GEMMs~\citep{asvd,palu,svdllm2024};
 \textbf{(ii)}~structured pruning removes neurons or attention heads, shrinking~$N$~\citep{llmpruner};
