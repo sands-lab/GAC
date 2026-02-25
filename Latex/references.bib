@@ -1,27 +1,37 @@
-@article{flashattention,
-  title={Flashattention: Fast and memory-efficient exact attention with io-awareness},
-  author={Dao, Tri and Fu, Dan and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
-  journal={Advances in neural information processing systems},
-  volume={35},
-  pages={16344--16359},
-  year={2022}
+@inproceedings{flashattention,
+ author = {Dao, Tri and Fu, Dan and Ermon, Stefano and Rudra, Atri and R\'{e}, Christopher},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh},
+ pages = {16344--16359},
+ publisher = {Curran Associates, Inc.},
+ title = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2022/file/67d57c32e20fd0a7a302cb81d36e40d5-Paper-Conference.pdf},
+ volume = {35},
+ year = {2022}
 }
 
-@article{flashattention2,
-  title={Flashattention-2: Faster attention with better parallelism and work partitioning},
-  author={Dao, Tri},
-  journal={arXiv preprint arXiv:2307.08691},
-  year={2023}
+
+@inproceedings{
+flashattention2,
+title={FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning},
+author={Tri Dao},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=mZn2Xyh9Ec}
 }
 
-@article{flashattention3,
-  title={Flashattention-3: Fast and accurate attention with asynchrony and low-precision},
-  author={Shah, Jay and Bikshandi, Ganesh and Zhang, Ying and Thakkar, Vijay and Ramani, Pradeep and Dao, Tri},
-  journal={Advances in Neural Information Processing Systems},
-  volume={37},
-  pages={68658--68685},
-  year={2024}
+@inproceedings{flashattention3,
+ author = {Dao, Tri and Fu, Dan and Ermon, Stefano and Rudra, Atri and R\'{e}, Christopher},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh},
+ pages = {16344--16359},
+ publisher = {Curran Associates, Inc.},
+ title = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2022/file/67d57c32e20fd0a7a302cb81d36e40d5-Paper-Conference.pdf},
+ volume = {35},
+ year = {2022}
 }
+
 
 @misc{nvidia_hopper_whitepaper,
   title={NVIDIA H100 Tensor Core GPU Architecture},
@@ -31,27 +41,36 @@
   note={\url{https://resources.nvidia.com/en-us-hopper-architecture/nvidia-h100-tensor-c}}
 }
 
-@article{palu,
-  title={Palu: Compressing kv-cache with low-rank projection},
-  author={Chang, Chi-Chih and Lin, Wei-Cheng and Lin, Chien-Yu and Chen, Chong-Yan and Hu, Yu-Fang and Wang, Pei-Shuo and Huang, Ning-Chi and Ceze, Luis and Abdelfattah, Mohamed S and Wu, Kai-Chiang},
-  journal={arXiv preprint arXiv:2407.21118},
-  year={2024}
+@inproceedings{
+palu,
+title={Palu: {KV}-Cache Compression with Low-Rank Projection},
+author={Chi-Chih Chang and Wei-Cheng Lin and Chien-Yu Lin and Chong-Yan Chen and Yu-Fang Hu and Pei-Shuo Wang and Ning-Chi Huang and Luis Ceze and Mohamed S. Abdelfattah and Kai-Chiang Wu},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=LWMS4pk2vK}
 }
 
 @inproceedings{sparsegpt,
-  title={Sparsegpt: Massive language models can be accurately pruned in one-shot},
-  author={Frantar, Elias and Alistarh, Dan},
-  booktitle={International conference on machine learning},
-  pages={10323--10337},
-  year={2023},
-  organization={PMLR}
+author = {Frantar, Elias and Alistarh, Dan},
+title = {SparseGPT: massive language models can be accurately pruned in one-shot},
+year = {2023},
+publisher = {JMLR.org},
+abstract = {We show for the first time that large-scale generative pretrained transformer (GPT) family models can be pruned to at least 50\% sparsity in one-shot, without any retraining, at minimal loss of accuracy. This is achieved via a new pruning method called SparseGPT, specifically designed to work efficiently and accurately on massive GPT-family models. We can execute SparseGPT on the largest available open-source models, OPT-175B and BLOOM-176B, in under 4.5 hours, and can reach 60\% unstructured sparsity with negligible increase in perplexity: remarkably, more than 100 billion weights from these models can be ignored at inference time. SparseGPT generalizes to semi-structured (2:4 and 4:8) patterns, and is compatible with weight quantization approaches. The code is available at: https://github.com/IST-DASLab/ sparsegpt.},
+booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+articleno = {414},
+numpages = {15},
+location = {Honolulu, Hawaii, USA},
+series = {ICML'23}
 }
 
-@article{gptq,
-  title={Gptq: Accurate post-training quantization for generative pre-trained transformers},
-  author={Frantar, Elias and Ashkboos, Saleh and Hoefler, Torsten and Alistarh, Dan},
-  journal={arXiv preprint arXiv:2210.17323},
-  year={2022}
+@misc{gptq,
+      title={GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers}, 
+      author={Elias Frantar and Saleh Ashkboos and Torsten Hoefler and Dan Alistarh},
+      year={2023},
+      eprint={2210.17323},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2210.17323}, 
 }
 
 @misc{cutlass,
@@ -68,14 +87,17 @@
   year={2024}
 }
 
-@article{awq,
-  title={Awq: Activation-aware weight quantization for on-device llm compression and acceleration},
-  author={Lin, Ji and Tang, Jiaming and Tang, Haotian and Yang, Shang and Chen, Wei-Ming and Wang, Wei-Chen and Xiao, Guangxuan and Dang, Xingyu and Gan, Chuang and Han, Song},
-  journal={Proceedings of machine learning and systems},
-  volume={6},
-  pages={87--100},
-  year={2024}
+@inproceedings{awq,
+ author = {Lin, Ji and Tang, Jiaming and Tang, Haotian and Yang, Shang and Chen, Wei-Ming and Wang, Wei-Chen and Xiao, Guangxuan and Dang, Xingyu and Gan, Chuang and Han, Song},
+ booktitle = {Proceedings of Machine Learning and Systems},
+ editor = {P. Gibbons and G. Pekhimenko and C. De Sa},
+ pages = {87--100},
+ title = {AWQ: Activation-aware Weight Quantization for On-Device LLM Compression and Acceleration},
+ url = {https://proceedings.mlsys.org/paper_files/paper/2024/file/42a452cbafa9dd64e9ba4aa95cc1ef21-Paper-Conference.pdf},
+ volume = {6},
+ year = {2024}
 }
+
 
 @article{mqa,
   title={Fast transformer decoding: One write-head is all you need},
@@ -106,11 +128,20 @@
 }
 
 @inproceedings{vllm,
-  title={Efficient memory management for large language model serving with pagedattention},
-  author={Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
-  booktitle={Proceedings of the 29th symposium on operating systems principles},
-  pages={611--626},
-  year={2023}
+author = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
+title = {Efficient Memory Management for Large Language Model Serving with PagedAttention},
+year = {2023},
+isbn = {9798400702297},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3600006.3613165},
+doi = {10.1145/3600006.3613165},
+abstract = {High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4\texttimes{} with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.},
+booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+pages = {611–626},
+numpages = {16},
+location = {Koblenz, Germany},
+series = {SOSP '23}
 }
 
 @article{rap,
@@ -236,11 +267,17 @@
 
 % ===== HIGH PRIORITY (80+) =====
 
-@article{quest,
-  title={Quest: Query-aware sparsity for efficient long-context llm inference},
-  author={Tang, Jiaming and Zhao, Yilong and Zhu, Kan and Xiao, Guangxuan and Kasikci, Baris and Han, Song},
-  journal={arXiv preprint arXiv:2406.10774},
-  year={2024}
+@inproceedings{quest,
+author = {Tang, Jiaming and Zhao, Yilong and Zhu, Kan and Xiao, Guangxuan and Kasikci, Baris and Han, Song},
+title = {QUEST: query-aware sparsity for efficient long-context LLM inference},
+year = {2024},
+publisher = {JMLR.org},
+abstract = {As the demand for long-context large language models (LLMs) increases, models with context windows of up to 128K or 1M tokens are becoming increasingly prevalent. However, long-context LLM inference is challenging since the inference speed decreases significantly as the sequence length grows. This slowdown is primarily caused by loading a large KV cache during self-attention. Previous works have shown that a small portion of critical tokens will dominate the attention outcomes. However, we observe the criticality of a token highly depends on the query. To this end, we propose Quest, a query-aware KV cache selection algorithm. Quest keeps track of the minimal and maximal Key values in KV cache pages and estimates the criticality of a given page using Query vectors. By only loading the Top-K critical KV cache pages for attention, Quest significantly speeds up self-attention without sacrificing accuracy. We show that Quest can achieve up to 7.03\texttimes{} self-attention speedup, which reduces inference latency by 2.23\texttimes{} while performing well on tasks with long dependencies with negligible accuracy loss. Code is available at https://github.com/mit-han-lab/quest.},
+booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+articleno = {1955},
+numpages = {11},
+location = {Vienna, Austria},
+series = {ICML'24}
 }
 
 % ===== COMPRESSION METHODS =====
@@ -252,20 +289,27 @@
   year={2023}
 }
 
-@article{h2o,
-  title={H2o: Heavy-hitter oracle for efficient generative inference of large language models},
-  author={Zhang, Zhenyu and Sheng, Ying and Zhou, Tianyi and Chen, Tianlong and Zheng, Lianmin and Cai, Ruisi and Song, Zhao and Tian, Yuandong and R{\'e}, Christopher and Barrett, Clark and others},
-  journal={Advances in Neural Information Processing Systems},
-  volume={36},
-  pages={34661--34710},
-  year={2023}
+@inproceedings{h2o,
+ author = {Zhang, Zhenyu and Sheng, Ying and Zhou, Tianyi and Chen, Tianlong and Zheng, Lianmin and Cai, Ruisi and Song, Zhao and Tian, Yuandong and R\'{e}, Christopher and Barrett, Clark and Wang, Zhangyang "Atlas" and Chen, Beidi},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {A. Oh and T. Naumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+ pages = {34661--34710},
+ publisher = {Curran Associates, Inc.},
+ title = {H2O: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2023/file/6ceefa7b15572587b78ecfcebb2827f8-Paper-Conference.pdf},
+ volume = {36},
+ year = {2023}
 }
 
-@article{pyramidkv,
-  title={Pyramidkv: Dynamic kv cache compression based on pyramidal information funneling},
-  author={Cai, Zefan and Zhang, Yichi and Gao, Bofei and Liu, Yuliang and Li, Yucheng and Liu, Tianyu and Lu, Keming and Xiong, Wayne and Dong, Yue and Hu, Junjie and others},
-  journal={arXiv preprint arXiv:2406.02069},
-  year={2024}
+
+@misc{pyramidkv,
+      title={PyramidKV: Dynamic KV Cache Compression based on Pyramidal Information Funneling}, 
+      author={Zefan Cai and Yichi Zhang and Bofei Gao and Yuliang Liu and Yucheng Li and Tianyu Liu and Keming Lu and Wayne Xiong and Yue Dong and Junjie Hu and Wen Xiao},
+      year={2025},
+      eprint={2406.02069},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2406.02069}, 
 }
 
 @article{snapkv,
@@ -425,20 +469,28 @@
 % ===== HARDWARE-AWARE COMPRESSION =====
 
 @inproceedings{haloc2023,
-  title={HALOC: hardware-aware automatic low-rank compression for compact neural networks},
-  author={Xiao, Jinqi and Zhang, Chengming and Gong, Yu and Yin, Miao and Sui, Yang and Xiang, Lizhi and Tao, Dingwen and Yuan, Bo},
-  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
-  volume={37},
-  number={9},
-  pages={10464--10472},
-  year={2023}
+author = {Xiao, Jinqi and Zhang, Chengming and Gong, Yu and Yin, Miao and Sui, Yang and Xiang, Lizhi and Tao, Dingwen and Yuan, Bo},
+title = {HALOC: hardware-aware automatic low-rank compression for compact neural networks},
+year = {2023},
+isbn = {978-1-57735-880-0},
+publisher = {AAAI Press},
+url = {https://doi.org/10.1609/aaai.v37i9.26244},
+doi = {10.1609/aaai.v37i9.26244},
+abstract = {Low-rank compression is an important model compression strategy for obtaining compact neural network models. In general, because the rank values directly determine the model complexity and model accuracy, proper selection of layer-wise rank is very critical and desired. To date, though many low-rank compression approaches, either selecting the ranks in a manual or automatic way, have been proposed, they suffer from costly manual trials or unsatisfied compression performance. In addition, all of the existing works are not designed in a hardware-aware way, limiting the practical performance of the compressed models on real-world hardware platforms. To address these challenges, in this paper we propose HALOC, a hardware-aware automatic low-rank compression framework. By interpreting automatic rank selection from an architecture search perspective, we develop an end-to-end solution to determine the suitable layer-wise ranks in a differentiable and hardware-aware way. We further propose design principles and mitigation strategy to efficiently explore the rank space and reduce the potential interference problem.Experimental results on different datasets and hardware platforms demonstrate the effectiveness of our proposed approach. On CIFAR-10 dataset, HALOC enables 0.07\% and 0.38\% accuracy increase over the uncompressed ResNet-20 and VGG-16 models with 72.20\% and 86.44\% fewer FLOPs, respectively. On ImageNet dataset, HALOC achieves 0.9\% higher top-1 accuracy than the original ResNet-18 model with 66.16\% fewer FLOPs. HALOC also shows 0.66\% higher top-1 accuracy increase than the state-of-the-art automatic low-rank compression solution with fewer computational and memory costs. In addition, HALOC demonstrates the practical speedups on different hardware platforms, verified by the measurement results on desktop GPU, embedded GPU and ASIC accelerator.},
+booktitle = {Proceedings of the Thirty-Seventh AAAI Conference on Artificial Intelligence and Thirty-Fifth Conference on Innovative Applications of Artificial Intelligence and Thirteenth Symposium on Educational Advances in Artificial Intelligence},
+articleno = {1175},
+numpages = {9},
+series = {AAAI'23/IAAI'23/EAAI'23}
 }
 
-@article{halp2021,
-  title={Halp: hardware-aware latency pruning},
-  author={Shen, Maying and Yin, Hongxu and Molchanov, Pavlo and Mao, Lei and Liu, Jianna and Alvarez, Jose M},
-  journal={arXiv preprint arXiv:2110.10811},
-  year={2021}
+@misc{halp2021,
+      title={HALP: Hardware-Aware Latency Pruning}, 
+      author={Maying Shen and Hongxu Yin and Pavlo Molchanov and Lei Mao and Jianna Liu and Jose M. Alvarez},
+      year={2021},
+      eprint={2110.10811},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2110.10811}, 
 }
 
 @inproceedings{amc2018,
@@ -465,11 +517,13 @@
 
 % ===== SVD-BASED COMPRESSION =====
 
-@inproceedings{svdllm2024,
-  title={SVD-LLM: Truncation-aware Singular Value Decomposition for Large Language Model Compression},
-  author={Wang, Xin and Zheng, Yu and Wan, Zhongwei and Zhang, Mi},
-  booktitle={International Conference on Learning Representations},
-  year={2025}
+@inproceedings{
+svdllm2024,
+title={{SVD}-{LLM}: Truncation-aware Singular Value Decomposition for Large Language Model Compression},
+author={Xin Wang and Yu Zheng and Zhongwei Wan and Mi Zhang},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=LNYIUouhdt}
 }
 
 @inproceedings{fwsvd2022,
@@ -537,12 +591,14 @@
 
 % ===== PRUNING METHODS =====
 
-@inproceedings{taylor_pruning,
-  title={Importance estimation for neural network pruning},
-  author={Molchanov, Pavlo and Mallya, Arun and Tyree, Stephen and Frosio, Iuri and Kautz, Jan},
-  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
-  pages={11264--11272},
-  year={2019}
+@misc{taylor_pruning,
+      title={Importance Estimation for Neural Network Pruning}, 
+      author={Pavlo Molchanov and Arun Mallya and Stephen Tyree and Iuri Frosio and Jan Kautz},
+      year={2019},
+      eprint={1906.10771},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1906.10771}, 
 }
 
 @inproceedings{structured_pruning_iclr2024,
@@ -632,27 +688,36 @@
 
 % ===== ASVD, LLM-Pruner, Wanda =====
 
-@article{asvd,
-  title={Asvd: Activation-aware singular value decomposition for compressing large language models},
-  author={Yuan, Zhihang and Shang, Yuzhang and Song, Yue and Yang, Dawei and Wu, Qiang and Yan, Yan and Sun, Guangyu},
-  journal={arXiv preprint arXiv:2312.05821},
-  year={2023}
+@misc{asvd,
+      title={ASVD: Activation-aware Singular Value Decomposition for Compressing Large Language Models}, 
+      author={Zhihang Yuan and Yuzhang Shang and Yue Song and Dawei Yang and Qiang Wu and Yan Yan and Guangyu Sun},
+      year={2025},
+      eprint={2312.05821},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2312.05821}, 
 }
 
-@article{llmpruner,
-  title={Llm-pruner: On the structural pruning of large language models},
-  author={Ma, Xinyin and Fang, Gongfan and Wang, Xinchao},
-  journal={Advances in neural information processing systems},
-  volume={36},
-  pages={21702--21720},
-  year={2023}
+@inproceedings{llmpruner,
+ author = {Ma, Xinyin and Fang, Gongfan and Wang, Xinchao},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {A. Oh and T. Naumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+ pages = {21702--21720},
+ publisher = {Curran Associates, Inc.},
+ title = {LLM-Pruner: On the Structural Pruning of Large Language Models},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2023/file/44956951349095f74492a5471128a7e0-Paper-Conference.pdf},
+ volume = {36},
+ year = {2023}
 }
 
-@article{wanda,
-  title={A simple and effective pruning approach for large language models},
-  author={Sun, Mingjie and Liu, Zhuang and Bair, Anna and Kolter, J Zico},
-  journal={arXiv preprint arXiv:2306.11695},
-  year={2023}
+
+@inproceedings{
+wanda,
+title={A Simple and Effective Pruning Approach for Large Language Models},
+author={Mingjie Sun and Zhuang Liu and Anna Bair and J Zico Kolter},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=PxoFut3dWW}
 }
 
 % ===== END OF ADDITIONS =====
