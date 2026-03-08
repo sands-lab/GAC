@@ -1,6 +1,6 @@
 [submodule "third_party/RAP"]
 	path = third_party/RAP
-	url = https://github.com/JihaoXin/RAP.git
+	url = https://github.com/sands-lab/RAP.git
 [submodule "third_party/SVD-LLM"]
 	path = third_party/SVD-LLM
 	url = https://github.com/AIoT-MLSys-Lab/SVD-LLM.git
