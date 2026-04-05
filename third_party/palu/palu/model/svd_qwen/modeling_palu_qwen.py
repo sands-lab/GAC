@@ -9,6 +9,8 @@ class PaluQwen2ForCausalLM(Qwen2ForCausalLM):
     def __init__(self, config: PaluQwen2Config):
         super().__init__(config)
         self.head_wise_ranks=config.head_wise_ranks
+        self.dimension_repair_strategy = getattr(config, "dimension_repair_strategy", None)
+        self.dimension_repair_max_overhead_pct = getattr(config, "dimension_repair_max_overhead_pct", 20.0)
 
         full_name_dict = {module: name for name, module in self.named_modules()}
         linear_info = {}
@@ -34,7 +36,9 @@ class PaluQwen2ForCausalLM(Qwen2ForCausalLM):
                     self.head_wise_ranks[name],
                     module.in_features,
                     module.out_features,
-                    bias=module.bias is not None
+                    bias=module.bias is not None,
+                    repair_strategy=self.dimension_repair_strategy,
+                    repair_max_overhead_pct=self.dimension_repair_max_overhead_pct,
                 )
                 setattr(info["father"], info["name"], new_layer)
     

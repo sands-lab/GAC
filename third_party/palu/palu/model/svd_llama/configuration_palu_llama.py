@@ -112,6 +112,8 @@ class PaluLlamaConfig(PretrainedConfig):
         attention_bias=False,
         mlp_bias=False,
         head_wise_ranks=None,
+        dimension_repair_strategy=None,
+        dimension_repair_max_overhead_pct=20.0,
         **kwargs,
     ):
         self.vocab_size = vocab_size
@@ -147,6 +149,8 @@ class PaluLlamaConfig(PretrainedConfig):
 
         # for avsd
         self.head_wise_ranks = head_wise_ranks
+        self.dimension_repair_strategy = dimension_repair_strategy
+        self.dimension_repair_max_overhead_pct = dimension_repair_max_overhead_pct
         
     def _rope_scaling_validation(self):
         """

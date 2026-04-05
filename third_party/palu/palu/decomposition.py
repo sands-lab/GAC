@@ -1,4 +1,5 @@
 from loguru import logger
+import inspect
 import torch.nn as nn
 import torch
 import os
@@ -6,6 +7,7 @@ import click
 from tqdm import tqdm
 from .data_utils import get_calib_data
 from .model import HeadwiseLowRankModule
+from .rank_repair import repair_selection_result
 
 def find_layers(module, layers=[nn.Conv2d, nn.Linear], name=''):
     if type(module) in layers:
@@ -17,9 +19,66 @@ def find_layers(module, layers=[nn.Conv2d, nn.Linear], name=''):
         ))
     return res
 
+
+def _resolve_whiten_runtime_components(model):
+    candidates = [model]
+    seen = set()
+
+    while candidates:
+        candidate = candidates.pop(0)
+        if candidate is None or id(candidate) in seen:
+            continue
+        seen.add(id(candidate))
+
+        for attr in ("model", "decoder", "transformer"):
+            nested = getattr(candidate, attr, None)
+            if nested is not None:
+                candidates.append(nested)
+
+        layers = getattr(candidate, "layers", None)
+        embed_tokens = getattr(candidate, "embed_tokens", None)
+        norm = getattr(candidate, "norm", None)
+        if norm is None:
+            norm = getattr(candidate, "final_layer_norm", None)
+
+        if layers is None or embed_tokens is None or norm is None:
+            continue
+
+        return {
+            "root": candidate,
+            "layers": layers,
+            "embed_tokens": embed_tokens,
+            "norm": norm,
+            "rotary_emb": getattr(candidate, "rotary_emb", None),
+        }
+
+    raise ValueError(
+        f"Unsupported model structure for whiten decomposition: {type(model).__name__}"
+    )
+
+
+def _build_whiten_layer_kwargs(layer, runtime_components, hidden_states, attention_mask, position_ids):
+    parameter_names = inspect.signature(layer.forward).parameters
+    kwargs = {}
+
+    if "attention_mask" in parameter_names and attention_mask is not None:
+        kwargs["attention_mask"] = attention_mask
+    if "position_ids" in parameter_names and position_ids is not None:
+        kwargs["position_ids"] = position_ids
+    if "position_embeddings" in parameter_names:
+        rotary_emb = runtime_components["rotary_emb"]
+        if rotary_emb is None:
+            raise ValueError(
+                f"Layer {type(layer).__name__} requires position_embeddings but no rotary_emb was found."
+            )
+        kwargs["position_embeddings"] = rotary_emb(hidden_states, position_ids)
+
+    return kwargs
+
 @torch.no_grad()
 def get_whiten_scale_matrix(model, tokenizer, args, dev):
     model_id = model.config._name_or_path
+    runtime_components = _resolve_whiten_runtime_components(model)
     #NOTE (brian1009): Might need to check the random seed, currently we have < 0.1 perplexity difference at Llama2-7B
     calib_loader = get_calib_data(
         "wikitext2", 
@@ -52,8 +111,7 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
         logger.info(f"[whiten] Load scaling diag matrix from cache: {cache_file}", fg="yellow")
         scaling_matrics = torch.load(cache_file, map_location="cpu")
 
-
-        layers = model.model.layers
+        layers = runtime_components["layers"]
         for i in tqdm(range(len(layers))):
             layer = layers[i]
             subset = find_layers(layer) # Collect all linear layers
@@ -72,13 +130,9 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
     # Here, inference are performed in an layer-wise manner.
     use_cache = model.config.use_cache
     model.config.use_cache = False
-    #FIXME: This is not a good implementation...
-    if "llama" in model_id or "mistral" in model_id or "vicuna" in model_id or "longchat":
-        layers = model.model.layers
-    elif "opt" in model_id:
-        layers = model.model.decoder.layers
-    model.model.embed_tokens = model.model.embed_tokens.to(dev)
-    model.model.norm = model.model.norm.to(dev)
+    layers = runtime_components["layers"]
+    runtime_components["embed_tokens"].to(dev)
+    runtime_components["norm"].to(dev)
     layers[0] = layers[0].to(dev)
 
     dtype = next(iter(model.parameters())).dtype
@@ -111,8 +165,8 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
     
     layers[0] = layers[0].module
     layers[0] = layers[0].cpu()
-    model.model.embed_tokens = model.model.embed_tokens.cpu()
-    model.model.norm = model.model.norm.cpu()
+    runtime_components["embed_tokens"].cpu()
+    runtime_components["norm"].cpu()
     torch.cuda.empty_cache()
     outs = torch.zeros_like(inps)
     attention_masks = cache['attention_mask']
@@ -136,19 +190,17 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
             subset[name].scaling_diag_matrix = 0
             handles.append(subset[name].register_forward_hook(hook))
         for j in range(inps.shape[0]):
-            # Compute position_embeddings for transformers 4.49.0 compatibility
-            # Get the rotary embedding from the model
-            rotary_emb = model.model.rotary_emb
             hidden_states = inps[j].unsqueeze(0)
             position_ids_batch = position_ids[0].unsqueeze(0)
-            position_embeddings = rotary_emb(hidden_states, position_ids_batch)
-            
-            outs[j] = layer(
-                hidden_states, 
-                attention_mask=attention_masks, 
-                position_ids=position_ids_batch,
-                position_embeddings=position_embeddings
-            )[0]
+            layer_kwargs = _build_whiten_layer_kwargs(
+                layer,
+                runtime_components,
+                hidden_states,
+                attention_masks,
+                position_ids_batch,
+            )
+
+            outs[j] = layer(hidden_states, **layer_kwargs)[0]
         for h in handles:
             h.remove()
         layer = layer.cpu()
@@ -204,6 +256,13 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
 
 def compress_model_whiten(model, tokenizer, args, dev, selection_result):
     logger.info("Compressing model with whiten decomposition...")
+    repair_strategy = getattr(args, "dimension_repair_strategy", None)
+    repair_max_overhead_pct = getattr(args, "dimension_repair_max_overhead_pct", 20.0)
+    selection_result = repair_selection_result(
+        selection_result,
+        strategy=repair_strategy,
+        max_overhead_pct=repair_max_overhead_pct,
+    )
     # NOTE(brian1009): Prepare whiten scaling matrix
     get_whiten_scale_matrix(model, tokenizer, args, dev)
     # Compress the model
@@ -233,12 +292,19 @@ def compress_model_whiten(model, tokenizer, args, dev, selection_result):
     
         head_wise_svd_linear = HeadwiseLowRankModule.from_linear_whiten(
             raw_linear,
-            selected_head_rank
+            selected_head_rank,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
         )
         setattr(info["father"], info["name"],  head_wise_svd_linear)
 
-def compress_model_svd(model, selection_result):
+def compress_model_svd(model, selection_result, repair_strategy=None, repair_max_overhead_pct=20.0):
     logger.info("Compressing model with svd decomposition...")
+    selection_result = repair_selection_result(
+        selection_result,
+        strategy=repair_strategy,
+        max_overhead_pct=repair_max_overhead_pct,
+    )
     # Compress the model
     module_dict = {name: module for name, module in model.named_modules()}
     full_name_dict = {module: name for name, module in model.named_modules()}
@@ -266,7 +332,9 @@ def compress_model_svd(model, selection_result):
         print("head-wise svd", layername, raw_linear)
         head_wise_svd_linear = HeadwiseLowRankModule.from_linear(
             raw_linear,
-            selected_head_rank
+            selected_head_rank,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
         )
         setattr(info["father"], info["name"],  head_wise_svd_linear)
 
@@ -275,6 +343,13 @@ def compress_model(model, tokenizer, args, dev, selection_result):
     if args.decompose_method == "whiten":
         compress_model_whiten(model, tokenizer, args, dev, selection_result)
     elif args.decompose_method == "svd":
-        compress_model_svd(model, selection_result)
+        repair_strategy = getattr(args, "dimension_repair_strategy", None)
+        repair_max_overhead_pct = getattr(args, "dimension_repair_max_overhead_pct", 20.0)
+        compress_model_svd(
+            model,
+            selection_result,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
+        )
     else:
         raise ValueError(f"Decomposition method {args.decompose_method} is not supported.")
