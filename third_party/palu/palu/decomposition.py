@@ -7,6 +7,7 @@ import click
 from tqdm import tqdm
 from .data_utils import get_calib_data
 from .model import HeadwiseLowRankModule
+from .rank_repair import repair_selection_result
 
 def find_layers(module, layers=[nn.Conv2d, nn.Linear], name=''):
     if type(module) in layers:
@@ -255,6 +256,13 @@ def get_whiten_scale_matrix(model, tokenizer, args, dev):
 
 def compress_model_whiten(model, tokenizer, args, dev, selection_result):
     logger.info("Compressing model with whiten decomposition...")
+    repair_strategy = getattr(args, "dimension_repair_strategy", None)
+    repair_max_overhead_pct = getattr(args, "dimension_repair_max_overhead_pct", 20.0)
+    selection_result = repair_selection_result(
+        selection_result,
+        strategy=repair_strategy,
+        max_overhead_pct=repair_max_overhead_pct,
+    )
     # NOTE(brian1009): Prepare whiten scaling matrix
     get_whiten_scale_matrix(model, tokenizer, args, dev)
     # Compress the model
@@ -284,12 +292,19 @@ def compress_model_whiten(model, tokenizer, args, dev, selection_result):
     
         head_wise_svd_linear = HeadwiseLowRankModule.from_linear_whiten(
             raw_linear,
-            selected_head_rank
+            selected_head_rank,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
         )
         setattr(info["father"], info["name"],  head_wise_svd_linear)
 
-def compress_model_svd(model, selection_result):
+def compress_model_svd(model, selection_result, repair_strategy=None, repair_max_overhead_pct=20.0):
     logger.info("Compressing model with svd decomposition...")
+    selection_result = repair_selection_result(
+        selection_result,
+        strategy=repair_strategy,
+        max_overhead_pct=repair_max_overhead_pct,
+    )
     # Compress the model
     module_dict = {name: module for name, module in model.named_modules()}
     full_name_dict = {module: name for name, module in model.named_modules()}
@@ -317,7 +332,9 @@ def compress_model_svd(model, selection_result):
         print("head-wise svd", layername, raw_linear)
         head_wise_svd_linear = HeadwiseLowRankModule.from_linear(
             raw_linear,
-            selected_head_rank
+            selected_head_rank,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
         )
         setattr(info["father"], info["name"],  head_wise_svd_linear)
 
@@ -326,6 +343,13 @@ def compress_model(model, tokenizer, args, dev, selection_result):
     if args.decompose_method == "whiten":
         compress_model_whiten(model, tokenizer, args, dev, selection_result)
     elif args.decompose_method == "svd":
-        compress_model_svd(model, selection_result)
+        repair_strategy = getattr(args, "dimension_repair_strategy", None)
+        repair_max_overhead_pct = getattr(args, "dimension_repair_max_overhead_pct", 20.0)
+        compress_model_svd(
+            model,
+            selection_result,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
+        )
     else:
         raise ValueError(f"Decomposition method {args.decompose_method} is not supported.")

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from .quant import Quantizer
 from .hadamard_utils import apply_hadamard
+from ...rank_repair import repair_ranks
 
 def _per_head_whiten_decomposition_from_weight(weight, scaling_diag_matrix, rank):
     original_dtype = weight.dtype
@@ -53,11 +54,22 @@ def _per_head_decomposition_from_weight(weight, rank):
 class HeadwiseLowRankModule(nn.Module):
     """ Headwise low rank module """
 
-    def __init__(self, ranks, in_features, out_features, bias):
+    def __init__(
+        self,
+        ranks,
+        in_features,
+        out_features,
+        bias,
+        repair_strategy=None,
+        repair_max_overhead_pct=20.0,
+    ):
         super().__init__()
 
-
-        self.ranks = ranks
+        self.ranks = repair_ranks(
+            ranks,
+            strategy=repair_strategy,
+            max_overhead_pct=repair_max_overhead_pct,
+        )
         self.num_groups = len(ranks)
         self.in_features = in_features
         self.out_features = out_features
@@ -171,8 +183,17 @@ class HeadwiseLowRankModule(nn.Module):
     def from_linear_whiten(
         old_module: nn.Linear,
         ranks: list,
+        repair_strategy=None,
+        repair_max_overhead_pct=20.0,
     ):   
-        new_module = HeadwiseLowRankModule(ranks, old_module.in_features, old_module.out_features, bias=old_module.bias is not None)
+        new_module = HeadwiseLowRankModule(
+            ranks,
+            old_module.in_features,
+            old_module.out_features,
+            bias=old_module.bias is not None,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
+        )
         w = old_module.weight.data.reshape(len(ranks), -1, old_module.in_features)
         # Handle the cases where the bias is not None
         if old_module.bias is not None:
@@ -207,8 +228,17 @@ class HeadwiseLowRankModule(nn.Module):
     def from_linear(
         old_module: nn.Linear,
         ranks: list,
+        repair_strategy=None,
+        repair_max_overhead_pct=20.0,
     ):
-        new_module = HeadwiseLowRankModule(ranks, old_module.in_features, old_module.out_features, bias=old_module.bias is not None)
+        new_module = HeadwiseLowRankModule(
+            ranks,
+            old_module.in_features,
+            old_module.out_features,
+            bias=old_module.bias is not None,
+            repair_strategy=repair_strategy,
+            repair_max_overhead_pct=repair_max_overhead_pct,
+        )
         w = old_module.weight.data.reshape(len(ranks), -1, old_module.in_features)
         if old_module.bias is not None:
             b = old_module.bias.data.reshape(len(ranks), -1)

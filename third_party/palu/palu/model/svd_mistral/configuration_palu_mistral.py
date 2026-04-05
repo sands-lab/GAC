@@ -99,6 +99,8 @@ class PaluMistralConfig(PretrainedConfig):
         sliding_window=4096,
         attention_dropout=0.0,
         head_wise_ranks=None,
+        dimension_repair_strategy=None,
+        dimension_repair_max_overhead_pct=20.0,
         **kwargs,
     ):
         self.vocab_size = vocab_size
@@ -131,3 +133,5 @@ class PaluMistralConfig(PretrainedConfig):
 
         # for avsd
         self.head_wise_ranks = head_wise_ranks
+        self.dimension_repair_strategy = dimension_repair_strategy
+        self.dimension_repair_max_overhead_pct = dimension_repair_max_overhead_pct
