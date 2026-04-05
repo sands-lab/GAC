@@ -21,21 +21,29 @@ from .modules import (
     HeadwiseLowRankModule
 )
 
-#TODO Mistral
-
-
-
-AVAILABLE_MODELS = {
+_MODEL_FAMILIES = {
     'llama': {
         'config': PaluLlamaConfig,
-        'ModelForCausalLM': PaluLlamaForCausalLM
+        'ModelForCausalLM': PaluLlamaForCausalLM,
+        'aliases': ('llama', 'palullama'),
     },
     'mistral': {
         'config': PaluMistralConfig,
-        'ModelForCausalLM': PaluMistralForCausalLM
+        'ModelForCausalLM': PaluMistralForCausalLM,
+        'aliases': ('mistral', 'palumistral'),
     },
     'qwen2': {
         'config': PaluQwen2Config,
-        'ModelForCausalLM': PaluQwen2ForCausalLM
-    }
+        'ModelForCausalLM': PaluQwen2ForCausalLM,
+        'aliases': ('qwen2', 'paluqwen2'),
+    },
 }
+
+AVAILABLE_MODELS = {}
+for family in _MODEL_FAMILIES.values():
+    entry = {
+        'config': family['config'],
+        'ModelForCausalLM': family['ModelForCausalLM'],
+    }
+    for alias in family['aliases']:
+        AVAILABLE_MODELS[alias] = entry
