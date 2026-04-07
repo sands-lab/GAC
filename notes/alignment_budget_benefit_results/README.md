@@ -1,6 +1,6 @@
 # Alignment Budget Benefit Results
 
-This folder isolates the smallest repo-tracked artifact set that demonstrates the current alignment budget prototype already produces a useful benefit on the PaLU path, and now also carries a second non-PaLU method bundle for LLM-Pruner.
+This folder isolates the smallest repo-tracked artifact set that demonstrates the current alignment budget prototype already produces a useful benefit on the PaLU path, and now also carries non-PaLU method bundles for LLM-Pruner and ASVD.
 
 ## Source
 
@@ -21,6 +21,15 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
   - `proxy_summary`: deterministic repo-native alignment search output on a checked-in example width config
   - `paper_*`: existing LLM-Pruner alignment / prefill / quality numbers structured from `Latex/main.tex` and `Latex/slides.tex`
 
+## ASVD Method Bundle
+
+- Issue: `17-asvd-alignment-budget`
+- Adapter: `src/gcompress_bench/alignment_budget/adapters/asvd.py`
+- Contract: `get_hardware_contract("a100")`
+- Evidence split:
+  - `proxy_summary`: deterministic repo-native alignment search output on a checked-in ASVD per-projection rank config
+  - `paper_*`: existing ASVD alignment / prefill / quality numbers structured from `Latex/main.tex` and `Latex/slides.tex`
+
 ## Included Files
 
 - `palu_example_input.json`: original PaLU `head_wise_ranks` example used for benefit validation.
@@ -29,9 +38,14 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `llmpruner_example_input.json`: minimal LLM-Pruner per-layer kept-width example used to exercise the non-PaLU adapter.
 - `llmpruner_example_aligned.json`: aligned width config emitted by the repo-native LLM-Pruner adapter.
 - `llmpruner_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
+- `asvd_example_input.json`: minimal ASVD per-projection rank example used to exercise the repo-native ASVD adapter.
+- `asvd_example_aligned.json`: aligned rank config emitted by the repo-native ASVD adapter.
+- `asvd_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
 
 ## Key Takeaway
 
 For this checked-in example, the aligned result keeps total budget overhead at `2.88%` while reducing the latency-proxy hardware penalty from `90.78125` to `0.0`. This is the smallest deterministic artifact bundle proving the prototype is already useful before adding real profiling or more pruning methods.
 
 For LLM-Pruner, the checked-in repo-native example shows the same adapter/search flow can align non-PaLU structural widths, while the structured paper evidence records that the aligned GAC variant improved prefill latency from `137.7 ms` to `88.0 ms` and raised alignment from `83%` to `100%`.
+
+For ASVD, the checked-in repo-native example keeps budget overhead at `1.32%` while cutting the proxy hardware penalty from `173.6875` to `2.0`. The structured paper evidence records the same qualitative story at model scale: alignment rises from `5%` to `100%`, and prefill latency improves from `100.5 ms` to `67.1 ms`.
