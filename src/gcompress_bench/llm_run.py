@@ -12,14 +12,14 @@ from .metrics import measure_kernel, compute_stats, memory_stats, reset_memory
 from environment import collect_environment
 from .palu_loader import load_palu_model
 
+DEFAULT_BASELINE_MODEL_ID = "meta-llama/Meta-Llama-3-8B-Instruct"
 
-def load_model(variant: str, device: str, dtype_str: str = "float16"):
+def load_model(variant: str, device: str, dtype_str: str = "float16", baseline_model_id: str = DEFAULT_BASELINE_MODEL_ID):
     torch_dtype = torch.float16 if dtype_str == "float16" else torch.bfloat16
     if variant == "baseline":
-        model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
-        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
+        tokenizer = AutoTokenizer.from_pretrained(baseline_model_id, use_fast=True)
         model = AutoModelForCausalLM.from_pretrained(
-            model_id,
+            baseline_model_id,
             torch_dtype=torch_dtype,
             device_map="auto" if device.startswith("cuda") else None,
         )
@@ -145,6 +145,7 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--dtype", default="float16", choices=["float16", "bfloat16"])
+    parser.add_argument("--baseline-model-id", default=DEFAULT_BASELINE_MODEL_ID)
     parser.add_argument("--run-id", default=None)
     parser.add_argument("--max-prefill-len", type=int, default=None, help="Cap prefill seq len for smoke tests")
     parser.add_argument("--max-decode-ctx", type=int, default=None, help="Cap decode context len for smoke tests")
@@ -153,7 +154,7 @@ def main():
     run_id = args.run_id or datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{args.variant}_{args.suite}"
     run_dir = args.out / run_id
 
-    model, tokenizer, palu_dir = load_model(args.variant, args.device, args.dtype)
+    model, tokenizer, palu_dir = load_model(args.variant, args.device, args.dtype, args.baseline_model_id)
     tokenizer.padding_side = "left"
     tokenizer.pad_token = tokenizer.eos_token
 
@@ -162,6 +163,7 @@ def main():
         "suite": args.suite,
         "device": args.device,
         "dtype": args.dtype,
+        "baseline_model_id": args.baseline_model_id,
         "palu_dir": str(palu_dir) if palu_dir else None,
     }
 
