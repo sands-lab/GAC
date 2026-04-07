@@ -57,8 +57,3 @@ page6_metrics_report.json
 reference/
 
 figures_backup/*
-
-# Local agent/tooling state should not enter the main repo history
-/.agent-workflow/
-/.claude/
-/.codex
