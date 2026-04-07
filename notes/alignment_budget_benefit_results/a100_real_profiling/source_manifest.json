@@ -1,0 +1,72 @@
+{
+  "hardware": "a100",
+  "sources": [
+    {
+      "kind": "paper",
+      "path": "Latex/main.tex",
+      "section": "Full-Stack Analysis",
+      "notes": "Defines the A100 device, software stack, timing protocol, SDPA/GEMM/hardware-layer findings, and end-to-end latency numbers for ASVD and LLM-Pruner."
+    },
+    {
+      "kind": "paper",
+      "path": "Latex/slides.tex",
+      "section": "A100 end-to-end results table",
+      "notes": "Carries structured A100 baseline, ASVD, and LLM-Pruner latency and alignment percentages in presentation form."
+    },
+    {
+      "kind": "slurm_script",
+      "path": "slurm/profile_alignment.sbatch",
+      "command": "python scripts/profile_alignment.py --sweep --sweep-csv results/alignment_sweep.csv",
+      "notes": "A100 GEMM alignment sweep entrypoint used to build candidate-set evidence."
+    },
+    {
+      "kind": "slurm_script",
+      "path": "slurm/profile_palu_ranks.sbatch",
+      "command": "python3 -c \"...\"",
+      "notes": "A100 GEMM rank sweep for PaLU-style dimensions; writes results/palu_rank_profile.csv."
+    },
+    {
+      "kind": "slurm_script",
+      "path": "slurm/ncu_profile_m_transition.sbatch",
+      "command": "python scripts/ncu_profile_kernels.py --M $M --N 2048 --K 128",
+      "notes": "A100 Nsight Compute profiling entrypoint for M-dimension kernel-switch cliffs."
+    },
+    {
+      "kind": "slurm_script",
+      "path": "slurm/ncu_profile_k_transition.sbatch",
+      "command": "python scripts/ncu_profile_kernels.py --M 2048 --N 2048 --K $K",
+      "notes": "A100 Nsight Compute profiling entrypoint for K-dimension alignment behavior."
+    },
+    {
+      "kind": "slurm_script",
+      "path": "slurm/run_l2_verify.sbatch",
+      "command": "python scripts/ncu_l2_profile.py --K 4096 --ncu-mode",
+      "notes": "A100 L2 verification entrypoint used to probe sector utilization and memory penalties."
+    },
+    {
+      "kind": "python_script",
+      "path": "scripts/profile_alignment.py",
+      "notes": "Profiles cuBLAS kernel selection and timing across A100 alignment boundaries; default CSV target is results/alignment_sweep.csv."
+    },
+    {
+      "kind": "python_script",
+      "path": "scripts/profile_gemm_128.py",
+      "notes": "Profiles a representative FP16 GEMM and prints kernel-level information for A100 Tensor Core analysis."
+    },
+    {
+      "kind": "python_script",
+      "path": "scripts/ncu_profile_kernels.py",
+      "notes": "Minimal GEMM launcher used by Nsight Compute SLURM jobs."
+    },
+    {
+      "kind": "python_script",
+      "path": "scripts/ncu_l2_profile.py",
+      "notes": "L2-focused profiling workload referenced by the A100 memory verification jobs."
+    }
+  ],
+  "missing_raw_artifacts": [
+    "results/alignment_sweep.csv is referenced by scripts and plotting code but is not currently checked in",
+    "results/palu_rank_profile.csv is referenced by slurm/profile_palu_ranks.sbatch but is not currently checked in",
+    "results/ncu_profiles/*.txt Nsight Compute outputs are referenced by slurm/run_l2_verify.sbatch but are not currently checked in"
+  ]
+}
