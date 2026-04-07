@@ -41,6 +41,7 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `asvd_example_input.json`: minimal ASVD per-projection rank example used to exercise the repo-native ASVD adapter.
 - `asvd_example_aligned.json`: aligned rank config emitted by the repo-native ASVD adapter.
 - `asvd_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
+- `a100_real_profiling/`: repo-tracked A100 profiling bundle with a provenance manifest and structured summary of the checked-in real-measurement evidence and run commands.
 
 ## Key Takeaway
 
@@ -49,3 +50,5 @@ For this checked-in example, the aligned result keeps total budget overhead at `
 For LLM-Pruner, the checked-in repo-native example shows the same adapter/search flow can align non-PaLU structural widths, while the structured paper evidence records that the aligned GAC variant improved prefill latency from `137.7 ms` to `88.0 ms` and raised alignment from `83%` to `100%`.
 
 For ASVD, the checked-in repo-native example keeps budget overhead at `1.32%` while cutting the proxy hardware penalty from `173.6875` to `2.0`. The structured paper evidence records the same qualitative story at model scale: alignment rises from `5%` to `100%`, and prefill latency improves from `100.5 ms` to `67.1 ms`.
+
+The `a100_real_profiling/` bundle complements these method bundles by consolidating the repository's checked-in A100 measurement protocol, layer-wise profiling conclusions, and profiling command provenance in one place. It also records the remaining gap that raw A100 CSV / NCU outputs are still not versioned in the repo.

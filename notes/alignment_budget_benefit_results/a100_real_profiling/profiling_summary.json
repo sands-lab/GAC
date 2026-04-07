@@ -1,0 +1,126 @@
+{
+  "hardware": "a100",
+  "measurement_protocol": {
+    "device": "NVIDIA A100-80GB",
+    "dtype": "FP16",
+    "timing": "CUDA events with 50 warmup iterations, 200 measurement iterations, and 3 trials",
+    "software_stack": {
+      "framework": "PyTorch 2.9.1",
+      "cuda": "CUDA 12.8"
+    },
+    "source_excerpt_refs": [
+      "Latex/main.tex:246",
+      "Latex/main.tex:504"
+    ]
+  },
+  "framework_layer": {
+    "key_findings": [
+      "PyTorch SDPA stays on the fast path only when the head dimension is divisible by 8; otherwise it falls back to the Math backend.",
+      "Among 8-aligned dimensions, FlashAttention-2 still shows template-tier cliffs at roughly 32-dimension boundaries.",
+      "The paper records an example where d=129 is about 90 percent slower than d=128 on A100."
+    ],
+    "representative_numbers": {
+      "sdpa_latency_ms": {
+        "d_64": 0.74,
+        "d_64_to_96_region": 1.12,
+        "d_96_to_128_region": 1.47,
+        "d_128_to_160_region": 2.0,
+        "d_160_to_256_region": "2.3-2.9"
+      }
+    },
+    "source_refs": [
+      "Latex/main.tex:246",
+      "Latex/main.tex:284",
+      "Latex/main.tex:298"
+    ]
+  },
+  "library_layer": {
+    "key_findings": [
+      "A100 GEMM shows a clear mod-8 benefit on K and N, with misaligned dimensions paying up to roughly 30 percent latency penalty.",
+      "Kernel-switching cliffs exist at specific M and N boundaries when cuBLAS selects a slower implementation.",
+      "Nsight Compute analysis in the paper distinguishes the cuBLAS-native fast path from CUTLASS align2 and align1 fallback tiers."
+    ],
+    "representative_numbers": {
+      "gemm_penalty_pct": {
+        "misaligned_vs_aligned": "up to 30"
+      },
+      "kernel_tiers": [
+        "mod8 == 0 -> cuBLAS-native sm80",
+        "mod2 == 0 -> CUTLASS sm80 align2",
+        "odd -> CUTLASS sm75 align1"
+      ]
+    },
+    "source_refs": [
+      "Latex/main.tex:314",
+      "Latex/main.tex:322",
+      "Latex/main.tex:338"
+    ]
+  },
+  "hardware_layer": {
+    "key_findings": [
+      "A100 Tensor Core throughput near K,N=4096 reaches about 160-175 TFLOPS for aligned dimensions and drops to about 50-110 TFLOPS for misaligned dimensions.",
+      "The throughput periodicity matches the Tensor Core tile shape: period-16 on K and period-8 on N.",
+      "The paper also reports about 2x memory-bandwidth loss for misaligned L2 access patterns."
+    ],
+    "representative_numbers": {
+      "aligned_tflops": "160-175",
+      "misaligned_tflops": "50-110",
+      "l2_bandwidth_penalty": "about 2x"
+    },
+    "source_refs": [
+      "Latex/main.tex:361",
+      "Latex/main.tex:363",
+      "Latex/main.tex:364"
+    ]
+  },
+  "alignment_budget_relevance": {
+    "contract": {
+      "name": "a100",
+      "minimal_alignment": 8,
+      "preferred_alignment": 16,
+      "recommended_values": [
+        32,
+        64,
+        96,
+        112,
+        128,
+        160,
+        192,
+        224,
+        256
+      ],
+      "cliff_values": []
+    },
+    "supported_methods": [
+      "palu",
+      "llm_pruner",
+      "asvd"
+    ],
+    "method_level_evidence": {
+      "baseline_prefill_latency_ms": 99.6,
+      "asvd": {
+        "unaligned_alignment_pct": 5.0,
+        "unaligned_prefill_latency_ms": 100.5,
+        "aligned_gac_alignment_pct": 100.0,
+        "aligned_gac_prefill_latency_ms": 67.1
+      },
+      "llm_pruner": {
+        "unaligned_alignment_pct": 83.0,
+        "unaligned_prefill_latency_ms": 137.7,
+        "aligned_gac_alignment_pct": 100.0,
+        "aligned_gac_prefill_latency_ms": 88.0
+      }
+    },
+    "source_refs": [
+      "Latex/main.tex:514",
+      "Latex/main.tex:531",
+      "Latex/main.tex:554",
+      "Latex/slides.tex:711"
+    ],
+    "notes": [
+      "This summary is intentionally limited to A100 evidence already checked into the repository.",
+      "The bundle justifies the current coarse a100 contract and existing method artifacts without claiming that raw profiling tables are already versioned.",
+      "A future upgrade should add the original A100 CSV and Nsight outputs referenced by the profiling scripts and SLURM wrappers."
+    ]
+  }
+}
