@@ -33,6 +33,26 @@ python -m scripts.run_benchmarks --experiment gemm_projection --dtype float16
 python auto_research/orchestrator.py --max-iterations 10
 ```
 
+## Baseline Model Selection
+
+The repo-native LLM benchmark entrypoints now accept an explicit baseline model id instead of assuming a fixed Llama checkpoint.
+
+```bash
+# Evaluate a Mistral baseline
+python -m src.gcompress_bench.llm_eval \
+  --variant baseline \
+  --suite ppl \
+  --baseline-model-id mistralai/Mistral-7B-Instruct-v0.2 \
+  --out results/llm_eval
+
+# Run inference benchmarking for a Llama baseline
+python -m src.gcompress_bench.llm_run \
+  --variant baseline \
+  --suite infer_sweep \
+  --baseline-model-id meta-llama/Meta-Llama-3-8B-Instruct \
+  --out results/llm_run
+```
+
 ## Project Structure
 
 ```

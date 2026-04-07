@@ -1,0 +1,10 @@
+{
+  "model.layers.0.self_attn.k_proj": [
+    107,
+    121
+  ],
+  "model.layers.0.self_attn.v_proj": [
+    95,
+    128
+  ]
+}

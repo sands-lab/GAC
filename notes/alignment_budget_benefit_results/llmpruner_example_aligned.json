@@ -1,0 +1,9 @@
+{
+  "method": "llm_pruner",
+  "hardware_contract": "a100",
+  "aligned_config": {
+    "model.layers.3.mlp.intermediate_size": 6096,
+    "model.layers.4.mlp.intermediate_size": 5632,
+    "model.layers.5.mlp.intermediate_size": 4872
+  }
+}

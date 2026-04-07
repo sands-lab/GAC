@@ -13,14 +13,14 @@ from .metrics import compute_stats
 from .palu_loader import load_palu_model
 from .dimension_repair import DimensionRepairer
 
+DEFAULT_BASELINE_MODEL_ID = "meta-llama/Meta-Llama-3-8B-Instruct"
 
-def load_model(variant: str, device: str, dtype_str: str = "float16"):
+def load_model(variant: str, device: str, dtype_str: str = "float16", baseline_model_id: str = DEFAULT_BASELINE_MODEL_ID):
     torch_dtype = torch.float16 if dtype_str == "float16" else torch.bfloat16
     if variant == "baseline":
-        model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
-        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
+        tokenizer = AutoTokenizer.from_pretrained(baseline_model_id, use_fast=True)
         model = AutoModelForCausalLM.from_pretrained(
-            model_id,
+            baseline_model_id,
             torch_dtype=torch_dtype,
             device_map="auto" if device.startswith("cuda") else None,
         )
@@ -167,6 +167,7 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--dtype", default="float16", choices=["float16", "bfloat16"])
+    parser.add_argument("--baseline-model-id", default=DEFAULT_BASELINE_MODEL_ID)
     parser.add_argument("--tasks", default="piqa,hellaswag")
     parser.add_argument("--limit", type=int, default=200)
     parser.add_argument("--allow-fallback-corpus", action="store_true")
@@ -176,7 +177,7 @@ def main():
     run_id = args.run_id or datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{args.variant}_{args.suite}"
     run_dir = args.out / run_id
 
-    model, tokenizer, palu_dir = load_model(args.variant, args.device, args.dtype)
+    model, tokenizer, palu_dir = load_model(args.variant, args.device, args.dtype, args.baseline_model_id)
     config = {
         "variant": args.variant,
         "suite": args.suite,
@@ -184,6 +185,7 @@ def main():
         "limit": args.limit,
         "device": args.device,
         "dtype": args.dtype,
+        "baseline_model_id": args.baseline_model_id,
         "palu_dir": str(palu_dir) if palu_dir else None,
     }
 

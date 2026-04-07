@@ -1,48 +1,38 @@
-from collections import defaultdict
-from typing import Dict, Iterable, List
+from typing import Dict, List
 
 from ..contract import NormalizedBudgetItem
 from ..search import choose_aligned_candidate, summarize_alignment
 
 
-class PaluBudgetAdapter:
-    """Adapter for PaLU `head_wise_ranks` config dictionaries."""
+class ASVDBudgetAdapter:
+    """Adapter for ASVD-style per-projection rank allocations."""
 
-    method_name = "palu"
+    method_name = "asvd"
 
-    def export_items(self, head_wise_ranks: Dict[str, Iterable[int]]) -> List[NormalizedBudgetItem]:
+    def export_items(self, rank_config: Dict[str, int]) -> List[NormalizedBudgetItem]:
         items: List[NormalizedBudgetItem] = []
-        for name, ranks in sorted(head_wise_ranks.items()):
+        for name, rank in sorted(rank_config.items()):
             operator_role = "attention_kv" if any(token in name for token in ("k_proj", "v_proj")) else "linear"
-            for index, rank in enumerate(ranks):
-                items.append(
-                    NormalizedBudgetItem(
-                        name=f"{name}#group{index}",
-                        method=self.method_name,
-                        budget_kind="rank",
-                        operator_role=operator_role,
-                        original_budget=int(rank),
-                        granularity="per_group",
-                        constraints={
-                            "config_key": name,
-                            "group_index": index,
-                            "group_count": len(list(ranks)) if not isinstance(ranks, list) else len(ranks),
-                        },
-                    )
+            items.append(
+                NormalizedBudgetItem(
+                    name=name,
+                    method=self.method_name,
+                    budget_kind="rank",
+                    operator_role=operator_role,
+                    original_budget=int(rank),
+                    granularity="per_layer",
+                    constraints={
+                        "config_key": name,
+                    },
                 )
+            )
         return items
 
-    def materialize(self, items: List[NormalizedBudgetItem]) -> Dict[str, List[int]]:
-        grouped: Dict[str, Dict[int, int]] = defaultdict(dict)
-        for item in items:
-            config_key = item.constraints["config_key"]
-            group_index = int(item.constraints["group_index"])
-            grouped[config_key][group_index] = int(item.original_budget)
-
-        materialized: Dict[str, List[int]] = {}
-        for key, values in grouped.items():
-            materialized[key] = [value for _, value in sorted(values.items())]
-        return materialized
+    def materialize(self, items: List[NormalizedBudgetItem]) -> Dict[str, int]:
+        return {
+            str(item.constraints["config_key"]): int(item.original_budget)
+            for item in items
+        }
 
     def align_items(
         self,
@@ -76,12 +66,12 @@ class PaluBudgetAdapter:
 
     def align_config(
         self,
-        head_wise_ranks: Dict[str, Iterable[int]],
+        rank_config: Dict[str, int],
         contract,
         max_overhead_pct: float = 20.0,
         search_radius: int = 16,
     ) -> Dict[str, object]:
-        original_items = self.export_items(head_wise_ranks)
+        original_items = self.export_items(rank_config)
         aligned_items = self.align_items(
             original_items,
             contract=contract,

@@ -1,0 +1,35 @@
+{
+  "method": "asvd",
+  "proxy_summary": {
+    "total_original_budget": 758.0,
+    "total_aligned_budget": 768.0,
+    "budget_overhead_pct": 1.3192612137203166,
+    "original_hardware_penalty": 173.6875,
+    "aligned_hardware_penalty": 2.0
+  },
+  "paper_prefill_latency_ms": {
+    "baseline": 99.6,
+    "unaligned": 100.5,
+    "aligned_gac": 67.1
+  },
+  "paper_alignment_pct": {
+    "unaligned": 5.0,
+    "aligned_gac": 100.0
+  },
+  "paper_quality": {
+    "ppl_unaligned": 34.7,
+    "ppl_aligned_gac": 31.3,
+    "piqa_unaligned": 0.58,
+    "piqa_aligned_gac": 0.57,
+    "hellaswag_unaligned": 0.28,
+    "hellaswag_aligned_gac": 0.26
+  },
+  "sources": {
+    "paper_table": "Latex/main.tex",
+    "slide_table": "Latex/slides.tex"
+  },
+  "notes": [
+    "proxy_summary is produced by the repo-native alignment_budget adapter on the checked-in ASVD rank example above",
+    "paper_* fields are structured from the existing checked-in paper tables rather than remeasured in the current environment"
+  ]
+}
