@@ -23,6 +23,8 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 import numpy as np
 
+from src.gcompress_bench.palu_loader import default_palu_base_dir
+
 
 # ---------------------------------------------------------------------------
 # Constants for Llama-3-8B with PaLU (group_size=4)
@@ -426,8 +428,11 @@ def main():
     parser = argparse.ArgumentParser(description="GAC Rank Allocation")
     parser.add_argument("--scores", default="results/rank_scores/llama3_8b.json")
     parser.add_argument("--palu-config",
-                        default="/home/xinj/rap/submodules/palu/"
-                                "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-svd/config.json")
+                        default=str(
+                            default_palu_base_dir()
+                            / "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-svd"
+                            / "config.json"
+                        ))
     parser.add_argument("--profile-csv", default="results/alignment_sweep.csv")
     parser.add_argument("--output", default="results/gac_allocation")
     args = parser.parse_args()

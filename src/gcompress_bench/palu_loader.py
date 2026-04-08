@@ -3,11 +3,17 @@ PaLU helper: locate compressed checkpoint directory and load model/tokenizer.
 Uses the checkpoint's registered config/model type to resolve the right PaLU architecture.
 """
 import glob
+import sys
 from pathlib import Path
 from typing import Tuple
 
 import torch
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PALU_VENDOR_DIR = REPO_ROOT / "third_party" / "palu"
+if str(PALU_VENDOR_DIR) not in sys.path:
+    sys.path.insert(0, str(PALU_VENDOR_DIR))
 
 import palu.model  # noqa: F401 - ensure PaLU AutoConfig/AutoModel registrations are loaded
 
@@ -22,8 +28,13 @@ DEFAULT_BASELINE_IDS = {
 }
 
 
+def default_palu_base_dir() -> Path:
+    """Return the repo-local PaLU vendor root."""
+    return PALU_VENDOR_DIR
+
+
 def find_palu_dir(
-    base: str = "/home/xinj/rap/submodules/palu",
+    base: str | Path = default_palu_base_dir(),
     pattern: str = "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*",
 ) -> Path:
     candidates = sorted(glob.glob(str(Path(base) / pattern)))
@@ -53,7 +64,7 @@ def _resolve_baseline_id(config, palu_dir: Path, baseline_id: str | None = None)
 def load_palu_model(
     device: str = "cuda",
     torch_dtype: torch.dtype = torch.float16,
-    base: str = "/home/xinj/rap/submodules/palu",
+    base: str | Path = default_palu_base_dir(),
     pattern: str = "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*",
     baseline_id: str | None = None,
 ) -> Tuple[torch.nn.Module, AutoTokenizer, Path]:
