@@ -16,6 +16,7 @@ It also preserves the older actual A100 partial baseline run provenance introduc
 - `source_manifest.json`: provenance index for the historical actual A100 smoke run, recovered baseline results, completed comparison run, and aligned checkpoint metadata
 - `actual_results_summary.json`: issue-20 summary of the actual A100 partial baseline run, failed PaLU attempt, and remaining historical gap
 - `latency_comparison.json`: normalized comparison summary with explicit `baseline` / `unaligned` / `aligned_gac` latency and alignment fields
+- `decode_root_cause_summary.json`: structured note explaining why the historical decode throughput looks too good on some shapes and how the benchmark contract was fixed
 - `README.md`: human-readable summary of the completed PaLU A100 comparison
 
 ## Final Measured Result
@@ -53,6 +54,14 @@ For the current checked-in PaLU evidence:
 - `baseline` is reused from the successful baseline portion of job `25269`
 - `unaligned` comes from the true non-rounded `rb1` PaLU checkpoint
 - `aligned_gac` comes from the repo-native GAC-aligned checkpoint `...-rb1-gac-a100`
+
+## Decode Measurement Caveat
+
+- `decode_root_cause_summary.json` records a benchmark-contract issue in the historical decode numbers from `results/C5/20260408_120500_palu_unaligned_vs_gac/`
+- The old decode path only set `max_new_tokens=gen`, so `generate()` could stop early while throughput still assumed the full requested length
+- That is why several `gen=64` / `gen=128` pairs keep nearly the same latency but almost exactly double the reported tok/s
+- Prefill does not have the same ambiguity because it is measured with a fixed forward pass over an explicit input tensor
+- `scripts/run_c5_e2e_comparison.py` now enforces `min_new_tokens=gen` and records `actual_new_tokens` so future reruns use a fixed-length decode contract
 
 ## Provenance
 
