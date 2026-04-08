@@ -9,6 +9,8 @@ import math
 from tqdm import tqdm
 
 def rounding_search_result(config: dict, block_size=32):
+    if block_size in (None, 0, 1):
+        return config
     for module_name in config.keys():
         ranks = config[module_name]
         for i in range(len(ranks)):
@@ -85,6 +87,7 @@ def calib_fisher_info(model, calib_loader, device, use_cache=True):
 
 def rank_search(model: nn.Module, tokenizer, args):
     logger.info(f"[Rank search] Do rank searching. Search method: {args.search_method}", fg="yellow")
+    rank_block_size = getattr(args, "rank_block_size", 32)
     if args.search_method == "uniform":
         target_model_class = AVAILABLE_MODELS[model.config.model_type]["ModelForCausalLM"]
         total_rank = 0
@@ -98,7 +101,7 @@ def rank_search(model: nn.Module, tokenizer, args):
                 
                 select_result.update({name: [info.lr_group_dims*args.param_ratio_target] * info.num_lr_groups})
 
-        select_result = rounding_search_result(select_result)
+        select_result = rounding_search_result(select_result, block_size=rank_block_size)
         rank_sum = sum([sum(v) for k, v in select_result.items()])
         logger.info(f"[Rank search] KV-Cache Compression Ratio: {100-(rank_sum / total_rank * 100): .2f}%")
         return select_result, rank_sum, total_rank    
@@ -161,7 +164,7 @@ def rank_search(model: nn.Module, tokenizer, args):
                 if dif == 0:
                     break
                 
-        select_result = rounding_search_result(select_result)
+        select_result = rounding_search_result(select_result, block_size=rank_block_size)
         rank_sum = sum([sum(v) for k, v in select_result.items()])
         logger.info(f"[Rank Search] KV-Cache Compression Ratio: {100-(rank_sum / total_rank * 100): .2f}%")
         
@@ -223,7 +226,7 @@ def rank_search(model: nn.Module, tokenizer, args):
                     break
         
         select_result = split_values(select_result, model.config.num_key_value_heads//args.head_group_size)
-        select_result = rounding_search_result(select_result)
+        select_result = rounding_search_result(select_result, block_size=rank_block_size)
         rank_sum = sum([sum(v) for k, v in select_result.items()])
         logger.info(f"[Rank Search] KV-Cache Compression Ratio: {100-(rank_sum / total_rank * 100): .2f}%")
         

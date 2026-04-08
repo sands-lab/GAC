@@ -1,0 +1,137 @@
+{
+  "hardware": {
+    "gpu": "NVIDIA A100",
+    "device": "cuda:0",
+    "dtype": "float16"
+  },
+  "measurement_scope": {
+    "prefill": "aggregated from the per-shape prefill measurements in the completed A100 run",
+    "decode": "aggregated from the per-shape decode measurements in the completed A100 run"
+  },
+  "prefill_latency_ms": {
+    "baseline": {
+      "status": "measured",
+      "measurements": {
+        "batch1_seq256": 30.96,
+        "batch1_seq512": 51.36,
+        "batch1_seq1024": 94.3,
+        "batch1_seq2048": 184.27,
+        "batch4_seq256": 94.23,
+        "batch4_seq512": 181.29,
+        "batch4_seq1024": 357.8,
+        "batch4_seq2048": 722.67
+      },
+      "average_latency_ms": 214.60999999999999,
+      "average_throughput_tok_s": 10645.125,
+      "source": "results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json"
+    },
+    "unaligned": {
+      "status": "measured",
+      "measurements": {
+        "batch1_seq256": 32.7544378068712,
+        "batch1_seq512": 53.10977155897353,
+        "batch1_seq1024": 96.81361312866211,
+        "batch1_seq2048": 187.12032148573132,
+        "batch4_seq256": 96.36859410603842,
+        "batch4_seq512": 183.00648091634113,
+        "batch4_seq1024": 360.7480777316623,
+        "batch4_seq2048": 727.3761542426215
+      },
+      "average_latency_ms": 217.16218137211268,
+      "average_throughput_tok_s": 10426.555181396896,
+      "source": "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json"
+    },
+    "aligned_gac": {
+      "status": "measured",
+      "measurements": {
+        "batch1_seq256": 32.4129337310791,
+        "batch1_seq512": 52.30578333536784,
+        "batch1_seq1024": 95.68704282972547,
+        "batch1_seq2048": 184.9163091023763,
+        "batch4_seq256": 95.19281472100153,
+        "batch4_seq512": 181.00495995415582,
+        "batch4_seq1024": 357.36737433539497,
+        "batch4_seq2048": 720.5629625108506
+      },
+      "average_latency_ms": 214.93127256499395,
+      "average_throughput_tok_s": 10545.941699567216,
+      "source": "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json"
+    }
+  },
+  "decode_latency_ms": {
+    "baseline": {
+      "status": "measured",
+      "measurements": {
+        "batch1_ctx512_gen64": 1319.69,
+        "batch1_ctx512_gen128": 2614.57,
+        "batch1_ctx1024_gen64": 1081.14,
+        "batch1_ctx1024_gen128": 1079.88,
+        "batch4_ctx512_gen64": 1478.72,
+        "batch4_ctx512_gen128": 2807.97,
+        "batch4_ctx1024_gen64": 1356.33,
+        "batch4_ctx1024_gen128": 1355.67
+      },
+      "average_latency_ms": 1636.7462500000001,
+      "average_throughput_tok_s": 149.6375,
+      "source": "results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json"
+    },
+    "unaligned": {
+      "status": "measured",
+      "measurements": {
+        "batch1_ctx512_gen64": 213.00885399712456,
+        "batch1_ctx512_gen128": 212.76176011827258,
+        "batch1_ctx1024_gen64": 307.6997589111328,
+        "batch1_ctx1024_gen128": 308.42696058485245,
+        "batch4_ctx512_gen64": 347.15218675401474,
+        "batch4_ctx512_gen128": 344.8380632188585,
+        "batch4_ctx1024_gen64": 567.5493136935764,
+        "batch4_ctx1024_gen128": 568.9362636990018
+      },
+      "average_latency_ms": 358.7966451221042,
+      "average_throughput_tok_s": 637.5438343803224,
+      "source": "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json"
+    },
+    "aligned_gac": {
+      "status": "measured",
+      "measurements": {
+        "batch1_ctx512_gen64": 52.987177191840274,
+        "batch1_ctx512_gen128": 53.00969013637967,
+        "batch1_ctx1024_gen64": 146.42593875461154,
+        "batch1_ctx1024_gen128": 145.62249315049914,
+        "batch4_ctx512_gen64": 174.7133005777995,
+        "batch4_ctx512_gen128": 174.78020782470702,
+        "batch4_ctx1024_gen64": 395.0978003607856,
+        "batch4_ctx1024_gen128": 394.90209147135414
+      },
+      "average_latency_ms": 192.1923374334971,
+      "average_throughput_tok_s": 1409.7597861422007,
+      "source": "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json"
+    }
+  },
+  "alignment_pct": {
+    "baseline": {
+      "status": "measured",
+      "value": 100.0,
+      "notes": "The uncompressed baseline serves as the aligned reference."
+    },
+    "unaligned": {
+      "status": "measured",
+      "value": 63.4375
+    },
+    "aligned_gac": {
+      "status": "measured",
+      "value": 100.0
+    }
+  },
+  "sources": {
+    "baseline_results": "results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json",
+    "comparison_run_summary": "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json",
+    "comparison_run_results": "results/C5/20260408_120500_palu_unaligned_vs_gac/results.json",
+    "aligned_checkpoint_build_summary": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/build_summary.json"
+  },
+  "notes": [
+    "This file now records a completed baseline / unaligned / aligned_gac comparison using the repo-native GAC-aligned PaLU checkpoint flow.",
+    "The baseline figures are reused from the successful baseline portion of job 25269 and stored in a minimal baseline-only results.json for skip-baseline runs.",
+    "The aligned_gac figures come from a checkpoint-level GAC alignment, not from the older runtime palu_repair path."
+  ]
+}

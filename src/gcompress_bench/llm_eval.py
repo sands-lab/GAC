@@ -21,7 +21,7 @@ def load_model(variant: str, device: str, dtype_str: str = "float16", baseline_m
         tokenizer = AutoTokenizer.from_pretrained(baseline_model_id, use_fast=True)
         model = AutoModelForCausalLM.from_pretrained(
             baseline_model_id,
-            torch_dtype=torch_dtype,
+            dtype=torch_dtype,
             device_map="auto" if device.startswith("cuda") else None,
         )
         palu_dir = None

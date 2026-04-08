@@ -1,57 +1,67 @@
-# PaLU A100 Actual Results Bundle
+# PaLU A100 Results Bundle
 
-This bundle collects the repository's currently available PaLU-related A100 evidence into one repo-tracked handoff package under `notes/alignment_budget_benefit_results/`.
+This bundle collects the repo-tracked PaLU A100 latency comparison and its provenance under `notes/alignment_budget_benefit_results/`.
+It also preserves the older actual A100 partial baseline run provenance introduced by the previous issue, so the bundle now carries both the historical smoke-run evidence and the final completed comparison summary.
 
 ## Scope
 
-- Hardware target: NVIDIA A100-80GB
+- Hardware target: NVIDIA A100
 - Model family: Llama-3-8B / PaLU compressed Llama-3-8B
-- Goal: make the actual A100-facing PaLU result provenance easy to inspect from one place
-- Non-goal: this bundle does not pretend the repository already contains a completed real A100 PaLU inference JSON for baseline, PaLU, and PaLU+Repair
-
-## What Counts As "Actual" In This Bundle
-
-This bundle separates three evidence classes:
-
-1. actual A100 runtime logs already present in `slurm_logs/`
-2. actual failure provenance showing why the historical PaLU run did not finish
-3. actual repo-tracked checkpoint build metadata and checked-in paper/slide numbers that provide the surrounding A100 context
+- Goal: make the final `baseline / unaligned / aligned_gac` PaLU comparison easy to inspect from one place
+- Historical provenance retained: actual A100 partial baseline run plus the failed pre-fix PaLU attempt
+- Non-goal: this bundle does not preserve the older `palu_repair` runtime path as the aligned reference
 
 ## Included Files
 
-- `source_manifest.json`: provenance index for the real A100 logs, checkpoint build summary, and paper/slide references
-- `actual_results_summary.json`: structured extraction of the partial baseline run, failed PaLU attempt, checkpoint metadata, and current missing-artifact boundary
+- `source_manifest.json`: provenance index for the historical actual A100 smoke run, recovered baseline results, completed comparison run, and aligned checkpoint metadata
+- `actual_results_summary.json`: issue-20 summary of the actual A100 partial baseline run, failed PaLU attempt, and remaining historical gap
+- `latency_comparison.json`: normalized comparison summary with explicit `baseline` / `unaligned` / `aligned_gac` latency and alignment fields
+- `README.md`: human-readable summary of the completed PaLU A100 comparison
 
-## Current Best Actual Evidence
+## Final Measured Result
 
-- A partial baseline run exists in `slurm_logs/25035_C5_palu_env.out`
-  - prefill `batch=1, seq_len=256`: `29.86 ms`, `8608 tok/s`
-  - prefill `batch=1, seq_len=512`: `46.46 ms`, `11019 tok/s`
-  - decode `batch=1, ctx=256, gen=32`: `666.00 ms`, `48.0 tok/s`
-- The corresponding PaLU attempt failed before benchmarking because the historical run still used the old absolute PaLU path under `/home/xinj/rap/submodules/palu`
-- A repo-local PaLU checkpoint build summary exists in `results/palu_checkpoints/.../build_summary.json`, confirming the compressed checkpoint metadata now tracked in this workspace
+- `baseline`
+  - prefill average latency: `214.61 ms`
+  - decode average latency: `1636.75 ms`
+  - alignment: `100.0%`
+- `unaligned PaLU`
+  - prefill average latency: `217.16 ms`
+  - decode average latency: `358.80 ms`
+  - alignment: `63.44%`
+- `aligned GAC`
+  - prefill average latency: `214.93 ms`
+  - decode average latency: `192.19 ms`
+  - alignment: `100.0%`
 
-## Why The Bundle Still Matters
+## Main Takeaway
 
-The repository previously had no single place that answered:
+- GAC checkpoint alignment restores PaLU to full `mod 8` alignment on A100
+- Prefill latency changes only slightly: `217.16 ms -> 214.93 ms`
+- Decode latency improves substantially: `358.80 ms -> 192.19 ms`
+- In throughput terms, decode rises from `637.5 tok/s` to `1409.8 tok/s` over unaligned PaLU
 
-- which PaLU A100 measurements actually ran,
-- which run failed and why,
-- what compressed checkpoint metadata exists locally, and
-- what is still missing before a complete baseline / PaLU / PaLU+Repair A100 result set can be claimed.
+## Comparison Shape
 
-This bundle makes that boundary explicit.
+To match the ASVD / LLM-Pruner artifact style, `latency_comparison.json` always exposes:
 
-## Current Gap
+- `prefill_latency_ms.baseline|unaligned|aligned_gac`
+- `decode_latency_ms.baseline|unaligned|aligned_gac`
+- `alignment_pct.baseline|unaligned|aligned_gac`
 
-The repository still has no completed real A100 PaLU inference JSON under a repo-tracked results directory for:
+For the current checked-in PaLU evidence:
 
-- baseline
-- palu
-- palu_repair
+- `baseline` is reused from the successful baseline portion of job `25269`
+- `unaligned` comes from the true non-rounded `rb1` PaLU checkpoint
+- `aligned_gac` comes from the repo-native GAC-aligned checkpoint `...-rb1-gac-a100`
 
-So the correct reading today is:
+## Provenance
 
-- actual A100 partial baseline run: present
-- actual A100 PaLU attempt provenance: present
-- actual completed PaLU / PaLU+Repair A100 benchmark artifact set: still missing
+- Historical actual A100 partial baseline run:
+  - `slurm_logs/25035_C5_palu_env.out`
+  - `slurm_logs/25035_C5_palu_env.err`
+- Baseline-only recovered artifact:
+  - `results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json`
+- Completed comparison run:
+  - `results/C5/20260408_120500_palu_unaligned_vs_gac/`
+- Aligned checkpoint build metadata:
+  - `results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/build_summary.json`

@@ -20,7 +20,7 @@ def load_model(variant: str, device: str, dtype_str: str = "float16", baseline_m
         tokenizer = AutoTokenizer.from_pretrained(baseline_model_id, use_fast=True)
         model = AutoModelForCausalLM.from_pretrained(
             baseline_model_id,
-            torch_dtype=torch_dtype,
+            dtype=torch_dtype,
             device_map="auto" if device.startswith("cuda") else None,
         )
         palu_dir = None
@@ -87,7 +87,7 @@ def benchmark_decode(model, tokenizer, device, batches, ctx_lens, gen_lens, warm
         for ctx in ctx_lens:
             for gen in gen_lens:
                 input_ids, attention_mask = gen_input(tokenizer, b, ctx, device)
-                gen_kwargs = dict(max_new_tokens=gen, do_sample=False, temperature=0.0, top_k=0)
+                gen_kwargs = dict(max_new_tokens=gen, do_sample=False)
                 reset_memory()
                 def fn():
                     with torch.inference_mode():

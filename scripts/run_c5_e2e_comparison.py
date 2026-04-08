@@ -5,7 +5,7 @@ C5 End-to-End LLM Inference Comparison
 Compares three model variants:
 1. Baseline: Original Llama-3-8B-Instruct
 2. PaLU: Compressed with PaLU (misaligned dimensions)
-3. PaLU+Repair: PaLU with dimension repair applied
+3. Aligned GAC: PaLU with an aligned checkpoint or runtime repair
 
 Metrics:
 - Prefill latency (tok/s)
@@ -35,7 +35,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "third_party" / "palu"))
 
 from src.gcompress_bench.metrics import measure_kernel, compute_stats, memory_stats, reset_memory
 from src.gcompress_bench.palu_loader import load_palu_model
-from src.gcompress_bench.dimension_repair import DimensionRepairer, repair_dimension, ShapeContract
+from src.gcompress_bench.dimension_repair import DimensionRepairer
 from environment import collect_environment
 
 
@@ -66,13 +66,26 @@ class VariantResult:
     repair_info: Optional[Dict] = None
 
 
+def load_stored_variant_result(results_json_path: Path, variant: str) -> VariantResult:
+    payload = json.loads(results_json_path.read_text())
+    variant_payload = payload["results"][variant]
+    return VariantResult(
+        variant=variant_payload["variant"],
+        prefill_results=variant_payload["prefill_results"],
+        decode_results=variant_payload["decode_results"],
+        memory_peak_mb=variant_payload.get("memory_peak_mb", 0.0),
+        model_params=variant_payload.get("model_params", 0),
+        repair_info=variant_payload.get("repair_info"),
+    )
+
+
 def load_baseline_model(device: str, dtype: torch.dtype):
     """Load original Llama-3-8B model."""
     model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
     tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        torch_dtype=dtype,
+        dtype=dtype,
         device_map="auto" if device.startswith("cuda") else None,
     )
     tokenizer.pad_token = tokenizer.eos_token
@@ -80,9 +93,13 @@ def load_baseline_model(device: str, dtype: torch.dtype):
     return model, tokenizer
 
 
-def load_palu_model_variant(device: str, dtype: torch.dtype):
+def load_palu_model_variant(
+    device: str,
+    dtype: torch.dtype,
+    pattern: str = "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*",
+):
     """Load PaLU compressed model."""
-    model, tokenizer, palu_dir = load_palu_model(device=device, torch_dtype=dtype)
+    model, tokenizer, palu_dir = load_palu_model(device=device, torch_dtype=dtype, pattern=pattern)
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
     return model, tokenizer, palu_dir
@@ -249,7 +266,7 @@ def benchmark_decode(model, tokenizer, config: BenchmarkConfig) -> List[Dict]:
             for gen in config.decode_gen_lens:
                 print(f"  Decode: batch={b}, ctx={ctx}, gen={gen}", end="", flush=True)
                 input_ids, attention_mask = gen_input(tokenizer, b, ctx, device)
-                gen_kwargs = dict(max_new_tokens=gen, do_sample=False, temperature=0.0, top_k=0)
+                gen_kwargs = dict(max_new_tokens=gen, do_sample=False)
                 reset_memory()
 
                 def fn():
@@ -351,6 +368,125 @@ def run_variant(variant_name: str, model, tokenizer, config: BenchmarkConfig,
     )
 
 
+def summarize_latency_comparison(results: Dict[str, VariantResult], comparison: Dict) -> Dict:
+    """Build a compact baseline/unaligned/aligned latency summary for downstream artifacts."""
+
+    def summarize_measurements(entries: List[Dict], mode: str, variant_label: str) -> Dict:
+        valid = [
+            entry for entry in entries
+            if "error" not in entry
+            and isinstance(entry.get("latency_ms"), dict)
+            and "mean" in entry["latency_ms"]
+        ]
+        if not valid:
+            return {
+                "status": "missing",
+                "reason": f"no successful {mode} measurements recorded for {variant_label}",
+            }
+
+        measurement_map = {}
+        latencies = []
+        throughputs = []
+        for entry in valid:
+            if mode == "prefill":
+                shape_key = f"batch{entry['batch']}_seq{entry['seq_len']}"
+            else:
+                shape_key = f"batch{entry['batch']}_ctx{entry['context_len']}_gen{entry['gen_len']}"
+            measurement_map[shape_key] = entry["latency_ms"]["mean"]
+            latencies.append(entry["latency_ms"]["mean"])
+
+            throughput = entry.get("throughput_toks_per_s")
+            if isinstance(throughput, dict) and "mean" in throughput:
+                throughputs.append(throughput["mean"])
+
+        summary = {
+            "status": "measured",
+            "measurements": measurement_map,
+            "average_latency_ms": sum(latencies) / len(latencies),
+        }
+        if throughputs:
+            summary["average_throughput_tok_s"] = sum(throughputs) / len(throughputs)
+        return summary
+
+    baseline = results.get("baseline")
+    palu = results.get("palu")
+    aligned_variant = results.get("aligned_gac") or results.get("palu_repair")
+
+    summary = {
+        "measurement_scope": {
+            "prefill": "aggregated from the per-shape prefill measurements in this run",
+            "decode": "aggregated from the per-shape decode measurements in this run",
+        },
+        "prefill_latency_ms": {
+            "baseline": summarize_measurements(baseline.prefill_results, "prefill", "baseline") if baseline else {
+                "status": "missing",
+                "reason": "baseline variant was skipped",
+            },
+            "unaligned": summarize_measurements(palu.prefill_results, "prefill", "palu") if palu else {
+                "status": "missing",
+                "reason": "unaligned PaLU variant did not complete",
+            },
+            "aligned_gac": summarize_measurements(aligned_variant.prefill_results, "prefill", "aligned_gac") if aligned_variant else {
+                "status": "missing",
+                "reason": "aligned GAC variant did not complete",
+            },
+        },
+        "decode_latency_ms": {
+            "baseline": summarize_measurements(baseline.decode_results, "decode", "baseline") if baseline else {
+                "status": "missing",
+                "reason": "baseline variant was skipped",
+            },
+            "unaligned": summarize_measurements(palu.decode_results, "decode", "palu") if palu else {
+                "status": "missing",
+                "reason": "unaligned PaLU variant did not complete",
+            },
+            "aligned_gac": summarize_measurements(aligned_variant.decode_results, "decode", "aligned_gac") if aligned_variant else {
+                "status": "missing",
+                "reason": "aligned GAC variant did not complete",
+            },
+        },
+        "alignment_pct": {
+            "baseline": {
+                "status": "measured",
+                "value": 100.0,
+            },
+            "unaligned": {
+                "status": "missing",
+                "reason": "unaligned PaLU alignment ratio is unavailable",
+            },
+            "aligned_gac": {
+                "status": "missing",
+                "reason": "aligned GAC alignment ratio is unavailable",
+            },
+        },
+        "sources": {
+            "comparison_json": "comparison.json",
+            "results_json": "results.json",
+        },
+        "notes": [],
+    }
+
+    if palu and palu.repair_info and "before_repair" in palu.repair_info:
+        summary["alignment_pct"]["unaligned"] = {
+            "status": "measured",
+            "value": palu.repair_info["before_repair"]["aligned_8_pct"],
+        }
+
+    if aligned_variant and aligned_variant.repair_info and "after" in aligned_variant.repair_info:
+        summary["alignment_pct"]["aligned_gac"] = {
+            "status": "measured",
+            "value": aligned_variant.repair_info["after"]["aligned_8_pct"],
+        }
+
+    if comparison:
+        summary["sources"]["comparison_metrics"] = "comparison.json"
+        summary["notes"].append(
+            "baseline / unaligned / aligned_gac are mapped from baseline / palu / {aligned_gac|palu_repair} variants in this run"
+        )
+
+    return summary
+
+
 def compute_comparison(results: Dict[str, VariantResult]) -> Dict:
     """Compute comparison metrics between variants."""
     comparison = {}
@@ -358,7 +494,7 @@ def compute_comparison(results: Dict[str, VariantResult]) -> Dict:
     # Get baseline metrics if available
     baseline = results.get("baseline")
     palu = results.get("palu")
-    palu_repair = results.get("palu_repair")
+    aligned_variant = results.get("aligned_gac") or results.get("palu_repair")
 
     if not baseline or not palu:
         return {"error": "Missing baseline or palu results"}
@@ -384,11 +520,11 @@ def compute_comparison(results: Dict[str, VariantResult]) -> Dict:
         "palu_vs_baseline_pct": 100.0 * (palu_prefill - baseline_prefill) / baseline_prefill if baseline_prefill > 0 else 0,
     }
 
-    if palu_repair:
-        repair_prefill = get_avg_throughput(palu_repair, "prefill")
-        comparison["prefill"]["palu_repair_tok_s"] = repair_prefill
-        comparison["prefill"]["repair_vs_palu_pct"] = 100.0 * (repair_prefill - palu_prefill) / palu_prefill if palu_prefill > 0 else 0
-        comparison["prefill"]["repair_vs_baseline_pct"] = 100.0 * (repair_prefill - baseline_prefill) / baseline_prefill if baseline_prefill > 0 else 0
+    if aligned_variant:
+        aligned_prefill = get_avg_throughput(aligned_variant, "prefill")
+        comparison["prefill"]["aligned_gac_tok_s"] = aligned_prefill
+        comparison["prefill"]["aligned_vs_palu_pct"] = 100.0 * (aligned_prefill - palu_prefill) / palu_prefill if palu_prefill > 0 else 0
+        comparison["prefill"]["aligned_vs_baseline_pct"] = 100.0 * (aligned_prefill - baseline_prefill) / baseline_prefill if baseline_prefill > 0 else 0
 
     # Compare decode throughput
     baseline_decode = get_avg_throughput(baseline, "decode")
@@ -400,22 +536,23 @@ def compute_comparison(results: Dict[str, VariantResult]) -> Dict:
         "palu_vs_baseline_pct": 100.0 * (palu_decode - baseline_decode) / baseline_decode if baseline_decode > 0 else 0,
     }
 
-    if palu_repair:
-        repair_decode = get_avg_throughput(palu_repair, "decode")
-        comparison["decode"]["palu_repair_tok_s"] = repair_decode
-        comparison["decode"]["repair_vs_palu_pct"] = 100.0 * (repair_decode - palu_decode) / palu_decode if palu_decode > 0 else 0
-        comparison["decode"]["repair_vs_baseline_pct"] = 100.0 * (repair_decode - baseline_decode) / baseline_decode if baseline_decode > 0 else 0
+    if aligned_variant:
+        aligned_decode = get_avg_throughput(aligned_variant, "decode")
+        comparison["decode"]["aligned_gac_tok_s"] = aligned_decode
+        comparison["decode"]["aligned_vs_palu_pct"] = 100.0 * (aligned_decode - palu_decode) / palu_decode if palu_decode > 0 else 0
+        comparison["decode"]["aligned_vs_baseline_pct"] = 100.0 * (aligned_decode - baseline_decode) / baseline_decode if baseline_decode > 0 else 0
 
     # Memory comparison
-    comparison["memory"] = {
-        "baseline_mb": baseline.memory_peak_mb,
-        "palu_mb": palu.memory_peak_mb,
-        "palu_compression_pct": 100.0 * (baseline.memory_peak_mb - palu.memory_peak_mb) / baseline.memory_peak_mb if baseline.memory_peak_mb > 0 else 0,
-    }
+    if baseline.memory_peak_mb > 0 and palu.memory_peak_mb > 0:
+        comparison["memory"] = {
+            "baseline_mb": baseline.memory_peak_mb,
+            "palu_mb": palu.memory_peak_mb,
+            "palu_compression_pct": 100.0 * (baseline.memory_peak_mb - palu.memory_peak_mb) / baseline.memory_peak_mb,
+        }
 
-    if palu_repair:
-        comparison["memory"]["palu_repair_mb"] = palu_repair.memory_peak_mb
-        comparison["memory"]["repair_overhead_pct"] = 100.0 * (palu_repair.memory_peak_mb - palu.memory_peak_mb) / palu.memory_peak_mb if palu.memory_peak_mb > 0 else 0
+        if aligned_variant and aligned_variant.memory_peak_mb > 0:
+            comparison["memory"]["aligned_gac_mb"] = aligned_variant.memory_peak_mb
+            comparison["memory"]["aligned_overhead_pct"] = 100.0 * (aligned_variant.memory_peak_mb - palu.memory_peak_mb) / palu.memory_peak_mb
 
     return comparison
 
@@ -451,8 +588,8 @@ def generate_summary_report(results: Dict[str, VariantResult], comparison: Dict,
             f"| Baseline | {p['baseline_tok_s']:.1f} | - |",
             f"| PaLU | {p['palu_tok_s']:.1f} | {p['palu_vs_baseline_pct']:+.1f}% |",
         ])
-        if "palu_repair_tok_s" in p:
-            lines.append(f"| PaLU+Repair | {p['palu_repair_tok_s']:.1f} | {p['repair_vs_baseline_pct']:+.1f}% |")
+        if "aligned_gac_tok_s" in p:
+            lines.append(f"| Aligned GAC | {p['aligned_gac_tok_s']:.1f} | {p['aligned_vs_baseline_pct']:+.1f}% |")
         lines.append("")
 
     # Decode comparison
@@ -466,8 +603,8 @@ def generate_summary_report(results: Dict[str, VariantResult], comparison: Dict,
             f"| Baseline | {d['baseline_tok_s']:.1f} | - |",
             f"| PaLU | {d['palu_tok_s']:.1f} | {d['palu_vs_baseline_pct']:+.1f}% |",
         ])
-        if "palu_repair_tok_s" in d:
-            lines.append(f"| PaLU+Repair | {d['palu_repair_tok_s']:.1f} | {d['repair_vs_baseline_pct']:+.1f}% |")
+        if "aligned_gac_tok_s" in d:
+            lines.append(f"| Aligned GAC | {d['aligned_gac_tok_s']:.1f} | {d['aligned_vs_baseline_pct']:+.1f}% |")
         lines.append("")
 
     # Memory comparison
@@ -481,26 +618,26 @@ def generate_summary_report(results: Dict[str, VariantResult], comparison: Dict,
             f"| Baseline | {m['baseline_mb']:.1f} | - |",
             f"| PaLU | {m['palu_mb']:.1f} | {m['palu_compression_pct']:+.1f}% |",
         ])
-        if "palu_repair_mb" in m:
-            lines.append(f"| PaLU+Repair | {m['palu_repair_mb']:.1f} | {m['repair_overhead_pct']:+.1f}% overhead |")
+        if "aligned_gac_mb" in m:
+            lines.append(f"| Aligned GAC | {m['aligned_gac_mb']:.1f} | {m['aligned_overhead_pct']:+.1f}% overhead |")
         lines.append("")
 
-    # Repair info
-    palu_repair = results.get("palu_repair")
-    if palu_repair and palu_repair.repair_info:
-        ri = palu_repair.repair_info
+    # Alignment info
+    aligned_variant = results.get("aligned_gac") or results.get("palu_repair")
+    if aligned_variant and aligned_variant.repair_info:
+        ri = aligned_variant.repair_info
         lines.extend([
-            "## Dimension Repair Analysis",
+            "## Alignment Analysis",
             "",
             f"- Strategy: {ri['strategy']}",
             f"- Memory overhead: {ri['memory_overhead_pct']:.2f}%",
             f"- Affected layers: {ri['affected_layers']}",
             "",
-            "### Before Repair",
+            "### Before Alignment",
             f"- Misaligned dimensions: {ri['before']['misaligned_pct']:.1f}%",
             f"- Unique dims: {ri['before']['unique_dims']}",
             "",
-            "### After Repair",
+            "### After Alignment",
             f"- Misaligned dimensions: {ri['after']['misaligned_pct']:.1f}%",
             f"- Unique dims: {ri['after']['unique_dims']}",
             "",
@@ -512,19 +649,19 @@ def generate_summary_report(results: Dict[str, VariantResult], comparison: Dict,
         "",
     ])
 
-    if "prefill" in comparison and "repair_vs_palu_pct" in comparison["prefill"]:
-        speedup = comparison["prefill"]["repair_vs_palu_pct"]
+    if "prefill" in comparison and "aligned_vs_palu_pct" in comparison["prefill"]:
+        speedup = comparison["prefill"]["aligned_vs_palu_pct"]
         if speedup > 0:
-            lines.append(f"- Dimension repair improves prefill throughput by **{speedup:.1f}%** over unrepaired PaLU")
+            lines.append(f"- GAC alignment improves prefill throughput by **{speedup:.1f}%** over unaligned PaLU")
 
-    if "decode" in comparison and "repair_vs_palu_pct" in comparison["decode"]:
-        speedup = comparison["decode"]["repair_vs_palu_pct"]
+    if "decode" in comparison and "aligned_vs_palu_pct" in comparison["decode"]:
+        speedup = comparison["decode"]["aligned_vs_palu_pct"]
         if speedup > 0:
-            lines.append(f"- Dimension repair improves decode throughput by **{speedup:.1f}%** over unrepaired PaLU")
+            lines.append(f"- GAC alignment improves decode throughput by **{speedup:.1f}%** over unaligned PaLU")
 
-    if palu_repair and palu_repair.repair_info:
-        overhead = palu_repair.repair_info["memory_overhead_pct"]
-        lines.append(f"- Memory overhead from repair: **{overhead:.2f}%**")
+    if aligned_variant and aligned_variant.repair_info:
+        overhead = aligned_variant.repair_info["memory_overhead_pct"]
+        lines.append(f"- Memory overhead from alignment: **{overhead:.2f}%**")
 
     return "\n".join(lines)
 
@@ -536,6 +673,10 @@ def main():
     parser.add_argument("--dtype", default="float16", choices=["float16", "bfloat16"])
     parser.add_argument("--repair-strategy", default="minimal",
                        choices=["minimal", "optimal", "predefined", "tradeoff"])
+    parser.add_argument("--palu-pattern", default="Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*")
+    parser.add_argument("--aligned-source", default="repair", choices=["repair", "checkpoint"])
+    parser.add_argument("--palu-aligned-pattern", default=None)
+    parser.add_argument("--baseline-results", type=Path, default=None)
     parser.add_argument("--smoke", action="store_true", help="Run smoke test with reduced params")
     parser.add_argument("--skip-baseline", action="store_true", help="Skip baseline (for faster iteration)")
     parser.add_argument("--run-id", default=None, help="Custom run ID")
@@ -597,12 +738,18 @@ def main():
         # Free memory
         del baseline_model
         torch.cuda.empty_cache()
+    elif args.baseline_results:
+        results["baseline"] = load_stored_variant_result(args.baseline_results, "baseline")
 
     # 2. PaLU benchmark
     print("\n" + "="*60)
     print("Loading PaLU Model")
     print("="*60)
-    palu_model, palu_tokenizer, palu_dir = load_palu_model_variant(args.device, torch_dtype)
+    palu_model, palu_tokenizer, palu_dir = load_palu_model_variant(
+        args.device,
+        torch_dtype,
+        pattern=args.palu_pattern,
+    )
 
     # Analyze PaLU dimensions
     palu_dim_analysis = analyze_palu_dimensions(palu_model)
@@ -613,24 +760,60 @@ def main():
     results["palu"] = run_variant("palu", palu_model, palu_tokenizer, config)
     results["palu"].repair_info = {"before_repair": palu_dim_analysis}
 
-    # 3. PaLU + Repair benchmark
-    print("\n" + "="*60)
-    print(f"Applying Dimension Repair (strategy={args.repair_strategy})")
-    print("="*60)
+    # 3. Aligned benchmark
+    if args.aligned_source == "checkpoint":
+        if not args.palu_aligned_pattern:
+            raise ValueError("--palu-aligned-pattern is required when --aligned-source=checkpoint")
 
-    repaired_model, repair_info = apply_dimension_repair(palu_model, strategy=args.repair_strategy)
-    print(f"Repair applied:")
-    print(f"  Memory overhead: {repair_info['memory_overhead_pct']:.2f}%")
-    print(f"  Affected layers: {repair_info['affected_layers']}")
-    print(f"  After repair - Misaligned: {repair_info['after']['misaligned_pct']:.1f}%")
+        print("\n" + "="*60)
+        print("Loading Aligned GAC PaLU Model")
+        print("="*60)
+        aligned_model, aligned_tokenizer, aligned_dir = load_palu_model_variant(
+            args.device,
+            torch_dtype,
+            pattern=args.palu_aligned_pattern,
+        )
+        aligned_dim_analysis = analyze_palu_dimensions(aligned_model)
+        print("Aligned GAC dimension analysis:")
+        print(f"  Unique dims: {aligned_dim_analysis['unique_dims']}")
+        print(f"  Misaligned: {aligned_dim_analysis['misaligned_pct']:.1f}%")
 
-    # Free original PaLU model before benchmarking repaired model to avoid double memory
-    del palu_model
-    import gc
-    gc.collect()
-    torch.cuda.empty_cache()
+        del palu_model
+        import gc
+        gc.collect()
+        torch.cuda.empty_cache()
 
-    results["palu_repair"] = run_variant("palu_repair", repaired_model, palu_tokenizer, config, repair_info)
+        results["aligned_gac"] = run_variant(
+            "aligned_gac",
+            aligned_model,
+            aligned_tokenizer,
+            config,
+            repair_info={
+                "strategy": "gac_checkpoint",
+                "before": palu_dim_analysis,
+                "after": aligned_dim_analysis,
+                "memory_overhead_pct": 0.0,
+                "affected_layers": 0,
+                "aligned_checkpoint_dir": str(aligned_dir),
+            },
+        )
+    else:
+        print("\n" + "="*60)
+        print(f"Applying Dimension Repair (strategy={args.repair_strategy})")
+        print("="*60)
+
+        repaired_model, repair_info = apply_dimension_repair(palu_model, strategy=args.repair_strategy)
+        print("Repair applied:")
+        print(f"  Memory overhead: {repair_info['memory_overhead_pct']:.2f}%")
+        print(f"  Affected layers: {repair_info['affected_layers']}")
+        print(f"  After repair - Misaligned: {repair_info['after']['misaligned_pct']:.1f}%")
+
+        del palu_model
+        import gc
+        gc.collect()
+        torch.cuda.empty_cache()
+
+        results["palu_repair"] = run_variant("palu_repair", repaired_model, palu_tokenizer, config, repair_info)
 
     # Compute comparison
     comparison = compute_comparison(results)
@@ -647,15 +830,17 @@ def main():
         "environment": collect_environment(),
         "palu_dir": str(palu_dir),
     }
+    comparison_summary = summarize_latency_comparison(results, comparison)
 
     (run_dir / "config.json").write_text(json.dumps(asdict(config), indent=2))
     (run_dir / "results.json").write_text(json.dumps(output_data, indent=2))
     (run_dir / "comparison.json").write_text(json.dumps(comparison, indent=2))
+    (run_dir / "comparison_summary.json").write_text(json.dumps(comparison_summary, indent=2))
     (run_dir / "report.md").write_text(report)
     (run_dir / "env.json").write_text(json.dumps(collect_environment(), indent=2))
 
     print(f"\nResults saved to: {run_dir}")
-    print("Files: config.json, results.json, comparison.json, report.md, env.json")
+    print("Files: config.json, results.json, comparison.json, comparison_summary.json, report.md, env.json")
 
     return 0
 
