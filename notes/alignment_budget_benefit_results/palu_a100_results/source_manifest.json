@@ -1,0 +1,39 @@
+{
+  "baseline_real_run_log": {
+    "path": "slurm_logs/25035_C5_palu_env.out",
+    "kind": "real_a100_slurm_stdout",
+    "notes": "Contains the partial baseline smoke benchmark that ran on A100 before the PaLU load step."
+  },
+  "baseline_real_run_err": {
+    "path": "slurm_logs/25035_C5_palu_env.err",
+    "kind": "real_a100_slurm_stderr",
+    "notes": "Contains the stderr stream for the same A100 run, including the subsequent PaLU failure traceback."
+  },
+  "palu_attempt_log": {
+    "path": "slurm_logs/25035_C5_palu_env.out",
+    "kind": "real_a100_palu_attempt_stdout",
+    "notes": "Shows the run advanced into 'Loading PaLU Model' after the baseline benchmark."
+  },
+  "palu_attempt_err": {
+    "path": "slurm_logs/25035_C5_palu_env.err",
+    "kind": "real_a100_palu_attempt_stderr",
+    "notes": "Records the FileNotFoundError caused by the historical absolute PaLU path."
+  },
+  "checkpoint_build_summary": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten/build_summary.json",
+    "kind": "repo_local_checkpoint_metadata",
+    "notes": "Repo-local PaLU checkpoint build metadata created after the path fix work."
+  },
+  "paper_a100_sources": [
+    {
+      "path": "Latex/main.tex",
+      "section_hint": "Table 1 / latency discussion around lines 520-580",
+      "notes": "Checked-in paper table with A100 baseline/ASVD/LLM-Pruner latency numbers."
+    },
+    {
+      "path": "Latex/slides.tex",
+      "section_hint": "Comprehensive Results slide around lines 700-720",
+      "notes": "Checked-in slide table with A100 prefill/decode summary."
+    }
+  ]
+}

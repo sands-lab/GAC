@@ -42,6 +42,7 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `asvd_example_aligned.json`: aligned rank config emitted by the repo-native ASVD adapter.
 - `asvd_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
 - `a100_real_profiling/`: repo-tracked A100 profiling bundle with a provenance manifest and structured summary of the checked-in real-measurement evidence and run commands.
+- `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, and the local checkpoint-build metadata.
 
 ## Key Takeaway
 
@@ -52,3 +53,5 @@ For LLM-Pruner, the checked-in repo-native example shows the same adapter/search
 For ASVD, the checked-in repo-native example keeps budget overhead at `1.32%` while cutting the proxy hardware penalty from `173.6875` to `2.0`. The structured paper evidence records the same qualitative story at model scale: alignment rises from `5%` to `100%`, and prefill latency improves from `100.5 ms` to `67.1 ms`.
 
 The `a100_real_profiling/` bundle complements these method bundles by consolidating the repository's checked-in A100 measurement protocol, layer-wise profiling conclusions, and profiling command provenance in one place. It also records the remaining gap that raw A100 CSV / NCU outputs are still not versioned in the repo.
+
+The `palu_a100_results/` bundle complements that hardware-level bundle with method-specific provenance for PaLU itself: it records the actual A100 partial baseline run found in `slurm_logs/25035_C5_palu_env.*`, the exact historical PaLU failure caused by the old absolute vendor path, and the repo-local checkpoint build metadata now available after the path-fix work.

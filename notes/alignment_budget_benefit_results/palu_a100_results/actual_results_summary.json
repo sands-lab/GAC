@@ -1,0 +1,52 @@
+{
+  "hardware": {
+    "gpu": "NVIDIA A100-80GB",
+    "device": "cuda:0",
+    "dtype": "float16",
+    "source": "slurm_logs/25035_C5_palu_env.out"
+  },
+  "baseline_real_smoke_run": {
+    "status": "partial_success",
+    "output_dir": "results/C5/real_gpu_paluenv_20260407T104718Z",
+    "smoke_mode": true,
+    "prefill": {
+      "batch1_seq256_latency_ms": 29.86,
+      "batch1_seq256_tok_s": 8608.0,
+      "batch1_seq512_latency_ms": 46.46,
+      "batch1_seq512_tok_s": 11019.0
+    },
+    "decode": {
+      "batch1_ctx256_gen32_latency_ms": 666.0,
+      "batch1_ctx256_gen32_tok_s": 48.0
+    },
+    "source_stdout": "slurm_logs/25035_C5_palu_env.out"
+  },
+  "palu_attempt": {
+    "status": "failed",
+    "failure_stage": "load_palu_model",
+    "failure_reason": "FileNotFoundError: No PaLU ratio directory matching Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4* under /home/xinj/rap/submodules/palu",
+    "root_cause": "The historical A100 run happened before the repo-relative PaLU path fix, so the job still referenced an obsolete absolute vendor path.",
+    "source_stdout": "slurm_logs/25035_C5_palu_env.out",
+    "source_stderr": "slurm_logs/25035_C5_palu_env.err"
+  },
+  "checkpoint_build": {
+    "status": "available",
+    "source_summary": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten/build_summary.json",
+    "model_id": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "output_dir": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten",
+    "param_ratio_target": 0.7,
+    "head_group_size": 4,
+    "search_method": "fisher_uniform",
+    "decompose_method": "whiten",
+    "effective_ratio": 0.703125
+  },
+  "paper_context": {
+    "checked_in_a100_baseline_prefill_ms_seq1024": 99.6,
+    "checked_in_a100_baseline_decode_ms": 25.1,
+    "notes": "These paper/slide numbers provide A100 context for the broader study, but they are not a completed repo-tracked PaLU runtime bundle."
+  },
+  "repo_gap": {
+    "current_missing_artifact": "The repository still has no completed real A100 PaLU inference JSON for baseline, palu, and palu_repair under a repo-tracked results directory.",
+    "why_it_matters": "Without that artifact set, the repository can prove the baseline run provenance and the old PaLU failure, but not claim a completed PaLU-vs-baseline-vs-repair A100 benchmark bundle."
+  }
+}
