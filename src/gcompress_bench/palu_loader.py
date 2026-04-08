@@ -12,6 +12,7 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PALU_VENDOR_DIR = REPO_ROOT / "third_party" / "palu"
+PALU_CHECKPOINT_DIR = REPO_ROOT / "results" / "palu_checkpoints"
 if str(PALU_VENDOR_DIR) not in sys.path:
     sys.path.insert(0, str(PALU_VENDOR_DIR))
 
@@ -33,13 +34,28 @@ def default_palu_base_dir() -> Path:
     return PALU_VENDOR_DIR
 
 
+def default_palu_checkpoint_dir() -> Path:
+    """Return the repo-local PaLU checkpoint output root."""
+    return PALU_CHECKPOINT_DIR
+
+
 def find_palu_dir(
     base: str | Path = default_palu_base_dir(),
     pattern: str = "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*",
 ) -> Path:
-    candidates = sorted(glob.glob(str(Path(base) / pattern)))
+    search_roots = [Path(base)]
+    if Path(base) == default_palu_base_dir():
+        checkpoint_root = default_palu_checkpoint_dir()
+        if checkpoint_root not in search_roots:
+            search_roots.append(checkpoint_root)
+
+    candidates = []
+    for root in search_roots:
+        candidates.extend(glob.glob(str(root / pattern)))
+    candidates = sorted(candidates)
     if not candidates:
-        raise FileNotFoundError(f"No PaLU ratio directory matching {pattern} under {base}")
+        roots = ", ".join(str(root) for root in search_roots)
+        raise FileNotFoundError(f"No PaLU ratio directory matching {pattern} under any of: {roots}")
     return Path(candidates[0])
 
 
@@ -74,7 +90,7 @@ def load_palu_model(
     model = AutoModelForCausalLM.from_pretrained(
         palu_dir,
         config=config,
-        torch_dtype=torch_dtype,
+        dtype=torch_dtype,
         device_map="auto" if device.startswith("cuda") else None,
         trust_remote_code=True,
     )

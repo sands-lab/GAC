@@ -26,6 +26,8 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from src.gcompress_bench.palu_loader import default_palu_base_dir  # noqa: E402
+from src.gcompress_bench.alignment_budget import get_hardware_contract  # noqa: E402
+from src.gcompress_bench.alignment_budget.adapters import PaluBudgetAdapter  # noqa: E402
 
 PALU_VENDOR_DIR = default_palu_base_dir()
 if str(PALU_VENDOR_DIR) not in sys.path:
@@ -49,6 +51,10 @@ def build_output_dir(args: argparse.Namespace) -> Path:
         f"_gs-{args.head_group_size}"
         f"-{args.search_method}-{args.decompose_method}"
     )
+    if args.rank_block_size not in (None, 32):
+        dirname += f"-rb{args.rank_block_size}"
+    if args.alignment_method != "none":
+        dirname += f"-{args.alignment_method}-{args.hardware_contract}"
     return Path(args.output_root) / dirname
 
 
@@ -115,6 +121,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--attn-implementation", default="sdpa", choices=["sdpa", "flash_attention_2"])
     parser.add_argument("--dimension-repair-strategy", default=None)
     parser.add_argument("--dimension-repair-max-overhead-pct", type=float, default=20.0)
+    parser.add_argument("--rank-block-size", type=int, default=32)
+    parser.add_argument("--alignment-method", default="none", choices=["none", "gac"])
+    parser.add_argument("--hardware-contract", default="a100")
+    parser.add_argument("--alignment-max-overhead-pct", type=float, default=20.0)
+    parser.add_argument("--alignment-search-radius", type=int, default=16)
     return parser.parse_args()
 
 
@@ -126,7 +137,7 @@ def main() -> int:
     tokenizer = AutoTokenizer.from_pretrained(args.model_id, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
-        torch_dtype=torch_dtype,
+        dtype=torch_dtype,
         trust_remote_code=True,
         device_map="auto" if args.device.startswith("cuda") else None,
         attn_implementation=args.attn_implementation,
@@ -134,7 +145,20 @@ def main() -> int:
     model.eval()
 
     search_results, rank_sum, total_rank = rank_search(model, tokenizer, args)
-    compress_model(model, tokenizer, args, args.device, search_results)
+    selected_ranks = search_results
+    alignment_summary = None
+    if args.alignment_method == "gac":
+        adapter = PaluBudgetAdapter()
+        alignment_result = adapter.align_config(
+            search_results,
+            contract=get_hardware_contract(args.hardware_contract),
+            max_overhead_pct=args.alignment_max_overhead_pct,
+            search_radius=args.alignment_search_radius,
+        )
+        selected_ranks = alignment_result["aligned_config"]
+        alignment_summary = alignment_result["summary"]
+
+    compress_model(model, tokenizer, args, args.device, selected_ranks)
 
     output_dir = build_output_dir(args)
     summary = {
@@ -144,10 +168,15 @@ def main() -> int:
         "head_group_size": args.head_group_size,
         "search_method": args.search_method,
         "decompose_method": args.decompose_method,
+        "rank_block_size": args.rank_block_size,
+        "alignment_method": args.alignment_method,
+        "hardware_contract": args.hardware_contract,
         "rank_sum": rank_sum,
         "total_rank": total_rank,
         "effective_ratio": (rank_sum / total_rank) if total_rank else None,
     }
+    if alignment_summary is not None:
+        summary["alignment_summary"] = alignment_summary
 
     if args.dump_huggingface_model:
         dump_palu_checkpoint(model, tokenizer, output_dir, baseline_model_id=args.model_id)
