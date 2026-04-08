@@ -17,8 +17,11 @@
 
 set -euo pipefail
 
+# Some activation hooks assume unset shell variables are tolerated.
+set +u
 source /home/lyut/miniforge3/etc/profile.d/conda.sh
 conda activate palu
+set -u
 cd $SLURM_SUBMIT_DIR
 
 # Set up Python path
