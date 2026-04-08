@@ -1,0 +1,87 @@
+{
+  "hardware": {
+    "gpu": "NVIDIA A100-80GB",
+    "device": "cuda:0",
+    "dtype": "float16"
+  },
+  "measurement_scope": {
+    "prefill": {
+      "status": "partial_measured",
+      "measured_shapes": [
+        "batch1_seq256",
+        "batch1_seq512"
+      ],
+      "notes": "Values come from the real A100 smoke run captured before the PaLU load step failed."
+    },
+    "decode": {
+      "status": "partial_measured",
+      "measured_shapes": [
+        "batch1_ctx256_gen32"
+      ],
+      "notes": "Only the baseline smoke decode measurement completed in the checked-in A100 run."
+    }
+  },
+  "prefill_latency_ms": {
+    "baseline": {
+      "status": "partial_measured",
+      "measurements": {
+        "batch1_seq256": 29.86,
+        "batch1_seq512": 46.46
+      },
+      "source": "slurm_logs/25035_C5_palu_env.out"
+    },
+    "unaligned": {
+      "status": "missing",
+      "reason": "The historical A100 PaLU run failed during model loading before any unaligned PaLU prefill latency was recorded.",
+      "source": "slurm_logs/25035_C5_palu_env.err"
+    },
+    "aligned_gac": {
+      "status": "missing",
+      "reason": "No completed repo-tracked PaLU+Repair A100 prefill run is checked in yet."
+    }
+  },
+  "decode_latency_ms": {
+    "baseline": {
+      "status": "partial_measured",
+      "measurements": {
+        "batch1_ctx256_gen32": 666.0
+      },
+      "source": "slurm_logs/25035_C5_palu_env.out"
+    },
+    "unaligned": {
+      "status": "missing",
+      "reason": "The historical A100 PaLU run failed during model loading before any unaligned PaLU decode latency was recorded.",
+      "source": "slurm_logs/25035_C5_palu_env.err"
+    },
+    "aligned_gac": {
+      "status": "missing",
+      "reason": "No completed repo-tracked PaLU+Repair A100 decode run is checked in yet."
+    }
+  },
+  "alignment_pct": {
+    "baseline": {
+      "status": "measured",
+      "value": 100.0,
+      "notes": "The uncompressed baseline serves as the aligned reference."
+    },
+    "unaligned": {
+      "status": "missing",
+      "reason": "The checked-in PaLU A100 evidence bundle does not yet include a completed run or a repo-tracked extracted alignment ratio for this exact benchmark."
+    },
+    "aligned_gac": {
+      "status": "missing",
+      "reason": "The checked-in PaLU A100 evidence bundle does not yet include a completed PaLU+Repair run for this exact benchmark."
+    }
+  },
+  "sources": {
+    "baseline_log": "slurm_logs/25035_C5_palu_env.out",
+    "baseline_err": "slurm_logs/25035_C5_palu_env.err",
+    "checkpoint_build_summary": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten/build_summary.json",
+    "future_runtime_export": "scripts/run_c5_e2e_comparison.py -> comparison_summary.json"
+  },
+  "notes": [
+    "This file normalizes the currently available PaLU evidence into the same baseline / unaligned / aligned_gac comparison shape used by other method artifacts.",
+    "Unlike ASVD and LLM-Pruner, the current PaLU entries are still partial because the only checked-in A100 run failed before the PaLU and PaLU+Repair benchmarks completed.",
+    "Once a full run succeeds, these missing entries should be replaced by measured values exported from comparison_summary.json."
+  ]
+}

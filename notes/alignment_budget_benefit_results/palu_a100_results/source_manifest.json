@@ -24,6 +24,11 @@
     "kind": "repo_local_checkpoint_metadata",
     "notes": "Repo-local PaLU checkpoint build metadata created after the path fix work."
   },
+  "latency_comparison_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/latency_comparison.json",
+    "kind": "repo_tracked_partial_latency_summary",
+    "notes": "Normalizes the currently available PaLU baseline / unaligned / aligned latency evidence into one comparison-shaped summary, explicitly marking which entries are still missing."
+  },
   "paper_a100_sources": [
     {
       "path": "Latex/main.tex",

@@ -42,7 +42,7 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `asvd_example_aligned.json`: aligned rank config emitted by the repo-native ASVD adapter.
 - `asvd_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
 - `a100_real_profiling/`: repo-tracked A100 profiling bundle with a provenance manifest and structured summary of the checked-in real-measurement evidence and run commands.
-- `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, and the local checkpoint-build metadata.
+- `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, the local checkpoint-build metadata, and a comparison-shaped latency summary with explicit baseline / unaligned / aligned status fields.
 
 ## Key Takeaway
 
@@ -54,4 +54,4 @@ For ASVD, the checked-in repo-native example keeps budget overhead at `1.32%` wh
 
 The `a100_real_profiling/` bundle complements these method bundles by consolidating the repository's checked-in A100 measurement protocol, layer-wise profiling conclusions, and profiling command provenance in one place. It also records the remaining gap that raw A100 CSV / NCU outputs are still not versioned in the repo.
 
-The `palu_a100_results/` bundle complements that hardware-level bundle with method-specific provenance for PaLU itself: it records the actual A100 partial baseline run found in `slurm_logs/25035_C5_palu_env.*`, the exact historical PaLU failure caused by the old absolute vendor path, and the repo-local checkpoint build metadata now available after the path-fix work.
+The `palu_a100_results/` bundle complements that hardware-level bundle with method-specific provenance for PaLU itself: it records the actual A100 partial baseline run found in `slurm_logs/25035_C5_palu_env.*`, the exact historical PaLU failure caused by the old absolute vendor path, the repo-local checkpoint build metadata now available after the path-fix work, and a normalized latency summary that keeps `baseline / unaligned / aligned_gac` fields stable even when some entries are still missing.

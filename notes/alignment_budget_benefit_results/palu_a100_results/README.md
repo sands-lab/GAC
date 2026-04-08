@@ -21,6 +21,7 @@ This bundle separates three evidence classes:
 
 - `source_manifest.json`: provenance index for the real A100 logs, checkpoint build summary, and paper/slide references
 - `actual_results_summary.json`: structured extraction of the partial baseline run, failed PaLU attempt, checkpoint metadata, and current missing-artifact boundary
+- `latency_comparison.json`: comparison-shaped summary with explicit `baseline` / `unaligned` / `aligned_gac` latency fields; measured entries are filled from current evidence and missing entries are preserved as structured gaps
 
 ## Current Best Actual Evidence
 
@@ -41,6 +42,20 @@ The repository previously had no single place that answered:
 - what is still missing before a complete baseline / PaLU / PaLU+Repair A100 result set can be claimed.
 
 This bundle makes that boundary explicit.
+
+## Comparison Shape
+
+To match the ASVD / LLM-Pruner artifact style, `latency_comparison.json` always exposes:
+
+- `prefill_latency_ms.baseline|unaligned|aligned_gac`
+- `decode_latency_ms.baseline|unaligned|aligned_gac`
+- `alignment_pct.baseline|unaligned|aligned_gac`
+
+For the current checked-in PaLU evidence:
+
+- `baseline` is partially measured from the real A100 smoke run in `slurm_logs/25035_C5_palu_env.out`
+- `unaligned` is marked missing because the historical run failed before the PaLU benchmark started
+- `aligned_gac` is marked missing because no completed repo-tracked PaLU+Repair A100 run has been checked in yet
 
 ## Current Gap
 

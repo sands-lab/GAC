@@ -351,6 +351,125 @@ def run_variant(variant_name: str, model, tokenizer, config: BenchmarkConfig,
     )
 
 
+def summarize_latency_comparison(results: Dict[str, VariantResult], comparison: Dict) -> Dict:
+    """Build a compact baseline/unaligned/aligned latency summary for downstream artifacts."""
+
+    def summarize_measurements(entries: List[Dict], mode: str, variant_label: str) -> Dict:
+        valid = [
+            entry for entry in entries
+            if "error" not in entry
+            and isinstance(entry.get("latency_ms"), dict)
+            and "mean" in entry["latency_ms"]
+        ]
+        if not valid:
+            return {
+                "status": "missing",
+                "reason": f"no successful {mode} measurements recorded for {variant_label}",
+            }
+
+        measurement_map = {}
+        latencies = []
+        throughputs = []
+        for entry in valid:
+            if mode == "prefill":
+                shape_key = f"batch{entry['batch']}_seq{entry['seq_len']}"
+            else:
+                shape_key = f"batch{entry['batch']}_ctx{entry['context_len']}_gen{entry['gen_len']}"
+            measurement_map[shape_key] = entry["latency_ms"]["mean"]
+            latencies.append(entry["latency_ms"]["mean"])
+
+            throughput = entry.get("throughput_toks_per_s")
+            if isinstance(throughput, dict) and "mean" in throughput:
+                throughputs.append(throughput["mean"])
+
+        summary = {
+            "status": "measured",
+            "measurements": measurement_map,
+            "average_latency_ms": sum(latencies) / len(latencies),
+        }
+        if throughputs:
+            summary["average_throughput_tok_s"] = sum(throughputs) / len(throughputs)
+        return summary
+
+    baseline = results.get("baseline")
+    palu = results.get("palu")
+    palu_repair = results.get("palu_repair")
+
+    summary = {
+        "measurement_scope": {
+            "prefill": "aggregated from the per-shape prefill measurements in this run",
+            "decode": "aggregated from the per-shape decode measurements in this run",
+        },
+        "prefill_latency_ms": {
+            "baseline": summarize_measurements(baseline.prefill_results, "prefill", "baseline") if baseline else {
+                "status": "missing",
+                "reason": "baseline variant was skipped",
+            },
+            "unaligned": summarize_measurements(palu.prefill_results, "prefill", "palu") if palu else {
+                "status": "missing",
+                "reason": "unaligned PaLU variant did not complete",
+            },
+            "aligned_gac": summarize_measurements(palu_repair.prefill_results, "prefill", "palu_repair") if palu_repair else {
+                "status": "missing",
+                "reason": "aligned PaLU+Repair variant did not complete",
+            },
+        },
+        "decode_latency_ms": {
+            "baseline": summarize_measurements(baseline.decode_results, "decode", "baseline") if baseline else {
+                "status": "missing",
+                "reason": "baseline variant was skipped",
+            },
+            "unaligned": summarize_measurements(palu.decode_results, "decode", "palu") if palu else {
+                "status": "missing",
+                "reason": "unaligned PaLU variant did not complete",
+            },
+            "aligned_gac": summarize_measurements(palu_repair.decode_results, "decode", "palu_repair") if palu_repair else {
+                "status": "missing",
+                "reason": "aligned PaLU+Repair variant did not complete",
+            },
+        },
+        "alignment_pct": {
+            "baseline": {
+                "status": "measured",
+                "value": 100.0,
+            },
+            "unaligned": {
+                "status": "missing",
+                "reason": "unaligned PaLU alignment ratio is unavailable",
+            },
+            "aligned_gac": {
+                "status": "missing",
+                "reason": "aligned PaLU+Repair alignment ratio is unavailable",
+            },
+        },
+        "sources": {
+            "comparison_json": "comparison.json",
+            "results_json": "results.json",
+        },
+        "notes": [],
+    }
+
+    if palu and palu.repair_info and "before_repair" in palu.repair_info:
+        summary["alignment_pct"]["unaligned"] = {
+            "status": "measured",
+            "value": palu.repair_info["before_repair"]["aligned_8_pct"],
+        }
+
+    if palu_repair and palu_repair.repair_info and "after" in palu_repair.repair_info:
+        summary["alignment_pct"]["aligned_gac"] = {
+            "status": "measured",
+            "value": palu_repair.repair_info["after"]["aligned_8_pct"],
+        }
+
+    if comparison:
+        summary["sources"]["comparison_metrics"] = "comparison.json"
+        summary["notes"].append(
+            "baseline / unaligned / aligned_gac are mapped from baseline / palu / palu_repair variants in this run"
+        )
+
+    return summary
+
+
 def compute_comparison(results: Dict[str, VariantResult]) -> Dict:
     """Compute comparison metrics between variants."""
     comparison = {}
@@ -647,15 +766,17 @@ def main():
         "environment": collect_environment(),
         "palu_dir": str(palu_dir),
     }
+    comparison_summary = summarize_latency_comparison(results, comparison)
 
     (run_dir / "config.json").write_text(json.dumps(asdict(config), indent=2))
     (run_dir / "results.json").write_text(json.dumps(output_data, indent=2))
     (run_dir / "comparison.json").write_text(json.dumps(comparison, indent=2))
+    (run_dir / "comparison_summary.json").write_text(json.dumps(comparison_summary, indent=2))
     (run_dir / "report.md").write_text(report)
     (run_dir / "env.json").write_text(json.dumps(collect_environment(), indent=2))
 
     print(f"\nResults saved to: {run_dir}")
-    print("Files: config.json, results.json, comparison.json, report.md, env.json")
+    print("Files: config.json, results.json, comparison.json, comparison_summary.json, report.md, env.json")
 
     return 0
 
