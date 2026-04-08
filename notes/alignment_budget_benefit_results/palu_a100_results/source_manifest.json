@@ -1,4 +1,29 @@
 {
+  "baseline_real_run_log": {
+    "path": "slurm_logs/25035_C5_palu_env.out",
+    "kind": "real_a100_slurm_stdout",
+    "notes": "Historical actual A100 smoke run stdout containing the partial baseline measurements captured before the PaLU path failure."
+  },
+  "baseline_real_run_err": {
+    "path": "slurm_logs/25035_C5_palu_env.err",
+    "kind": "real_a100_slurm_stderr",
+    "notes": "Companion stderr for the historical actual A100 smoke run."
+  },
+  "palu_attempt_log": {
+    "path": "slurm_logs/25035_C5_palu_env.out",
+    "kind": "real_a100_failed_palu_stdout",
+    "notes": "Same historical smoke run stdout, reused because the baseline partial success and the PaLU load failure happened in one job."
+  },
+  "palu_attempt_err": {
+    "path": "slurm_logs/25035_C5_palu_env.err",
+    "kind": "real_a100_failed_palu_stderr",
+    "notes": "Historical stderr recording the PaLU absolute-path failure."
+  },
+  "checkpoint_build_summary": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten/build_summary.json",
+    "kind": "repo_local_checkpoint_metadata",
+    "notes": "Repo-local PaLU checkpoint build summary captured for the original actual-results provenance bundle."
+  },
   "baseline_recovered_results": {
     "path": "results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json",
     "kind": "repo_tracked_baseline_recovery",

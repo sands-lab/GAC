@@ -1,17 +1,20 @@
 # PaLU A100 Results Bundle
 
 This bundle collects the repo-tracked PaLU A100 latency comparison and its provenance under `notes/alignment_budget_benefit_results/`.
+It also preserves the older actual A100 partial baseline run provenance introduced by the previous issue, so the bundle now carries both the historical smoke-run evidence and the final completed comparison summary.
 
 ## Scope
 
 - Hardware target: NVIDIA A100
 - Model family: Llama-3-8B / PaLU compressed Llama-3-8B
 - Goal: make the final `baseline / unaligned / aligned_gac` PaLU comparison easy to inspect from one place
+- Historical provenance retained: actual A100 partial baseline run plus the failed pre-fix PaLU attempt
 - Non-goal: this bundle does not preserve the older `palu_repair` runtime path as the aligned reference
 
 ## Included Files
 
-- `source_manifest.json`: provenance index for the recovered baseline results, completed comparison run, and aligned checkpoint metadata
+- `source_manifest.json`: provenance index for the historical actual A100 smoke run, recovered baseline results, completed comparison run, and aligned checkpoint metadata
+- `actual_results_summary.json`: issue-20 summary of the actual A100 partial baseline run, failed PaLU attempt, and remaining historical gap
 - `latency_comparison.json`: normalized comparison summary with explicit `baseline` / `unaligned` / `aligned_gac` latency and alignment fields
 - `README.md`: human-readable summary of the completed PaLU A100 comparison
 
@@ -53,6 +56,9 @@ For the current checked-in PaLU evidence:
 
 ## Provenance
 
+- Historical actual A100 partial baseline run:
+  - `slurm_logs/25035_C5_palu_env.out`
+  - `slurm_logs/25035_C5_palu_env.err`
 - Baseline-only recovered artifact:
   - `results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json`
 - Completed comparison run:
