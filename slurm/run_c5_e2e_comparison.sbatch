@@ -25,7 +25,7 @@ set -u
 cd $SLURM_SUBMIT_DIR
 
 # Set up Python path
-export PYTHONPATH="$SLURM_SUBMIT_DIR:$SLURM_SUBMIT_DIR/src:$SLURM_SUBMIT_DIR/third_party/palu:$PYTHONPATH"
+export PYTHONPATH="$SLURM_SUBMIT_DIR:$SLURM_SUBMIT_DIR/src:$SLURM_SUBMIT_DIR/third_party/palu:${PYTHONPATH:-}"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export TRANSFORMERS_OFFLINE=1
 export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
