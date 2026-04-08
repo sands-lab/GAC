@@ -266,7 +266,19 @@ def benchmark_decode(model, tokenizer, config: BenchmarkConfig) -> List[Dict]:
             for gen in config.decode_gen_lens:
                 print(f"  Decode: batch={b}, ctx={ctx}, gen={gen}", end="", flush=True)
                 input_ids, attention_mask = gen_input(tokenizer, b, ctx, device)
-                gen_kwargs = dict(max_new_tokens=gen, do_sample=False)
+                # Force a fixed decode length so throughput is measured against tokens that
+                # were actually emitted instead of an upper bound that may early-stop.
+                gen_kwargs = dict(max_new_tokens=gen, min_new_tokens=gen, do_sample=False)
+
+                with torch.inference_mode():
+                    probe_output = model.generate(
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        **gen_kwargs,
+                    )
+                actual_new_tokens = int(probe_output.shape[1] - input_ids.shape[1])
+                del probe_output
+                torch.cuda.empty_cache()
                 reset_memory()
 
                 def fn():
@@ -277,19 +289,26 @@ def benchmark_decode(model, tokenizer, config: BenchmarkConfig) -> List[Dict]:
                     res = measure_kernel(fn, warmup=config.warmup // 2, measure=config.measure,
                                         trials=config.trials, device=device)
                     mem = memory_stats()
-                    tokens = b * gen
+                    tokens = b * actual_new_tokens
                     throughput = [tokens / (t / 1000.0) for t in res["times_ms"]]
 
                     result = {
                         "batch": b,
                         "context_len": ctx,
                         "gen_len": gen,
+                        "requested_new_tokens": gen,
+                        "actual_new_tokens": actual_new_tokens,
+                        "decode_length_mode": "fixed_new_tokens",
                         "latency_ms": res["stats"],
                         "throughput_toks_per_s": compute_stats(throughput),
                         "memory_mb": mem.get("peak_mb", 0),
                     }
                     results.append(result)
-                    print(f" -> {res['stats']['mean']:.2f}ms, {compute_stats(throughput)['mean']:.1f} tok/s")
+                    print(
+                        f" -> {res['stats']['mean']:.2f}ms, "
+                        f"{compute_stats(throughput)['mean']:.1f} tok/s, "
+                        f"actual={actual_new_tokens}"
+                    )
 
                 except RuntimeError as e:
                     print(f" -> ERROR: {str(e)[:50]}")
@@ -297,6 +316,9 @@ def benchmark_decode(model, tokenizer, config: BenchmarkConfig) -> List[Dict]:
                         "batch": b,
                         "context_len": ctx,
                         "gen_len": gen,
+                        "requested_new_tokens": gen,
+                        "actual_new_tokens": actual_new_tokens,
+                        "decode_length_mode": "fixed_new_tokens",
                         "error": str(e),
                     })
                     del input_ids, attention_mask
@@ -387,6 +409,8 @@ def summarize_latency_comparison(results: Dict[str, VariantResult], comparison: 
         measurement_map = {}
         latencies = []
         throughputs = []
+        actual_new_tokens_map = {}
+        decode_length_modes = set()
         for entry in valid:
             if mode == "prefill":
                 shape_key = f"batch{entry['batch']}_seq{entry['seq_len']}"
@@ -398,6 +422,10 @@ def summarize_latency_comparison(results: Dict[str, VariantResult], comparison: 
             throughput = entry.get("throughput_toks_per_s")
             if isinstance(throughput, dict) and "mean" in throughput:
                 throughputs.append(throughput["mean"])
+            if mode == "decode" and isinstance(entry.get("actual_new_tokens"), int):
+                actual_new_tokens_map[shape_key] = entry["actual_new_tokens"]
+            if mode == "decode" and isinstance(entry.get("decode_length_mode"), str):
+                decode_length_modes.add(entry["decode_length_mode"])
 
         summary = {
             "status": "measured",
@@ -406,6 +434,14 @@ def summarize_latency_comparison(results: Dict[str, VariantResult], comparison: 
         }
         if throughputs:
             summary["average_throughput_tok_s"] = sum(throughputs) / len(throughputs)
+        if actual_new_tokens_map:
+            summary["actual_new_tokens"] = actual_new_tokens_map
+        if decode_length_modes:
+            summary["decode_length_mode"] = (
+                next(iter(decode_length_modes))
+                if len(decode_length_modes) == 1
+                else sorted(decode_length_modes)
+            )
         return summary
 
     baseline = results.get("baseline")

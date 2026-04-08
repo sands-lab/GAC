@@ -1,0 +1,95 @@
+{
+  "historical_measurement_scope": {
+    "bundle": "results/C5/20260408_120500_palu_unaligned_vs_gac",
+    "decode_contract_before_fix": {
+      "generation_kwargs": "max_new_tokens=gen, do_sample=False",
+      "throughput_formula": "batch * gen / latency",
+      "limitation": "The old decode path treated the requested gen length as if it had always been emitted, even though generate() could stop early."
+    },
+    "prefill_contract": "Prefill used a direct forward pass over a fixed input tensor, so it did not have the same early-stop ambiguity."
+  },
+  "suspicious_decode_shapes": [
+    {
+      "variant": "baseline",
+      "shape_pair": "batch1_ctx1024_gen64_vs_gen128",
+      "latency_ms": {
+        "gen64": 1081.14,
+        "gen128": 1079.88
+      },
+      "throughput_tok_s": {
+        "gen64": 59.2,
+        "gen128": 118.5
+      },
+      "signal": "Requested generation doubled while latency stayed flat, so the higher throughput cannot represent a true fixed-length decode loop."
+    },
+    {
+      "variant": "palu",
+      "shape_pair": "batch1_ctx512_gen64_vs_gen128",
+      "latency_ms": {
+        "gen64": 213.00885399712456,
+        "gen128": 212.76176011827258
+      },
+      "throughput_tok_s": {
+        "gen64": 300.5941999361373,
+        "gen128": 601.8039712546256
+      },
+      "signal": "The unaligned PaLU run shows near-identical latency but almost exactly doubled throughput, which is a classic requested-tokens-vs-actual-tokens mismatch."
+    },
+    {
+      "variant": "palu",
+      "shape_pair": "batch1_ctx1024_gen64_vs_gen128",
+      "latency_ms": {
+        "gen64": 307.6997589111328,
+        "gen128": 308.42696058485245
+      },
+      "throughput_tok_s": {
+        "gen64": 208.0606146130422,
+        "gen128": 415.15258307683956
+      },
+      "signal": "The same flat-latency / doubled-throughput pattern repeats at ctx=1024, so the anomaly is not isolated to one prompt length."
+    },
+    {
+      "variant": "aligned_gac",
+      "shape_pair": "batch1_ctx512_gen64_vs_gen128",
+      "latency_ms": {
+        "gen64": 52.987177191840274,
+        "gen128": 53.00969013637967
+      },
+      "throughput_tok_s": {
+        "gen64": 1207.8623622596192,
+        "gen128": 2414.6970174994176
+      },
+      "signal": "Aligned GAC inherits the same measurement pathology, which means the old decode gap is contaminated by the benchmark contract rather than only by kernel efficiency."
+    },
+    {
+      "variant": "aligned_gac",
+      "shape_pair": "batch1_ctx1024_gen64_vs_gen128",
+      "latency_ms": {
+        "gen64": 146.42593875461154,
+        "gen128": 145.62249315049914
+      },
+      "throughput_tok_s": {
+        "gen64": 437.17872748598796,
+        "gen128": 879.097679993657
+      },
+      "signal": "At ctx=1024 the aligned run again keeps latency constant while requested output doubles, so the old throughput is inflated."
+    }
+  ],
+  "likely_root_cause": "The most likely root cause is early stopping inside generate(): the synthetic decode prompts are EOS-heavy, so some shapes can terminate before the requested gen length is reached, but the historical benchmark still computed throughput as if every requested token had been produced. That mismatch causes throughput inflation and exaggerates decode-side gains relative to the more trustworthy fixed-shape prefill path.",
+  "current_fix": {
+    "script": "scripts/run_c5_e2e_comparison.py",
+    "decode_length_mode": "fixed_new_tokens",
+    "generation_guard": "max_new_tokens=gen, min_new_tokens=gen",
+    "recorded_fields": [
+      "requested_new_tokens",
+      "actual_new_tokens",
+      "decode_length_mode"
+    ],
+    "follow_up": "Future reruns should interpret decode throughput together with actual_new_tokens and replace the historical comparison summary."
+  },
+  "evidence_sources": [
+    "results/C5/20260408_120500_palu_unaligned_vs_gac/results.json",
+    "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json",
+    "scripts/run_c5_e2e_comparison.py"
+  ]
+}
