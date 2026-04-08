@@ -1,33 +1,33 @@
 {
-  "baseline_real_run_log": {
-    "path": "slurm_logs/25035_C5_palu_env.out",
+  "baseline_recovered_results": {
+    "path": "results/C5/20260408_102500_palu_latency_compare_retry1_baseline_only/results.json",
+    "kind": "repo_tracked_baseline_recovery",
+    "notes": "Minimal baseline-only results artifact reconstructed from the successful baseline portion of job 25269 so later runs could use --skip-baseline."
+  },
+  "baseline_source_log": {
+    "path": "slurm_logs/25269_C5_e2e_comparison.out",
     "kind": "real_a100_slurm_stdout",
-    "notes": "Contains the partial baseline smoke benchmark that ran on A100 before the PaLU load step."
+    "notes": "Contains the original successful baseline measurements later normalized into the recovered baseline-only artifact."
   },
-  "baseline_real_run_err": {
-    "path": "slurm_logs/25035_C5_palu_env.err",
-    "kind": "real_a100_slurm_stderr",
-    "notes": "Contains the stderr stream for the same A100 run, including the subsequent PaLU failure traceback."
+  "unaligned_checkpoint": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1/config.json",
+    "kind": "repo_local_unaligned_checkpoint",
+    "notes": "True unaligned PaLU checkpoint built with rank_block_size=1, preserving non-aligned ranks."
   },
-  "palu_attempt_log": {
-    "path": "slurm_logs/25035_C5_palu_env.out",
-    "kind": "real_a100_palu_attempt_stdout",
-    "notes": "Shows the run advanced into 'Loading PaLU Model' after the baseline benchmark."
+  "aligned_checkpoint_build_summary": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/build_summary.json",
+    "kind": "repo_local_aligned_checkpoint_metadata",
+    "notes": "GAC alignment metadata for the final aligned PaLU checkpoint used in the completed comparison run."
   },
-  "palu_attempt_err": {
-    "path": "slurm_logs/25035_C5_palu_env.err",
-    "kind": "real_a100_palu_attempt_stderr",
-    "notes": "Records the FileNotFoundError caused by the historical absolute PaLU path."
-  },
-  "checkpoint_build_summary": {
-    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten/build_summary.json",
-    "kind": "repo_local_checkpoint_metadata",
-    "notes": "Repo-local PaLU checkpoint build metadata created after the path fix work."
+  "completed_comparison_run": {
+    "path": "results/C5/20260408_120500_palu_unaligned_vs_gac/results.json",
+    "kind": "repo_tracked_completed_latency_run",
+    "notes": "Completed A100 comparison run containing the unaligned PaLU and aligned GAC benchmark results."
   },
   "latency_comparison_summary": {
     "path": "notes/alignment_budget_benefit_results/palu_a100_results/latency_comparison.json",
-    "kind": "repo_tracked_partial_latency_summary",
-    "notes": "Normalizes the currently available PaLU baseline / unaligned / aligned latency evidence into one comparison-shaped summary, explicitly marking which entries are still missing."
+    "kind": "repo_tracked_final_latency_summary",
+    "notes": "Normalizes the final baseline / unaligned / aligned_gac PaLU A100 evidence into the common comparison-shaped summary used by the other method bundles."
   },
   "paper_a100_sources": [
     {
