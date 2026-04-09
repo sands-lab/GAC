@@ -43,6 +43,9 @@ PALU_PATTERN="Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*"
 ALIGNED_SOURCE="repair"
 PALU_ALIGNED_PATTERN=""
 BASELINE_RESULTS=""
+WARMUP=""
+MEASURE=""
+TRIALS=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -54,6 +57,9 @@ while [[ $# -gt 0 ]]; do
     --aligned-source) ALIGNED_SOURCE="$2"; shift 2;;
     --palu-aligned-pattern) PALU_ALIGNED_PATTERN="$2"; shift 2;;
     --baseline-results) BASELINE_RESULTS="$2"; shift 2;;
+    --warmup) WARMUP="$2"; shift 2;;
+    --measure) MEASURE="$2"; shift 2;;
+    --trials) TRIALS="$2"; shift 2;;
     *) echo "Unknown arg: $1"; exit 1;;
   esac
 done
@@ -71,6 +77,9 @@ echo "PaLU Pattern: $PALU_PATTERN"
 echo "Aligned Source: $ALIGNED_SOURCE"
 echo "Aligned Pattern: ${PALU_ALIGNED_PATTERN:-<none>}"
 echo "Baseline Results: ${BASELINE_RESULTS:-<none>}"
+echo "Warmup Override: ${WARMUP:-<default>}"
+echo "Measure Override: ${MEASURE:-<default>}"
+echo "Trials Override: ${TRIALS:-<default>}"
 echo "=============================================="
 
 # Run the comparison experiment
@@ -89,6 +98,21 @@ if [[ -n "$BASELINE_RESULTS" ]]; then
 else
   BASELINE_RESULTS_ARG=""
 fi
+if [[ -n "$WARMUP" ]]; then
+  WARMUP_ARG="--warmup $WARMUP"
+else
+  WARMUP_ARG=""
+fi
+if [[ -n "$MEASURE" ]]; then
+  MEASURE_ARG="--measure $MEASURE"
+else
+  MEASURE_ARG=""
+fi
+if [[ -n "$TRIALS" ]]; then
+  TRIALS_ARG="--trials $TRIALS"
+else
+  TRIALS_ARG=""
+fi
 
 python scripts/run_c5_e2e_comparison.py \
     --out results/C5 \
@@ -99,6 +123,9 @@ python scripts/run_c5_e2e_comparison.py \
     --aligned-source "$ALIGNED_SOURCE" \
     $PALU_ALIGNED_ARG \
     $BASELINE_RESULTS_ARG \
+    $WARMUP_ARG \
+    $MEASURE_ARG \
+    $TRIALS_ARG \
     $SMOKE \
     $SKIP_BASELINE \
     $RUN_ID_ARG

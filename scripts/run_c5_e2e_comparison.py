@@ -716,6 +716,9 @@ def main():
     parser.add_argument("--smoke", action="store_true", help="Run smoke test with reduced params")
     parser.add_argument("--skip-baseline", action="store_true", help="Skip baseline (for faster iteration)")
     parser.add_argument("--run-id", default=None, help="Custom run ID")
+    parser.add_argument("--warmup", type=int, default=None, help="Override benchmark warmup iterations")
+    parser.add_argument("--measure", type=int, default=None, help="Override benchmark measurement iterations")
+    parser.add_argument("--trials", type=int, default=None, help="Override benchmark trial count")
     args = parser.parse_args()
 
     # Generate run ID
@@ -732,29 +735,35 @@ def main():
     # Configure benchmark
     if args.smoke:
         print("\n[SMOKE TEST MODE - reduced parameters]")
+        default_warmup = 3
+        default_measure = 10
+        default_trials = 2
         config = BenchmarkConfig(
             prefill_batches=[1],
             prefill_seq_lens=[256, 512],
             decode_batches=[1],
             decode_ctx_lens=[256],
             decode_gen_lens=[32],
-            warmup=3,
-            measure=10,
-            trials=2,
+            warmup=args.warmup if args.warmup is not None else default_warmup,
+            measure=args.measure if args.measure is not None else default_measure,
+            trials=args.trials if args.trials is not None else default_trials,
             dtype=args.dtype,
             device=args.device,
             repair_strategy=args.repair_strategy,
         )
     else:
+        default_warmup = 10
+        default_measure = 30
+        default_trials = 3
         config = BenchmarkConfig(
             prefill_batches=[1, 4],
             prefill_seq_lens=[256, 512, 1024, 2048],
             decode_batches=[1, 4],
             decode_ctx_lens=[512, 1024],
             decode_gen_lens=[64, 128],
-            warmup=10,
-            measure=30,
-            trials=3,
+            warmup=args.warmup if args.warmup is not None else default_warmup,
+            measure=args.measure if args.measure is not None else default_measure,
+            trials=args.trials if args.trials is not None else default_trials,
             dtype=args.dtype,
             device=args.device,
             repair_strategy=args.repair_strategy,
