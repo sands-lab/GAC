@@ -235,13 +235,14 @@ If the search space is too large or profiling data is missing:
 - Budget kind: low-rank middle dimension
 - Materialization target: aligned ASVD rank config
 - Opportunity: reuse the same DP machinery already used for SVD-style rank search
+- Existing evidence: paper-side ASVD results already show a strong prefill benefit from alignment, while `notes/alignment_budget_benefit_results/asvd_fixed_length_decode_summary.json` shows that the later fixed-length decode rerun does not reproduce a decode-side win
 
 ### LLM-Pruner
 
 - Input: kept channels or structured pruning masks
 - Budget kind: kept structural width
 - Materialization target: rounded structural dimensions, such as `round_to=8`
-- Existing evidence: `report.md` already shows that `LLM-Pruner` plus `8-aligned` rounding preserves quality while recovering latency
+- Existing evidence: paper-side LLM-Pruner results show that `8-aligned` rounding preserves quality while recovering prefill latency, while `notes/alignment_budget_benefit_results/llmpruner_fixed_length_decode_summary.json` shows that the later fixed-length decode rerun does not reproduce a decode-side win
 
 ### Future Methods
 

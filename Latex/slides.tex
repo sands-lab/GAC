@@ -704,28 +704,35 @@ $W_2, W_3$ round down, saving budget $\;\Rightarrow\;$ funds $W_1$'s round up.\\
 \begin{table}
 \centering
 \small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Method} & \textbf{Align\%} & \textbf{PPL}$\downarrow$ & \textbf{Acc} & \textbf{Prefill} & \textbf{Decode} \\
+\textbf{Method} & \textbf{Align\%} & \textbf{PPL}$\downarrow$ & \textbf{Acc} & \textbf{Prefill} \\
 \midrule
-\rowcolor{gray!10} Baseline & 100\% & 6.14 & 0.72 & 99.6 ms & 25.1 ms \\
+\rowcolor{gray!10} Baseline & 100\% & 6.14 & 0.72 & 99.6 ms \\
 \midrule
-ASVD(Unaligned) & 5\% & 34.7 & 0.38 & 100.5 \textcolor{cred}{(+1\%)} & 28.6 \textcolor{cred}{(+14\%)} \\
-ASVD(GAC) & 100\% & 31.3 & 0.39 & 67.1 \textcolor{cgreen}{(--33\%)} & 29.5 \textcolor{cred}{(+18\%)} \\
+ASVD(Unaligned) & 5\% & 34.7 & 0.38 & 100.5 \textcolor{cred}{(+1\%)} \\
+ASVD(GAC) & 100\% & 31.3 & 0.39 & 67.1 \textcolor{cgreen}{(--33\%)} \\
 \midrule
-LLM-Pruner(Unaligned) & 83\% & 9.88 & 0.67 & 137.7 \textcolor{cred}{(+38\%)} & 24.2 \textcolor{cgreen}{(--2\%)} \\
-LLM-Pruner(GAC) & 100\% & 9.87 & 0.67 & 88.0 \textcolor{cgreen}{(--12\%)} & 24.3 \textcolor{cgreen}{(--2\%)} \\
+LLM-Pruner(Unaligned) & 83\% & 9.88 & 0.67 & 137.7 \textcolor{cred}{(+38\%)} \\
+LLM-Pruner(GAC) & 100\% & 9.87 & 0.67 & 88.0 \textcolor{cgreen}{(--12\%)} \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\vspace{0.15cm}
+\textbf{Corrected fixed-length decode} (A100, prompt${=}128$, gen${=}64$, min\_new\_tokens${=}$max\_new\_tokens):
+\begin{itemize}\setlength\itemsep{0.1em}
+\item ASVD: aligned `38.82 tok/s` vs unaligned `39.30 tok/s` (\textbf{no win})
+\item LLM-Pruner: aligned `38.97 tok/s` vs unaligned `39.31 tok/s` (\textbf{no win})
+\end{itemize}
 
 \vspace{0.3cm}
 \textbf{Key Observations}:
 \begin{itemize}\setlength\itemsep{0.1em}
 \item ASVD: 5\% aligned $\Rightarrow$ GAC recovers \textbf{--33\%} prefill (1.5$\times$ speedup)
 \item LLM-Pruner: 83\% aligned but \textbf{+38\%} prefill penalty; GAC $\Rightarrow$ \textbf{--12\%} faster than baseline
-\item Decode (GEMV): cuBLAS masks misalignment $\Rightarrow$ minimal difference
-\item Prefill (GEMM): Alignment critical $\Rightarrow$ 1.5$\times$ speedup from GAC
+\item Corrected fixed-length decode no longer shows an aligned win for either method
+\item Prefill (GEMM) remains the strongest checked-in end-to-end benefit today
 \end{itemize}
 \end{frame}
 
