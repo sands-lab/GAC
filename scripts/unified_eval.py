@@ -349,6 +349,12 @@ def main():
         "method": args.method,
         "variant": args.variant,
         "model_id": args.model_id,
+        "decode_contract": {
+            "prompt_len": args.prompt_len,
+            "requested_new_tokens": args.gen_tokens,
+            "decode_warmup": args.decode_warmup,
+            "decode_measure": args.decode_measure,
+        },
     }
     if args.method == "asvd":
         results["construction"] = {

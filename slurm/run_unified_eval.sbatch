@@ -21,6 +21,8 @@ METHOD_RESULTS_DIR=""
 CONDA_ENV_NAME=""
 SUMMARY_PATH=""
 ASVD_SENSITIVITY=""
+ISSUE_ID=""
+PUBLISH_ROOT=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -35,6 +37,8 @@ while [[ $# -gt 0 ]]; do
     --conda-env) CONDA_ENV_NAME="$2"; shift 2;;
     --summary-path) SUMMARY_PATH="$2"; shift 2;;
     --asvd-sensitivity) ASVD_SENSITIVITY="$2"; shift 2;;
+    --issue-id) ISSUE_ID="$2"; shift 2;;
+    --publish-root) PUBLISH_ROOT="$2"; shift 2;;
     *) echo "Unknown arg: $1"; exit 1;;
   esac
 done
@@ -71,6 +75,11 @@ METHOD_RESULTS_DIR="${METHOD_RESULTS_DIR:-$DEFAULT_RESULTS_DIR}"
 SUMMARY_PATH="${SUMMARY_PATH:-$DEFAULT_SUMMARY_PATH}"
 ASVD_SENSITIVITY="${ASVD_SENSITIVITY:-$DEFAULT_ASVD_SENSITIVITY}"
 RAW_OUTPUT_DIR="$OUTPUT_ROOT/$METHOD"
+PUBLISH_DIR=""
+if [[ -n "$PUBLISH_ROOT" ]]; then
+  PUBLISH_DIR="$PUBLISH_ROOT/$METHOD"
+fi
+START_TIME_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 echo "============================================="
 echo "Unified Fixed-Length Decode Evaluation"
@@ -109,10 +118,67 @@ for variant in "${VARIANTS[@]}"; do
     --skip_accuracy
 done
 
-python scripts/collect_fixed_length_decode_summary.py \
-  --method "$METHOD" \
-  --results-dir "$RAW_OUTPUT_DIR" \
+METADATA_PATH="$RAW_OUTPUT_DIR/run_metadata.json"
+GIT_COMMIT="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+METADATA_TIME_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+export ISSUE_ID METHOD MODEL_ID CONDA_ENV_NAME METHOD_RESULTS_DIR
+export DECODE_WARMUP DECODE_MEASURE PROMPT_LEN GEN_TOKENS
+export START_TIME_UTC METADATA_TIME_UTC GIT_COMMIT ASVD_SENSITIVITY
+python3 - "$METADATA_PATH" "$REPO_ROOT" "$RAW_OUTPUT_DIR" "$SUMMARY_PATH" <<'PY'
+import json
+import os
+import sys
+from pathlib import Path
+
+metadata_path = Path(sys.argv[1])
+repo_root = Path(sys.argv[2]).resolve()
+raw_output_dir = Path(sys.argv[3]).resolve()
+summary_path = Path(sys.argv[4]).resolve()
+
+
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(repo_root))
+    except ValueError:
+        return str(path)
+
+
+payload = {
+    "issue_id": os.environ.get("ISSUE_ID") or None,
+    "submitted_via": "slurm/run_unified_eval.sbatch",
+    "job_id": os.environ.get("SLURM_JOB_ID", "<local>"),
+    "git_commit": os.environ["GIT_COMMIT"],
+    "method": os.environ["METHOD"],
+    "model_id": os.environ["MODEL_ID"],
+    "conda_env": os.environ["CONDA_ENV_NAME"],
+    "raw_results_root": display_path(raw_output_dir),
+    "summary_path": display_path(summary_path),
+    "results_dir": os.environ["METHOD_RESULTS_DIR"],
+    "decode_warmup": int(os.environ["DECODE_WARMUP"]),
+    "decode_measure": int(os.environ["DECODE_MEASURE"]),
+    "prompt_len": int(os.environ["PROMPT_LEN"]),
+    "gen_tokens": int(os.environ["GEN_TOKENS"]),
+    "started_at_utc": os.environ["START_TIME_UTC"],
+    "metadata_written_at_utc": os.environ["METADATA_TIME_UTC"],
+}
+
+asvd_sensitivity = os.environ.get("ASVD_SENSITIVITY")
+if os.environ["METHOD"] == "asvd" and asvd_sensitivity:
+    payload["asvd_sensitivity"] = asvd_sensitivity
+
+metadata_path.write_text(json.dumps(payload, indent=2) + "\n")
+PY
+
+COLLECT_ARGS=(
+  --method "$METHOD"
+  --results-dir "$RAW_OUTPUT_DIR"
   --output "$SUMMARY_PATH"
+)
+if [[ -n "$PUBLISH_DIR" ]]; then
+  COLLECT_ARGS+=(--publish-dir "$PUBLISH_DIR")
+fi
+
+python scripts/collect_fixed_length_decode_summary.py "${COLLECT_ARGS[@]}"
 
 echo ""
 echo "============================================="

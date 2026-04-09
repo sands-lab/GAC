@@ -3,7 +3,9 @@
 
 import argparse
 import json
+import shutil
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 METHOD_SPECS = {
@@ -40,16 +42,26 @@ def display_path(path: Path) -> str:
         return str(path)
 
 
+def load_metadata(path: Path) -> Optional[Dict[str, Any]]:
+    if not path.exists():
+        return None
+    return load_json(path)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--method", required=True, choices=sorted(METHOD_SPECS))
     parser.add_argument("--results-dir", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--publish-dir")
     args = parser.parse_args()
 
     results_dir = Path(args.results_dir)
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    publish_dir = Path(args.publish_dir) if args.publish_dir else None
+    if publish_dir is not None:
+        publish_dir.mkdir(parents=True, exist_ok=True)
 
     spec = METHOD_SPECS[args.method]
     loaded = {}
@@ -62,6 +74,15 @@ def main() -> None:
             "path": path,
             "payload": load_json(path),
         }
+
+    metadata = load_metadata(results_dir / "run_metadata.json")
+
+    def publish(path: Path) -> Path:
+        if publish_dir is None:
+            return path
+        destination = publish_dir / path.name
+        shutil.copy2(path, destination)
+        return destination
 
     baseline_decode = loaded["baseline"]["payload"]["decode_latency"]
     measurement_contract = {
@@ -77,10 +98,11 @@ def main() -> None:
     normalized_variants = {}
     for normalized_name, entry in loaded.items():
         payload = entry["payload"]["decode_latency"]
+        source_path = publish(entry["path"])
         normalized_variants[normalized_name] = {"raw_variant": entry["raw_variant"]}
         decode_comparison[normalized_name] = {
             "status": "measured",
-            "source": display_path(entry["path"]),
+            "source": display_path(source_path),
             "total_mean_ms": payload["total_mean_ms"],
             "total_std_ms": payload["total_std_ms"],
             "per_token_ms": payload["per_token_ms"],
@@ -108,10 +130,18 @@ def main() -> None:
             ),
         },
         "sources": [
-            display_path(entry["path"])
+            display_path(publish(entry["path"]))
             for entry in loaded.values()
         ],
     }
+    if metadata is not None:
+        if args.method != "asvd":
+            metadata.pop("asvd_sensitivity", None)
+        if publish_dir is not None:
+            published_metadata = publish(results_dir / "run_metadata.json")
+            metadata["published_artifact_root"] = display_path(publish_dir)
+            metadata["published_metadata_path"] = display_path(published_metadata)
+        summary["provenance"] = metadata
 
     output_path.write_text(json.dumps(summary, indent=2) + "\n")
     print(f"Wrote fixed-length summary to {output_path}")
