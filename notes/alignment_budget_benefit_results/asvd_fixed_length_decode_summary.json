@@ -1,0 +1,61 @@
+{
+  "method": "asvd",
+  "normalized_variants": {
+    "baseline": {
+      "raw_variant": "baseline"
+    },
+    "unaligned": {
+      "raw_variant": "unaligned"
+    },
+    "aligned_gac": {
+      "raw_variant": "aligned"
+    }
+  },
+  "measurement_contract": {
+    "prompt_len": 128,
+    "requested_new_tokens": 64,
+    "decode_length_mode": "fixed_new_tokens",
+    "generation_guard": "max_new_tokens=gen, min_new_tokens=gen",
+    "decode_warmup": 2,
+    "decode_measure": 5
+  },
+  "decode_comparison": {
+    "baseline": {
+      "status": "measured",
+      "source": "results/fixed_length_decode_20260409/asvd/asvd_baseline_eval.json",
+      "total_mean_ms": 1662.6779831945896,
+      "total_std_ms": 10.259924158625713,
+      "per_token_ms": 25.979343487415463,
+      "tokens_per_sec": 38.49211972906111,
+      "actual_new_tokens": 64
+    },
+    "unaligned": {
+      "status": "measured",
+      "source": "results/fixed_length_decode_20260409/asvd/asvd_unaligned_eval.json",
+      "total_mean_ms": 1628.2959558069706,
+      "total_std_ms": 5.578698165269269,
+      "per_token_ms": 25.442124309483916,
+      "tokens_per_sec": 39.304894034624134,
+      "actual_new_tokens": 64
+    },
+    "aligned_gac": {
+      "status": "measured",
+      "source": "results/fixed_length_decode_20260409/asvd/asvd_aligned_eval.json",
+      "total_mean_ms": 1648.7458892166615,
+      "total_std_ms": 8.306291583278231,
+      "per_token_ms": 25.761654519010335,
+      "tokens_per_sec": 38.8173826049126,
+      "actual_new_tokens": 64
+    }
+  },
+  "conclusion": {
+    "aligned_beats_unaligned": false,
+    "speedup_vs_unaligned_pct": -1.2403326397015024,
+    "summary": "Under the fixed-length decode contract, aligned_gac reaches 38.82 tok/s versus 39.30 tok/s for unaligned (-1.24%)."
+  },
+  "sources": [
+    "results/fixed_length_decode_20260409/asvd/asvd_baseline_eval.json",
+    "results/fixed_length_decode_20260409/asvd/asvd_unaligned_eval.json",
+    "results/fixed_length_decode_20260409/asvd/asvd_aligned_eval.json"
+  ]
+}

@@ -47,12 +47,27 @@
   "completed_comparison_run": {
     "path": "results/C5/20260408_120500_palu_unaligned_vs_gac/results.json",
     "kind": "repo_tracked_completed_latency_run",
-    "notes": "Completed A100 comparison run containing the unaligned PaLU and aligned GAC benchmark results."
+    "notes": "Historical pre-fix A100 comparison run retained for provenance and root-cause analysis; its decode throughput should not be treated as the current fixed-length result."
   },
   "latency_comparison_summary": {
     "path": "notes/alignment_budget_benefit_results/palu_a100_results/latency_comparison.json",
     "kind": "repo_tracked_final_latency_summary",
-    "notes": "Normalizes the final baseline / unaligned / aligned_gac PaLU A100 evidence into the common comparison-shaped summary used by the other method bundles."
+    "notes": "Normalizes the current fixed-length baseline / unaligned / aligned_gac PaLU A100 evidence into the common comparison-shaped summary used by the other method bundles."
+  },
+  "fixed_length_full_run": {
+    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/results.json",
+    "kind": "repo_tracked_fixed_length_latency_run",
+    "notes": "Same-hardware full rerun on A100-SXM4-40GB after the decode contract fix; includes baseline, unaligned PaLU, and aligned GAC with actual_new_tokens recorded."
+  },
+  "fixed_length_full_run_summary": {
+    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json",
+    "kind": "repo_tracked_fixed_length_latency_summary",
+    "notes": "Compact summary extracted from the same-hardware fixed-length rerun, including decode_length_mode=fixed_new_tokens."
+  },
+  "fixed_length_bundle_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_comparison.json",
+    "kind": "repo_tracked_fixed_length_bundle_summary",
+    "notes": "Issue-23 summary that compares prefill and fixed-length decode side by side and records that the old decode-dominant gain disappears after the contract fix."
   },
   "paper_a100_sources": [
     {
