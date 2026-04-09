@@ -2,11 +2,11 @@
 %% Target: EuroMLSys 2026 (SIGPLAN format, 6 pages excluding references)
 %%
 
-\documentclass[sigplan,10pt,nonacm]{acmart}
+\documentclass[sigplan,10pt]{acmart}
 
 %% Remove ACM-specific elements for submission
-\settopmatter{printacmref=false,authorsperrow=5}
-\renewcommand\footnotetextcopyrightpermission[1]{}
+\settopmatter{authorsperrow=5}
+% \renewcommand\footnotetextcopyrightpermission[1]{}
 \pagestyle{plain}
 
 %% Packages
@@ -97,9 +97,27 @@ We propose \textbf{GAC} (GPU-Aligned Compression), a new compression paradigm th
 We evaluate GAC on Llama-3-8B with ASVD and LLM-Pruner, achieving 100\% alignment and recovering up to 1.5$\times$ speedup while preserving model quality.
 \end{abstract}
 
-% \keywords{LLM Compression, GPU Optimization}
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10010147.10010257.10010293.10010294</concept_id>
+<concept_desc>Computing methodologies~Neural networks</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+  
+\ccsdesc[500]{Computing methodologies~Neural networks}
 
 \begin{document}
+
+\acmYear{2026}\copyrightyear{2026}
+\setcopyright{cc}
+\setcctype[4.0]{by}
+\acmConference[EuroMLSys '26]{The 6th Workshop on Machine Learning and Systems}{April 27--30, 2026}{Edinburgh, Scotland Uk}
+\acmBooktitle{The 6th Workshop on Machine Learning and Systems (EuroMLSys '26), April 27--30, 2026, Edinburgh, Scotland Uk}
+\acmDOI{10.1145/3805621.3807608}
+\acmISBN{979-8-4007-2605-7/26/04}
 
 \maketitle
 
@@ -119,7 +137,7 @@ We term this phenomenon \textbf{dimensional misalignment}.
 
 \begin{figure}[t]
 \centering
-\resizebox{0.85\columnwidth}{!}{%
+\resizebox{0.9\columnwidth}{!}{%
 \begin{tikzpicture}[
     dim/.style={<->, line width=0.7pt, gray!80!black},
     dlabel/.style={font=\sffamily\bfseries, fill=white, inner sep=1pt}]
@@ -150,6 +168,7 @@ We term this phenomenon \textbf{dimensional misalignment}.
 \caption{GEMM: $Y{=}X{\cdot}W$ with $X{\in}\mathbb{R}^{M \times K}$,
 $W{\in}\mathbb{R}^{K \times N}$.}
 \label{fig:GEMM_dims}
+\vspace{-0.2cm}
 \end{figure}
 
 To see why, consider one of the core operators in LLMs, GEMM (General Matrix Multiply) in the expression: $Y{=}X{\cdot}W$ (Figure~\ref{fig:GEMM_dims}), with sequence dimension~$M$, inner dimension~$K$, and output dimension~$N$.
