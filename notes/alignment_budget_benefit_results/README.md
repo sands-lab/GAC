@@ -41,8 +41,8 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `asvd_example_input.json`: minimal ASVD per-projection rank example used to exercise the repo-native ASVD adapter.
 - `asvd_example_aligned.json`: aligned rank config emitted by the repo-native ASVD adapter.
 - `asvd_example_summary.json`: combines deterministic proxy summary with structured paper-side alignment and prefill latency evidence.
-- `llmpruner_fixed_length_decode_summary.json`: A100 fixed-length decode rerun summary for `baseline / unaligned / aligned_gac`, normalized onto the shared comparison schema used by issue 24.
-- `asvd_fixed_length_decode_summary.json`: A100 fixed-length decode rerun summary for `baseline / unaligned / aligned_gac`, generated from the same fixed-token measurement contract and an ASVD stable-rank compression pass.
+- `llmpruner_fixed_length_decode_summary.json`: current A100 fixed-length decode source of truth for `baseline / unaligned / aligned_gac`; issue 28 rewrites it from a fresh SLURM rerun under `results/fixed_length_decode_issue28/` and attaches job/provenance metadata.
+- `asvd_fixed_length_decode_summary.json`: current A100 fixed-length decode source of truth for `baseline / unaligned / aligned_gac`; issue 28 rewrites it from a fresh SLURM rerun under `results/fixed_length_decode_issue28/`, using the ASVD stable-rank path and attached provenance metadata.
 - `a100_real_profiling/`: repo-tracked A100 profiling bundle with a provenance manifest and structured summary of the checked-in real-measurement evidence and run commands.
 - `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, the local checkpoint-build metadata, and a comparison-shaped latency summary with explicit baseline / unaligned / aligned status fields.
 
@@ -54,7 +54,7 @@ For LLM-Pruner, the checked-in repo-native example shows the same adapter/search
 
 For ASVD, the checked-in repo-native example keeps budget overhead at `1.32%` while cutting the proxy hardware penalty from `173.6875` to `2.0`. The structured paper evidence records the same qualitative story at model scale: alignment rises from `5%` to `100%`, and prefill latency improves from `100.5 ms` to `67.1 ms`.
 
-The fixed-length decode reruns added for issue `24-asvd-llmpruner-fixed-length` do not reproduce a decode-side win for alignment on either non-PaLU method. Under the corrected `min_new_tokens=gen` contract, `llmpruner_fixed_length_decode_summary.json` records `aligned_gac` at `38.97 tok/s` versus `39.31 tok/s` for unaligned (`-0.85%`), while `asvd_fixed_length_decode_summary.json` records `aligned_gac` at `38.82 tok/s` versus `39.30 tok/s` for unaligned (`-1.24%`).
+The fresh fixed-length decode reruns added for issue `28-rerun-asvd-llmpruner` replace the lighter quick-rerun from issue 24 as the current non-PaLU source of truth. Under the corrected `min_new_tokens=gen` contract, `llmpruner_fixed_length_decode_summary.json` now records `aligned_gac` at `38.10 tok/s` versus `38.58 tok/s` for unaligned (`-1.25%`), while `asvd_fixed_length_decode_summary.json` records `aligned_gac` at `38.37 tok/s` versus `38.84 tok/s` for unaligned (`-1.21%`). The decode-side takeaway stays the same: neither non-PaLU method shows an aligned decode win in the fresh rerun.
 
 The `a100_real_profiling/` bundle complements these method bundles by consolidating the repository's checked-in A100 measurement protocol, layer-wise profiling conclusions, and profiling command provenance in one place. It also records the remaining gap that raw A100 CSV / NCU outputs are still not versioned in the repo.
 

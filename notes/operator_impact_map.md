@@ -82,8 +82,8 @@ Why:
 Measured fixed-length `decode` evidence:
 
 - PaLU fixed-length rerun: aligned is only about `0.1%` faster than unaligned in decode throughput, while prefill is about `1.0%` faster
-- ASVD fixed-length rerun: aligned `38.82 tok/s` vs unaligned `39.30 tok/s` (`-1.24%`)
-- LLM-Pruner fixed-length rerun: aligned `38.97 tok/s` vs unaligned `39.31 tok/s` (`-0.85%`)
+- ASVD fixed-length rerun: aligned `38.37 tok/s` vs unaligned `38.84 tok/s` (`-1.21%`)
+- LLM-Pruner fixed-length rerun: aligned `38.10 tok/s` vs unaligned `38.58 tok/s` (`-1.25%`)
 
 Interpretation:
 

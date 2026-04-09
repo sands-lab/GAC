@@ -1,0 +1,25 @@
+{
+  "method": "llmpruner",
+  "variant": "pruned",
+  "model_id": "meta-llama/Meta-Llama-3-8B",
+  "decode_contract": {
+    "prompt_len": 128,
+    "requested_new_tokens": 64,
+    "decode_warmup": 3,
+    "decode_measure": 10
+  },
+  "decode_latency": {
+    "prompt_len": 128,
+    "requested_new_tokens": 64,
+    "actual_new_tokens": 64,
+    "decode_length_mode": "fixed_new_tokens",
+    "generation_guard": "max_new_tokens=gen, min_new_tokens=gen",
+    "warmup_count": 3,
+    "measure_count": 10,
+    "total_mean_ms": 1658.9399486780167,
+    "total_std_ms": 29.112021192576147,
+    "per_token_ms": 25.92093669809401,
+    "tokens_per_sec": 38.57885274931175,
+    "count": 10
+  }
+}
