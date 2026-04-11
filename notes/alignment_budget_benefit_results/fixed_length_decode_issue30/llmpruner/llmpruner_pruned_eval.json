@@ -1,17 +1,12 @@
 {
-  "method": "asvd",
-  "variant": "unaligned",
+  "method": "llmpruner",
+  "variant": "pruned",
   "model_id": "meta-llama/Meta-Llama-3-8B",
   "decode_contract": {
     "prompt_len": 128,
     "requested_new_tokens": 64,
     "decode_warmup": 3,
     "decode_measure": 10
-  },
-  "construction": {
-    "sensitivity_metric": "stable_rank",
-    "param_ratio_target": 0.85,
-    "rank_align": 1
   },
   "decode_latency": {
     "prompt_len": 128,
@@ -21,10 +16,10 @@
     "generation_guard": "max_new_tokens=gen, min_new_tokens=gen",
     "warmup_count": 3,
     "measure_count": 10,
-    "total_mean_ms": 1647.8551179170609,
-    "total_std_ms": 37.40628492801762,
-    "per_token_ms": 25.747736217454076,
-    "tokens_per_sec": 38.83836588795376,
+    "total_mean_ms": 1810.2620251476765,
+    "total_std_ms": 2.702468535768671,
+    "per_token_ms": 28.285344142932445,
+    "tokens_per_sec": 35.35399799085939,
     "count": 10
   }
 }

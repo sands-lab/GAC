@@ -1,19 +1,18 @@
 {
-  "issue_id": "28-rerun-asvd-llmpruner",
+  "issue_id": "30-rerun-fixed-token-gen",
   "submitted_via": "slurm/run_unified_eval.sbatch",
-  "job_id": "25527",
-  "git_commit": "6dd3cf03a42ebbb78a7c0182465f39fdfbb53c96",
+  "job_id": "25730",
+  "git_commit": "ce4a83940ee3735d3c3b520f3f4deac4df9cbe3e",
   "method": "llmpruner",
   "model_id": "meta-llama/Meta-Llama-3-8B",
   "conda_env": "prunelayers",
-  "raw_results_root": "results/fixed_length_decode_issue28/llmpruner",
+  "raw_results_root": "results/fixed_length_decode_issue30/llmpruner",
   "summary_path": "notes/alignment_budget_benefit_results/llmpruner_fixed_length_decode_summary.json",
   "results_dir": "results/llmpruner_llama3_v2",
   "decode_warmup": 3,
   "decode_measure": 10,
   "prompt_len": 128,
   "gen_tokens": 64,
-  "started_at_utc": "2026-04-09T14:51:03Z",
-  "metadata_written_at_utc": "2026-04-09T14:53:00Z",
-  "asvd_sensitivity": "ppl"
+  "started_at_utc": "2026-04-11T12:14:18Z",
+  "metadata_written_at_utc": "2026-04-11T12:16:28Z"
 }

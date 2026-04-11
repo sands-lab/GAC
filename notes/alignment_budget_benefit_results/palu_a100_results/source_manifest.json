@@ -52,22 +52,42 @@
   "latency_comparison_summary": {
     "path": "notes/alignment_budget_benefit_results/palu_a100_results/latency_comparison.json",
     "kind": "repo_tracked_final_latency_summary",
-    "notes": "Normalizes the current fixed-length baseline / unaligned / aligned_gac PaLU A100 evidence into the common comparison-shaped summary used by the other method bundles."
+    "notes": "Normalizes the current issue-30 fixed-length baseline / unaligned / aligned_gac PaLU A100 evidence into the common comparison-shaped summary used by the other method bundles."
   },
   "fixed_length_full_run": {
-    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/results.json",
-    "kind": "repo_tracked_fixed_length_latency_run",
-    "notes": "Same-hardware full rerun on A100-SXM4-40GB after the decode contract fix; includes baseline, unaligned PaLU, and aligned GAC with actual_new_tokens recorded."
+    "path": "results/C5/issue30_palu_fixed_token/results.json",
+    "kind": "repo_local_fixed_length_latency_run",
+    "notes": "Issue-30 clean-environment rerun on A100 80GB with rebuilt rb1 / gac-a100 checkpoints and fixed_new_tokens decode measurements."
   },
   "fixed_length_full_run_summary": {
-    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json",
+    "path": "results/C5/issue30_palu_fixed_token/comparison_summary.json",
+    "kind": "repo_local_fixed_length_latency_summary",
+    "notes": "Compact summary extracted from the issue-30 fixed-length rerun, including baseline / unaligned / aligned_gac and actual_new_tokens."
+  },
+  "fixed_length_published_run": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/results.json",
+    "kind": "repo_tracked_fixed_length_latency_run",
+    "notes": "Tracked copy of the issue-30 fixed-length rerun results used as the current PaLU source of truth."
+  },
+  "fixed_length_published_run_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
     "kind": "repo_tracked_fixed_length_latency_summary",
-    "notes": "Compact summary extracted from the same-hardware fixed-length rerun, including decode_length_mode=fixed_new_tokens."
+    "notes": "Tracked copy of the issue-30 fixed-length rerun summary; decode_length_mode stays fixed_new_tokens and actual_new_tokens is recorded."
+  },
+  "historical_fixed_length_full_run": {
+    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/results.json",
+    "kind": "historical_fixed_length_latency_run",
+    "notes": "Older same-hardware rerun retained for provenance only; its conclusion was superseded by the clean issue-30 checkpoint rebuild."
+  },
+  "historical_fixed_length_full_run_summary": {
+    "path": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json",
+    "kind": "historical_fixed_length_latency_summary",
+    "notes": "Older compact summary retained for provenance only; not the current checked-in PaLU conclusion."
   },
   "fixed_length_bundle_summary": {
     "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_comparison.json",
     "kind": "repo_tracked_fixed_length_bundle_summary",
-    "notes": "Issue-23 summary that compares prefill and fixed-length decode side by side and records that the old decode-dominant gain disappears after the contract fix."
+    "notes": "Current PaLU fixed-length bundle summary: aligned_gac improves prefill throughput by +2.18% and decode throughput by +4.37% over unaligned in the issue-30 rerun."
   },
   "paper_a100_sources": [
     {
