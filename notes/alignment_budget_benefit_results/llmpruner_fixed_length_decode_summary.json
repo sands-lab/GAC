@@ -22,60 +22,60 @@
   "decode_comparison": {
     "baseline": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_baseline_eval.json",
-      "total_mean_ms": 1626.9058395177126,
-      "total_std_ms": 8.682751762015267,
-      "per_token_ms": 25.42040374246426,
-      "tokens_per_sec": 39.338478260654874,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_baseline_eval.json",
+      "total_mean_ms": 1688.7510351836681,
+      "total_std_ms": 59.432991069712315,
+      "per_token_ms": 26.386734924744815,
+      "tokens_per_sec": 37.89783021097564,
       "actual_new_tokens": 64
     },
     "unaligned": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_pruned_eval.json",
-      "total_mean_ms": 1658.9399486780167,
-      "total_std_ms": 29.112021192576147,
-      "per_token_ms": 25.92093669809401,
-      "tokens_per_sec": 38.57885274931175,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_pruned_eval.json",
+      "total_mean_ms": 1810.2620251476765,
+      "total_std_ms": 2.702468535768671,
+      "per_token_ms": 28.285344142932445,
+      "tokens_per_sec": 35.35399799085939,
       "actual_new_tokens": 64
     },
     "aligned_gac": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_pruned_r8_eval.json",
-      "total_mean_ms": 1679.9239840358496,
-      "total_std_ms": 50.18363116742131,
-      "per_token_ms": 26.24881225056015,
-      "tokens_per_sec": 38.09696189124367,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_pruned_r8_eval.json",
+      "total_mean_ms": 1658.3965968340635,
+      "total_std_ms": 8.201442597600618,
+      "per_token_ms": 25.912446825532243,
+      "tokens_per_sec": 38.59149260326403,
       "actual_new_tokens": 64
     }
   },
   "conclusion": {
-    "aligned_beats_unaligned": false,
-    "speedup_vs_unaligned_pct": -1.2491062427372857,
-    "summary": "Under the fixed-length decode contract, aligned_gac reaches 38.10 tok/s versus 38.58 tok/s for unaligned (-1.25%)."
+    "aligned_beats_unaligned": true,
+    "speedup_vs_unaligned_pct": 9.15736492727548,
+    "summary": "Under the fixed-length decode contract, aligned_gac reaches 38.59 tok/s versus 35.35 tok/s for unaligned (+9.16%)."
   },
   "sources": [
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_baseline_eval.json",
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_pruned_eval.json",
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/llmpruner_pruned_r8_eval.json"
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_baseline_eval.json",
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_pruned_eval.json",
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/llmpruner_pruned_r8_eval.json"
   ],
   "provenance": {
-    "issue_id": "28-rerun-asvd-llmpruner",
+    "issue_id": "30-rerun-fixed-token-gen",
     "submitted_via": "slurm/run_unified_eval.sbatch",
-    "job_id": "25527",
-    "git_commit": "6dd3cf03a42ebbb78a7c0182465f39fdfbb53c96",
+    "job_id": "25730",
+    "git_commit": "ce4a83940ee3735d3c3b520f3f4deac4df9cbe3e",
     "method": "llmpruner",
     "model_id": "meta-llama/Meta-Llama-3-8B",
     "conda_env": "prunelayers",
-    "raw_results_root": "results/fixed_length_decode_issue28/llmpruner",
+    "raw_results_root": "results/fixed_length_decode_issue30/llmpruner",
     "summary_path": "notes/alignment_budget_benefit_results/llmpruner_fixed_length_decode_summary.json",
     "results_dir": "results/llmpruner_llama3_v2",
     "decode_warmup": 3,
     "decode_measure": 10,
     "prompt_len": 128,
     "gen_tokens": 64,
-    "started_at_utc": "2026-04-09T14:51:03Z",
-    "metadata_written_at_utc": "2026-04-09T14:53:00Z",
-    "published_artifact_root": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner",
-    "published_metadata_path": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/llmpruner/run_metadata.json"
+    "started_at_utc": "2026-04-11T12:14:18Z",
+    "metadata_written_at_utc": "2026-04-11T12:16:28Z",
+    "published_artifact_root": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner",
+    "published_metadata_path": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/llmpruner/run_metadata.json"
   }
 }

@@ -81,14 +81,14 @@ Why:
 
 Measured fixed-length `decode` evidence:
 
-- PaLU fixed-length rerun: aligned is only about `0.1%` faster than unaligned in decode throughput, while prefill is about `1.0%` faster
-- ASVD fixed-length rerun: aligned `38.37 tok/s` vs unaligned `38.84 tok/s` (`-1.21%`)
-- LLM-Pruner fixed-length rerun: aligned `38.10 tok/s` vs unaligned `38.58 tok/s` (`-1.25%`)
+- PaLU fixed-length rerun: aligned `86.05 tok/s` vs unaligned `82.44 tok/s` (`+4.37%`); prefill `10709.57 tok/s` vs `10480.95 tok/s` (`+2.18%`)
+- ASVD fixed-length rerun: aligned `35.96 tok/s` vs unaligned `37.47 tok/s` (`-4.03%`)
+- LLM-Pruner fixed-length rerun: aligned `38.59 tok/s` vs unaligned `35.35 tok/s` (`+9.16%`)
 
 Interpretation:
 
-- `decode` is not currently the best-supported explanation for why aligned variants win end-to-end.
-- For PaLU-like methods, SDPA still has the sharpest per-operator cliff, but the corrected repo-tracked end-to-end comparisons no longer show a large decode-side gain.
+- `decode` is now method-dependent rather than uniformly flat: PaLU and LLM-Pruner gain after alignment, while ASVD still does not.
+- For PaLU-like methods, SDPA still has the sharpest per-operator cliff, but the checked-in end-to-end evidence supports a moderate decode-side gain rather than either a huge artifact-driven jump or a near-zero effect.
 
 ### Working Conclusion
 

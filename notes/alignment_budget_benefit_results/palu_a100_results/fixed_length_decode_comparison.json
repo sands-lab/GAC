@@ -1,8 +1,8 @@
 {
   "measurement_contract": {
-    "run_id": "20260409_083500_palu_fixed_length_full_fast",
+    "run_id": "issue30_palu_fixed_token",
     "hardware": {
-      "gpu": "NVIDIA A100-SXM4-40GB",
+      "gpu": "unknown",
       "device": "cuda:0",
       "dtype": "float16"
     },
@@ -13,33 +13,33 @@
       "measure": 5,
       "trials": 1
     },
-    "notes": "This rerun keeps the original C5 shape grid but lowers warmup/measure/trials so the same-hardware fixed-length retest can finish quickly on a shared 40GB A100 node."
+    "notes": "This rerun was produced after deleting old local experiment outputs and rebuilding the PaLU checkpoints in the issue-30 clean environment."
   },
   "prefill_comparison": {
     "baseline": {
       "status": "measured",
-      "average_latency_ms": 194.49487318992615,
-      "average_throughput_tok_s": 11588.29078712926,
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "average_latency_ms": 208.06169571876526,
+      "average_throughput_tok_s": 10880.25529642346,
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     },
     "unaligned": {
       "status": "measured",
-      "average_latency_ms": 200.37299313545228,
-      "average_throughput_tok_s": 11170.663826278556,
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "average_latency_ms": 214.60561838150025,
+      "average_throughput_tok_s": 10480.950117953516,
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     },
     "aligned_gac": {
       "status": "measured",
-      "average_latency_ms": 198.7451657295227,
-      "average_throughput_tok_s": 11276.856603807719,
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "average_latency_ms": 210.6196475982666,
+      "average_throughput_tok_s": 10709.570122572723,
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     }
   },
   "fixed_length_decode_comparison": {
     "baseline": {
       "status": "measured",
-      "average_latency_ms": 2098.301678466797,
-      "average_throughput_tok_s": 110.10279635709475,
+      "average_latency_ms": 2227.646127319336,
+      "average_throughput_tok_s": 103.36602343555725,
       "actual_new_tokens": {
         "batch1_ctx512_gen64": 64,
         "batch1_ctx512_gen128": 128,
@@ -50,12 +50,12 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     },
     "unaligned": {
       "status": "measured",
-      "average_latency_ms": 2618.1134826660154,
-      "average_throughput_tok_s": 88.07066289963137,
+      "average_latency_ms": 2803.9034393310544,
+      "average_throughput_tok_s": 82.43939850359618,
       "actual_new_tokens": {
         "batch1_ctx512_gen64": 64,
         "batch1_ctx512_gen128": 128,
@@ -66,12 +66,12 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     },
     "aligned_gac": {
       "status": "measured",
-      "average_latency_ms": 2615.5295135498045,
-      "average_throughput_tok_s": 88.14275584425711,
+      "average_latency_ms": 2678.1338073730467,
+      "average_throughput_tok_s": 86.04594039975174,
       "actual_new_tokens": {
         "batch1_ctx512_gen64": 64,
         "batch1_ctx512_gen128": 128,
@@ -82,17 +82,16 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "source": "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json"
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
     }
   },
   "conclusion": {
-    "primary_gain_is_decode": false,
-    "summary": "Under the same-hardware fixed-length rerun on A100-SXM4-40GB, the old decode-dominant gain disappears: aligned_gac is only about 0.1% faster than unaligned PaLU in decode throughput and about 1.0% faster in prefill throughput. The large decode gain reported by the historical 2026-04-08 run does not survive the contract fix."
+    "primary_gain_is_decode": true,
+    "summary": "Under the issue-30 fixed-length rerun, aligned_gac changes prefill throughput by +2.18% versus unaligned and decode throughput by +4.37%."
   },
   "sources": [
-    "results/C5/20260409_083500_palu_fixed_length_full_fast/comparison_summary.json",
-    "results/C5/20260409_083500_palu_fixed_length_full_fast/results.json",
-    "results/C5/20260408_120500_palu_unaligned_vs_gac/comparison_summary.json",
+    "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
+    "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/results.json",
     "notes/alignment_budget_benefit_results/palu_a100_results/decode_root_cause_summary.json"
   ]
 }

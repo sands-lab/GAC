@@ -160,8 +160,8 @@ What to say:
 
 | Method | What is reliable now | What is still missing |
 | --- | --- | --- |
-| ASVD | strong `prefill` story; fixed-length `decode` rerun shows no win | operator-level `prefill` attribution |
-| LLM-Pruner | strong `prefill` story; fixed-length `decode` rerun shows no win | MLP-only operator attribution and naive-round baseline |
+| ASVD | strong `prefill` story; issue-30 fixed-length `decode` rerun still shows no win | operator-level `prefill` attribution |
+| LLM-Pruner | strong `prefill` story; issue-30 fixed-length `decode` rerun now shows a moderate aligned gain | replication, MLP-only operator attribution, and naive-round baseline |
 | PaLU | strong motivation for `head_dim` cliffs; corrected `decode` story is now conservative | per-operator timing and stronger `prefill` attribution |
 | token eviction | conceptual fit is strong because it changes `M` | almost all checked-in evaluation evidence is still missing |
 

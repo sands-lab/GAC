@@ -1,7 +1,7 @@
 {
   "measurement_scope": {
-    "prefill": "aggregated from the same-hardware fixed-length rerun in issue30_palu_fixed_token",
-    "decode": "aggregated from the same-hardware fixed-length rerun in issue30_palu_fixed_token with min_new_tokens=gen"
+    "prefill": "aggregated from the per-shape prefill measurements in this run",
+    "decode": "aggregated from the per-shape decode measurements in this run"
   },
   "prefill_latency_ms": {
     "baseline": {
@@ -17,8 +17,7 @@
         "batch4_seq2048": 694.7129272460937
       },
       "average_latency_ms": 208.06169571876526,
-      "average_throughput_tok_s": 10880.25529642346,
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "average_throughput_tok_s": 10880.25529642346
     },
     "unaligned": {
       "status": "measured",
@@ -33,8 +32,7 @@
         "batch4_seq2048": 714.1803955078125
       },
       "average_latency_ms": 214.60561838150025,
-      "average_throughput_tok_s": 10480.950117953516,
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "average_throughput_tok_s": 10480.950117953516
     },
     "aligned_gac": {
       "status": "measured",
@@ -49,8 +47,7 @@
         "batch4_seq2048": 702.9948364257813
       },
       "average_latency_ms": 210.6196475982666,
-      "average_throughput_tok_s": 10709.570122572723,
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "average_throughput_tok_s": 10709.570122572723
     }
   },
   "decode_latency_ms": {
@@ -78,8 +75,7 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "decode_length_mode": "fixed_new_tokens",
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "decode_length_mode": "fixed_new_tokens"
     },
     "unaligned": {
       "status": "measured",
@@ -105,8 +101,7 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "decode_length_mode": "fixed_new_tokens",
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "decode_length_mode": "fixed_new_tokens"
     },
     "aligned_gac": {
       "status": "measured",
@@ -132,8 +127,7 @@
         "batch4_ctx1024_gen64": 64,
         "batch4_ctx1024_gen128": 128
       },
-      "decode_length_mode": "fixed_new_tokens",
-      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+      "decode_length_mode": "fixed_new_tokens"
     }
   },
   "alignment_pct": {
@@ -151,18 +145,11 @@
     }
   },
   "sources": {
-    "fixed_length_run_summary": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
-    "fixed_length_run_results": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/results.json",
-    "aligned_checkpoint_build_summary": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/build_summary.json"
+    "comparison_json": "comparison.json",
+    "results_json": "results.json",
+    "comparison_metrics": "comparison.json"
   },
   "notes": [
-    "This file tracks the issue-30 fixed-length rerun stored under notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30.",
-    "All decode entries in this summary were measured with max_new_tokens=gen, min_new_tokens=gen, and actual_new_tokens recorded.",
-    "The aligned_gac figures come from the checkpoint-level GAC path rebuilt in the clean issue-30 environment."
-  ],
-  "hardware": {
-    "gpu": "unknown",
-    "device": "cuda:0",
-    "dtype": "float16"
-  }
+    "baseline / unaligned / aligned_gac are mapped from baseline / palu / {aligned_gac|palu_repair} variants in this run"
+  ]
 }

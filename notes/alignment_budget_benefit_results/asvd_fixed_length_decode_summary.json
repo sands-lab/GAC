@@ -22,61 +22,61 @@
   "decode_comparison": {
     "baseline": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_baseline_eval.json",
-      "total_mean_ms": 1662.648306461051,
-      "total_std_ms": 17.192987422780995,
-      "per_token_ms": 25.978879788453924,
-      "tokens_per_sec": 38.49280677777496,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_baseline_eval.json",
+      "total_mean_ms": 1711.1581127624959,
+      "total_std_ms": 52.41031915928952,
+      "per_token_ms": 26.736845511913998,
+      "tokens_per_sec": 37.40157003766198,
       "actual_new_tokens": 64
     },
     "unaligned": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_unaligned_eval.json",
-      "total_mean_ms": 1647.8551179170609,
-      "total_std_ms": 37.40628492801762,
-      "per_token_ms": 25.747736217454076,
-      "tokens_per_sec": 38.83836588795376,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_unaligned_eval.json",
+      "total_mean_ms": 1708.0508115701377,
+      "total_std_ms": 18.874436242215122,
+      "per_token_ms": 26.688293930783402,
+      "tokens_per_sec": 37.46961130574772,
       "actual_new_tokens": 64
     },
     "aligned_gac": {
       "status": "measured",
-      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_aligned_eval.json",
-      "total_mean_ms": 1668.0680885910988,
-      "total_std_ms": 54.80284603469454,
-      "per_token_ms": 26.06356388423592,
-      "tokens_per_sec": 38.367738366157674,
+      "source": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_aligned_eval.json",
+      "total_mean_ms": 1779.7896675299853,
+      "total_std_ms": 49.2103679885639,
+      "per_token_ms": 27.80921355515602,
+      "tokens_per_sec": 35.95930528623644,
       "actual_new_tokens": 64
     }
   },
   "conclusion": {
     "aligned_beats_unaligned": false,
-    "speedup_vs_unaligned_pct": -1.2117593287879869,
-    "summary": "Under the fixed-length decode contract, aligned_gac reaches 38.37 tok/s versus 38.84 tok/s for unaligned (-1.21%)."
+    "speedup_vs_unaligned_pct": -4.0307490974148426,
+    "summary": "Under the fixed-length decode contract, aligned_gac reaches 35.96 tok/s versus 37.47 tok/s for unaligned (-4.03%)."
   },
   "sources": [
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_baseline_eval.json",
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_unaligned_eval.json",
-    "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/asvd_aligned_eval.json"
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_baseline_eval.json",
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_unaligned_eval.json",
+    "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/asvd_aligned_eval.json"
   ],
   "provenance": {
-    "issue_id": "28-rerun-asvd-llmpruner",
+    "issue_id": "30-rerun-fixed-token-gen",
     "submitted_via": "slurm/run_unified_eval.sbatch",
-    "job_id": "25528",
-    "git_commit": "6dd3cf03a42ebbb78a7c0182465f39fdfbb53c96",
+    "job_id": "25729",
+    "git_commit": "ce4a83940ee3735d3c3b520f3f4deac4df9cbe3e",
     "method": "asvd",
     "model_id": "meta-llama/Meta-Llama-3-8B",
     "conda_env": "sparsegpt",
-    "raw_results_root": "results/fixed_length_decode_issue28/asvd",
+    "raw_results_root": "results/fixed_length_decode_issue30/asvd",
     "summary_path": "notes/alignment_budget_benefit_results/asvd_fixed_length_decode_summary.json",
     "results_dir": "results/asvd_simple",
     "decode_warmup": 3,
     "decode_measure": 10,
     "prompt_len": 128,
     "gen_tokens": 64,
-    "started_at_utc": "2026-04-09T14:51:33Z",
-    "metadata_written_at_utc": "2026-04-09T14:54:55Z",
+    "started_at_utc": "2026-04-11T12:13:02Z",
+    "metadata_written_at_utc": "2026-04-11T12:15:43Z",
     "asvd_sensitivity": "stable_rank",
-    "published_artifact_root": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd",
-    "published_metadata_path": "notes/alignment_budget_benefit_results/fixed_length_decode_issue28/asvd/run_metadata.json"
+    "published_artifact_root": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd",
+    "published_metadata_path": "notes/alignment_budget_benefit_results/fixed_length_decode_issue30/asvd/run_metadata.json"
   }
 }

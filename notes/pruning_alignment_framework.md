@@ -235,14 +235,14 @@ If the search space is too large or profiling data is missing:
 - Budget kind: low-rank middle dimension
 - Materialization target: aligned ASVD rank config
 - Opportunity: reuse the same DP machinery already used for SVD-style rank search
-- Existing evidence: paper-side ASVD results already show a strong prefill benefit from alignment, while `notes/alignment_budget_benefit_results/asvd_fixed_length_decode_summary.json` shows that the later fixed-length decode rerun does not reproduce a decode-side win
+- Existing evidence: paper-side ASVD results already show a strong prefill benefit from alignment, while the issue-30 fixed-length decode rerun in `notes/alignment_budget_benefit_results/asvd_fixed_length_decode_summary.json` records `aligned_gac` at `35.96 tok/s` versus `37.47 tok/s` for unaligned (`-4.03%`), so the decode-side win still does not reproduce there
 
 ### LLM-Pruner
 
 - Input: kept channels or structured pruning masks
 - Budget kind: kept structural width
 - Materialization target: rounded structural dimensions, such as `round_to=8`
-- Existing evidence: paper-side LLM-Pruner results show that `8-aligned` rounding preserves quality while recovering prefill latency, while `notes/alignment_budget_benefit_results/llmpruner_fixed_length_decode_summary.json` shows that the later fixed-length decode rerun does not reproduce a decode-side win
+- Existing evidence: paper-side LLM-Pruner results show that `8-aligned` rounding preserves quality while recovering prefill latency, while the issue-30 fixed-length decode rerun in `notes/alignment_budget_benefit_results/llmpruner_fixed_length_decode_summary.json` now records `aligned_gac` at `38.59 tok/s` versus `35.35 tok/s` for unaligned (`+9.16%`), so decode-side behavior is currently method-specific rather than uniformly "no win"
 
 ### Future Methods
 
