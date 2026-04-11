@@ -138,9 +138,9 @@ What to say:
    - Goal: prove whether the current method-level speedups are really dominated by large GEMM `K/N`
    - Comparison: unaligned vs GAC-aligned, broken down by operator family or layer group
 
-2. PaLU operator split under corrected fixed-length measurement
-   - Goal: separate SDPA from projection GEMM in both `prefill` and `decode`
-   - Comparison: baseline vs unaligned vs aligned GAC with per-operator timing
+2. Optional PaLU per-kernel timing follow-up after the structural operator split
+   - Current checked-in result: issue 32 already shows the corrected fixed-length contract leaves SDPA shape unchanged and that the changed operator family is the `k_proj` / `v_proj` low-rank projection path
+   - Remaining comparison: if a stronger paper figure is still needed, isolate `VT` / `U[*]` projection kernels directly rather than reopening SDPA head-dim sweeps
 
 3. Naive rounding baseline
    - Goal: show why GAC is better than "just round everything to 8"

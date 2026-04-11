@@ -89,6 +89,11 @@
     "kind": "repo_tracked_fixed_length_bundle_summary",
     "notes": "Current PaLU fixed-length bundle summary: aligned_gac improves prefill throughput by +2.18% and decode throughput by +4.37% over unaligned in the issue-30 rerun."
   },
+  "operator_split_issue32_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/operator_split_issue32/operator_split_summary.json",
+    "kind": "repo_tracked_operator_split_bundle",
+    "notes": "Issue-32 structural split artifact proving that PaLU keeps the SDPA width contract unchanged and only changes the attention-adjacent projection GEMM path."
+  },
   "paper_a100_sources": [
     {
       "path": "Latex/main.tex",

@@ -1,0 +1,32 @@
+{
+  "unaligned_checkpoint_config": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1/config.json",
+    "kind": "repo_local_unaligned_checkpoint_config",
+    "notes": "Issue-30 rb1 PaLU checkpoint config with the raw head_wise_ranks used for the operator split."
+  },
+  "aligned_checkpoint_config": {
+    "path": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/config.json",
+    "kind": "repo_local_aligned_checkpoint_config",
+    "notes": "Issue-30 gac-a100 PaLU checkpoint config with aligned head_wise_ranks."
+  },
+  "fixed_length_run_results": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/results.json",
+    "kind": "repo_tracked_fixed_length_results",
+    "notes": "Tracked copy of the issue-30 PaLU fixed-length rerun results payload."
+  },
+  "fixed_length_run_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
+    "kind": "repo_tracked_fixed_length_summary",
+    "notes": "Tracked comparison summary for the issue-30 PaLU fixed-length rerun."
+  },
+  "issue30_bundle_summary": {
+    "path": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_comparison.json",
+    "kind": "repo_tracked_fixed_length_bundle_summary",
+    "notes": "Existing PaLU bundle summary that already treats issue 30 as the current source of truth."
+  },
+  "headwise_module_source": {
+    "path": "third_party/palu/palu/model/modules/svd_linear.py",
+    "kind": "repo_source_contract",
+    "notes": "Source file proving that HeadwiseLowRankModule reconstructs back to the original output width before attention."
+  }
+}
