@@ -24,6 +24,49 @@ def load_experiment_spec(spec_path: Path, exp_name: str) -> Dict[str, Any]:
     return spec["experiments"][exp_name]
 
 
+def resolve_dense_sweep_values(exp_spec: Dict[str, Any], axis: str) -> List[int]:
+    """Resolve dense sweep values for an axis from either explicit values or a range."""
+    axis = axis.upper()
+    values_key = f"{axis}_values"
+    range_key = f"{axis}_range"
+
+    if values_key in exp_spec:
+        values = exp_spec[values_key]
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"Experiment spec key '{values_key}' must be a non-empty list")
+        return [int(value) for value in values]
+
+    if range_key not in exp_spec:
+        raise ValueError(
+            f"Experiment spec must define either '{values_key}' or '{range_key}'"
+        )
+
+    min_value, max_value = exp_spec[range_key]
+    step1 = int(exp_spec.get(f"{axis}_step_1", 1))
+    step2 = int(exp_spec.get(f"{axis}_step_2", step1))
+    boundary = int(exp_spec.get(f"{axis}_boundary", 128))
+
+    if min_value > max_value:
+        raise ValueError(
+            f"Experiment spec key '{range_key}' must be ordered as [min, max]"
+        )
+
+    values: List[int] = []
+    low_end = min(max_value, boundary)
+
+    if min_value <= low_end:
+        values.extend(range(min_value, low_end + 1, step1))
+
+    if max_value > boundary:
+        if min_value <= boundary:
+            high_start = boundary + step2
+        else:
+            high_start = min_value
+        values.extend(range(high_start, max_value + 1, step2))
+
+    return values
+
+
 def run_multiple_trials(
     kernel_fn,
     warmup: int,
@@ -196,16 +239,10 @@ def run_g3_gemm_k_dense(exp_spec: Dict, device: str = "cuda:0", seed: int = 42) 
     shape = exp_spec["shape"]
     M = shape["M"]
     N = shape["N"]
-    K_min, K_max = exp_spec["K_range"]
-    step1 = exp_spec.get("K_step_1", 1)
-    step2 = exp_spec.get("K_step_2", 2)
+    K_values = resolve_dense_sweep_values(exp_spec, "K")
     warmup = exp_spec.get("warmup", 50)
     measure = exp_spec.get("measure", 200)
     trials = exp_spec.get("trials", 3)
-    
-    # Generate K list
-    K_values = list(range(K_min, 129, step1))  # 64..128 step 1
-    K_values.extend(range(130, K_max + 1, step2))  # 130..160 step 2
     
     results = {
         "experiment": "G3_gemm_k_dense",
@@ -262,16 +299,10 @@ def run_g4_gemm_n_dense(exp_spec: Dict, device: str = "cuda:0", seed: int = 42) 
     dtypes = exp_spec["dtypes"]
     M_values = exp_spec["M_values"]
     K = exp_spec["K"]
-    N_min, N_max = exp_spec["N_range"]
-    step1 = exp_spec.get("N_step_1", 1)
-    step2 = exp_spec.get("N_step_2", 2)
+    N_values = resolve_dense_sweep_values(exp_spec, "N")
     warmup = exp_spec.get("warmup", 50)
     measure = exp_spec.get("measure", 200)
     trials = exp_spec.get("trials", 3)
-    
-    # Generate N list
-    N_values = list(range(N_min, 129, step1))  # 64..128 step 1
-    N_values.extend(range(130, N_max + 1, step2))  # 130..160 step 2
     
     results = {
         "experiment": "G4_gemm_n_dense_projectionlike",

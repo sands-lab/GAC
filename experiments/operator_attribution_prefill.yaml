@@ -1,0 +1,71 @@
+experiments:
+  ASVD_prefill_gemm_k_real_shapes:
+    type: gemm_k_dense
+    dtypes: [fp16, bf16]
+    shape: {M: 1024, N: 4096}
+    K_values: [300, 512, 1024, 1536, 2048, 3072, 3184, 3192]
+    warmup: 50
+    measure: 200
+    trials: 3
+    provenance:
+      method: ASVD
+      stage: prefill
+      operator_family: GEMM
+      changed_axis: K
+      sources:
+        - Latex/main.tex
+        - scripts/create_paper_figures.py
+        - scripts/gemv_small_k_test_v2.py
+      rationale: >
+        Sweep the factorized middle-rank checkpoints that are already referenced in the
+        paper-side ASVD rank distribution and repo scripts, so the next attribution run
+        can test real-shape K cliffs instead of the old 64..160 toy window.
+
+  LLMPRUNER_prefill_gateup_n_real_shapes:
+    type: gemm_n_dense
+    dtypes: [fp16, bf16]
+    M_values: [128, 512, 1024]
+    K: 4096
+    N_values: [4872, 4880, 5632, 5640, 6096, 6104]
+    warmup: 50
+    measure: 200
+    trials: 3
+    provenance:
+      method: LLM-Pruner
+      stage: prefill
+      operator_family: GEMM
+      changed_axis: N
+      modules:
+        - gate_proj
+        - up_proj
+      sources:
+        - Latex/main.tex
+        - notes/alignment_budget_benefit_results/llmpruner_example_input.json
+        - scripts/llmpruner_gac_experiment.py
+      rationale: >
+        Compare representative kept-width checkpoints from the checked-in LLM-Pruner
+        artifact against their nearest 8-aligned neighbors on the gate/up projection path.
+
+  LLMPRUNER_prefill_down_k_real_shapes:
+    type: gemm_k_dense
+    dtypes: [fp16, bf16]
+    shape: {M: 1024, N: 4096}
+    K_values: [4872, 4880, 5632, 5640, 6096, 6104]
+    warmup: 50
+    measure: 200
+    trials: 3
+    provenance:
+      method: LLM-Pruner
+      stage: prefill
+      operator_family: GEMM
+      changed_axis: K
+      modules:
+        - down_proj
+      sources:
+        - Latex/main.tex
+        - notes/alignment_budget_benefit_results/llmpruner_example_input.json
+        - scripts/llmpruner_gac_experiment.py
+      rationale: >
+        Mirror the same kept-width checkpoints on the paired down-projection K axis,
+        so the next attribution run can test whether the current prefill penalty is
+        dominated by gate/up N, down K, or both together.
