@@ -45,6 +45,7 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `asvd_fixed_length_decode_summary.json`: current A100 fixed-length decode source of truth for `baseline / unaligned / aligned_gac`; issue 30 rewrites it from a fresh SLURM rerun under `results/fixed_length_decode_issue30/`, using the ASVD stable-rank path and attached provenance metadata.
 - `a100_real_profiling/`: repo-tracked A100 profiling bundle with a provenance manifest and structured summary of the checked-in real-measurement evidence and run commands.
 - `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, the local checkpoint-build metadata, and a comparison-shaped latency summary with explicit baseline / unaligned / aligned status fields.
+- `prefill_operator_attribution/`: repo-tracked landing zone for ASVD / LLM-Pruner `prefill` operator attribution runs, including a publish script contract and the expected summary / provenance layout.
 
 ## Key Takeaway
 
@@ -59,3 +60,5 @@ The fresh fixed-length decode reruns added for issue `30-rerun-fixed-token-gen` 
 The `a100_real_profiling/` bundle complements these method bundles by consolidating the repository's checked-in A100 measurement protocol, layer-wise profiling conclusions, and profiling command provenance in one place. It also records the remaining gap that raw A100 CSV / NCU outputs are still not versioned in the repo.
 
 The `palu_a100_results/` bundle complements that hardware-level bundle with method-specific provenance for PaLU itself: it now records the recovered baseline artifact from job `25269`, the true unaligned `rb1` PaLU checkpoint, the repo-native GAC-aligned checkpoint build metadata, and the completed A100 comparison showing `baseline / unaligned / aligned_gac` side by side.
+
+The `prefill_operator_attribution/` directory is the next tracked bridge from high-level hypotheses to runnable evidence. Issue `29-inference-operator-hotspots` already added the real-shape experiment spec; issue `31-inference-operator-impact` adds the publisher and bundle contract so those ASVD / LLM-Pruner `prefill` runs can be cited as a structured artifact instead of staying as ad hoc raw outputs.
