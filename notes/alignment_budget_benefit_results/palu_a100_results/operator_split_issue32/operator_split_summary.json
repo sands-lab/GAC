@@ -1,0 +1,327 @@
+{
+  "measurement_contract": {
+    "source_run_id": "fixed_length_decode_issue30",
+    "hardware": {
+      "gpu": "unknown",
+      "device": "cuda:0",
+      "dtype": "float16"
+    },
+    "decode_length_mode": "fixed_new_tokens",
+    "decode_guard": "max_new_tokens=gen, min_new_tokens=gen",
+    "prefill_measurement": "explicit forward pass over a fixed input tensor",
+    "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json"
+  },
+  "sdpa_shape_contract": {
+    "shape_changed_between_variants": false,
+    "variant_shapes": {
+      "unaligned": {
+        "hidden_size": 4096,
+        "num_attention_heads": 32,
+        "num_key_value_heads": 8,
+        "head_dim": 128
+      },
+      "aligned_gac": {
+        "hidden_size": 4096,
+        "num_attention_heads": 32,
+        "num_key_value_heads": 8,
+        "head_dim": 128
+      }
+    },
+    "headwise_module_contract": {
+      "vt_projection_present": true,
+      "reconstructs_original_out_features": true,
+      "module_source": "third_party/palu/palu/model/modules/svd_linear.py"
+    },
+    "conclusion": "PaLU's HeadwiseLowRankModule compresses k_proj/v_proj internally but reconstructs back to the original out_features before the attention kernel. The SDPA tensor width contract therefore remains unchanged in both checkpoints."
+  },
+  "projection_gemm_contract": {
+    "changed_operator_family": "attention_projection_gemm",
+    "affected_modules": [
+      "model.layers.*.self_attn.k_proj.VT",
+      "model.layers.*.self_attn.k_proj.U[*]",
+      "model.layers.*.self_attn.v_proj.VT",
+      "model.layers.*.self_attn.v_proj.U[*]"
+    ],
+    "runtime_alignment_pct": {
+      "baseline": 100.0,
+      "unaligned": 63.4375,
+      "aligned_gac": 100.0
+    },
+    "config_rank_alignment_pct": {
+      "unaligned": 35.9375,
+      "aligned_gac": 100.0
+    },
+    "config_rank_summary": {
+      "unaligned": {
+        "overall": {
+          "total_values": 128,
+          "aligned_8_count": 46,
+          "aligned_8_pct": 35.9375,
+          "aligned_16_count": 42,
+          "aligned_16_pct": 32.8125,
+          "min_rank": 157,
+          "max_rank": 512,
+          "unique_ranks": [
+            157,
+            160,
+            163,
+            173,
+            175,
+            177,
+            181,
+            182,
+            186,
+            187,
+            199,
+            203,
+            212,
+            213,
+            218,
+            220,
+            227,
+            230,
+            232,
+            238,
+            244,
+            246,
+            249,
+            254,
+            263,
+            264,
+            269,
+            275,
+            283,
+            299,
+            345,
+            368,
+            403,
+            409,
+            412,
+            417,
+            437,
+            469,
+            473,
+            476,
+            484,
+            505,
+            509,
+            512
+          ]
+        },
+        "by_operator": {
+          "k_proj": {
+            "total_values": 64,
+            "aligned_8_count": 6,
+            "aligned_8_pct": 9.375,
+            "aligned_16_count": 2,
+            "aligned_16_pct": 3.125,
+            "min_rank": 157,
+            "max_rank": 412,
+            "unique_ranks": [
+              157,
+              160,
+              163,
+              173,
+              175,
+              177,
+              181,
+              182,
+              186,
+              187,
+              199,
+              203,
+              212,
+              213,
+              218,
+              220,
+              227,
+              230,
+              232,
+              238,
+              244,
+              246,
+              249,
+              254,
+              263,
+              264,
+              269,
+              275,
+              283,
+              299,
+              345,
+              412
+            ]
+          },
+          "v_proj": {
+            "total_values": 64,
+            "aligned_8_count": 40,
+            "aligned_8_pct": 62.5,
+            "aligned_16_count": 40,
+            "aligned_16_pct": 62.5,
+            "min_rank": 368,
+            "max_rank": 512,
+            "unique_ranks": [
+              368,
+              403,
+              409,
+              417,
+              437,
+              469,
+              473,
+              476,
+              484,
+              505,
+              509,
+              512
+            ]
+          }
+        },
+        "module_count": {
+          "k_proj": 32,
+          "v_proj": 32
+        }
+      },
+      "aligned_gac": {
+        "overall": {
+          "total_values": 128,
+          "aligned_8_count": 128,
+          "aligned_8_pct": 100.0,
+          "aligned_16_count": 106,
+          "aligned_16_pct": 82.8125,
+          "min_rank": 160,
+          "max_rank": 512,
+          "unique_ranks": [
+            160,
+            176,
+            184,
+            192,
+            200,
+            208,
+            224,
+            232,
+            240,
+            248,
+            256,
+            264,
+            272,
+            288,
+            304,
+            344,
+            368,
+            400,
+            408,
+            416,
+            432,
+            464,
+            472,
+            480,
+            504,
+            512
+          ]
+        },
+        "by_operator": {
+          "k_proj": {
+            "total_values": 64,
+            "aligned_8_count": 64,
+            "aligned_8_pct": 100.0,
+            "aligned_16_count": 48,
+            "aligned_16_pct": 75.0,
+            "min_rank": 160,
+            "max_rank": 416,
+            "unique_ranks": [
+              160,
+              176,
+              184,
+              192,
+              200,
+              208,
+              224,
+              232,
+              240,
+              248,
+              256,
+              264,
+              272,
+              288,
+              304,
+              344,
+              416
+            ]
+          },
+          "v_proj": {
+            "total_values": 64,
+            "aligned_8_count": 64,
+            "aligned_8_pct": 100.0,
+            "aligned_16_count": 58,
+            "aligned_16_pct": 90.625,
+            "min_rank": 368,
+            "max_rank": 512,
+            "unique_ranks": [
+              368,
+              400,
+              408,
+              416,
+              432,
+              464,
+              472,
+              480,
+              504,
+              512
+            ]
+          }
+        },
+        "module_count": {
+          "k_proj": 32,
+          "v_proj": 32
+        }
+      }
+    },
+    "notes": [
+      "runtime_alignment_pct reuses the issue-30 loaded-model analysis already published in the fixed-length rerun bundle.",
+      "config_rank_alignment_pct counts only the raw head_wise_ranks stored in the PaLU checkpoint config."
+    ]
+  },
+  "stage_attribution": {
+    "prefill": {
+      "changed_operator_family": "attention_projection_gemm",
+      "sdpa_shape_change_present": false,
+      "baseline_throughput_tok_s": 10880.25529642346,
+      "unaligned_throughput_tok_s": 10480.950117953516,
+      "aligned_gac_throughput_tok_s": 10709.570122572723,
+      "aligned_vs_unaligned_throughput_pct": 2.181290837627281,
+      "baseline_latency_ms": 208.06169571876526,
+      "unaligned_latency_ms": 214.60561838150025,
+      "aligned_gac_latency_ms": 210.6196475982666,
+      "aligned_vs_unaligned_latency_pct": -1.8573468920780378,
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
+      "conclusion": "The checked-in prefill delta should be interpreted as attention-adjacent projection GEMM sensitivity: the PaLU checkpoints keep the SDPA shape contract unchanged, while only the k_proj/v_proj low-rank projection path changes."
+    },
+    "decode": {
+      "changed_operator_family": "attention_projection_gemm",
+      "sdpa_shape_change_present": false,
+      "baseline_throughput_tok_s": 103.36602343555725,
+      "unaligned_throughput_tok_s": 82.43939850359618,
+      "aligned_gac_throughput_tok_s": 86.04594039975174,
+      "aligned_vs_unaligned_throughput_pct": 4.374779488472669,
+      "baseline_latency_ms": 2227.646127319336,
+      "unaligned_latency_ms": 2803.9034393310544,
+      "aligned_gac_latency_ms": 2678.1338073730467,
+      "aligned_vs_unaligned_latency_pct": -4.485519372522095,
+      "source": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
+      "conclusion": "Under the fixed_new_tokens decode contract, the moderate aligned gain should be read as projection-path alignment on cached K/V updates rather than an SDPA head_dim cliff, because the SDPA tensor width contract is unchanged."
+    }
+  },
+  "operator_split_conclusion": {
+    "dominant_changed_operator_family": "attention_projection_gemm",
+    "summary": "SDPA shape stays unchanged across the unaligned and aligned PaLU checkpoints (head_dim=128, num_attention_heads=32, num_key_value_heads=8). The only operator family whose shape contract changes is the attention-adjacent projection GEMM path inside HeadwiseLowRankModule (`k_proj` / `v_proj` `VT` + `U[*]`). Under the issue-30 fixed-length contract, aligned GAC changes prefill throughput by +2.18% and decode throughput by +4.37% versus unaligned, so the checked-in PaLU speed difference should be attributed to projection-path alignment rather than an SDPA width cliff.",
+    "caveat": "This bundle is a structural operator split based on the checked-in checkpoint contract plus the issue-30 fixed-length rerun. It is not a direct per-kernel profiler trace."
+  },
+  "sources": {
+    "unaligned_checkpoint_config": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1/config.json",
+    "aligned_checkpoint_config": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100/config.json",
+    "fixed_length_run_results": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/results.json",
+    "fixed_length_run_summary": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_issue30/comparison_summary.json",
+    "issue30_bundle_summary": "notes/alignment_budget_benefit_results/palu_a100_results/fixed_length_decode_comparison.json",
+    "headwise_module_source": "third_party/palu/palu/model/modules/svd_linear.py"
+  }
+}

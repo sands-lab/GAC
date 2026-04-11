@@ -104,7 +104,7 @@ If the question is "what should we investigate first to explain model-level infe
 | --- | --- | --- | --- |
 | ASVD | GEMM `K` during factorized projections | strongest checked-in speedup is prefill; method changes the low-rank middle dimension directly | high |
 | LLM-Pruner | MLP GEMM `N/K` | method only prunes MLP widths; checked-in prefill slowdown and recovery are large | high |
-| PaLU | SDPA `head_dim` plus attention-adjacent GEMMs | method perturbs attention-side dimensions, but current fixed-length reruns do not show a large decode win | medium |
+| PaLU | attention-adjacent projection GEMM in the `k_proj` / `v_proj` low-rank path | issue-32 structural split shows `HeadwiseLowRankModule` reconstructs back to the original attention width, so the changed operator family is projection GEMM rather than SDPA shape | high |
 | Token eviction | attention context length and GEMM `M` | paper plan identifies `M` as the changed axis, but the repo lacks a checked-in end-to-end attribution artifact | low |
 
 ## Experiment Matrix
@@ -115,7 +115,7 @@ The next experiments should answer operator attribution directly instead of only
 | --- | --- | --- | --- | --- | --- | --- |
 | Is the ASVD slowdown mostly projection GEMM? | ASVD | GEMM | `K` around real ranks | `prefill` | A100 prefill win is large; fixed-length `decode` win is absent | per-layer or per-op prefill attribution table |
 | Does LLM-Pruner slow down mainly in MLP blocks? | LLM-Pruner | GEMM/GEMV | `N` and paired `K` | `prefill` | paper-side result already shows large prefill penalty | MLP-only operator attribution bundle |
-| Does PaLU really pay mostly through SDPA cliffs after the contract fix? | PaLU | SDPA + projection GEMM | `head_dim` and nearby aligned values | `decode` then `prefill` | SDPA cliff is strong in microbenchmarks; end-to-end decode gain is weak after fix | split operator timing for SDPA vs projection |
+| Which PaLU operator family actually changes under the corrected contract? | PaLU | attention-adjacent projection GEMM | low-rank `k_proj` / `v_proj` widths | `prefill` and `decode` | issue-32 structural split shows SDPA shape is unchanged while projection-path ranks change | direct per-kernel projection timing if a stronger paper figure is still needed |
 | When token count changes, is the dominant effect on attention or GEMM? | token eviction / KV eviction | SDPA + GEMM | `M` / context length | `decode` and long-context `prefill` | only planning evidence exists today | token-eviction-specific operator sweep |
 
 ## Recommended Issue Order
@@ -123,15 +123,15 @@ The next experiments should answer operator attribution directly instead of only
 To keep the next backlog slices concrete:
 
 1. Build a repo-tracked ASVD/LLM-Pruner prefill operator-attribution artifact focused on GEMM `K/N`
-2. Build a PaLU operator-split artifact that times SDPA separately from projection GEMMs under the fixed-length contract
+2. Treat PaLU's issue-32 operator-split bundle as the current checked-in answer: SDPA shape is unchanged, so any stronger follow-up should time projection-path kernels directly
 3. Add a token-eviction-oriented `M`-sweep plan or artifact, because that line likely follows a different bottleneck story
 
 ## Deliverable Boundary
 
-This note is intentionally a mapping and experiment-planning artifact, not a claim that the repo already contains full operator-level attribution.
+This note is intentionally a mapping and experiment-planning artifact, not a claim that the repo already contains full per-kernel attribution for every method.
 Its job is to narrow the next question:
 
 - not "are aligned dimensions good?"
 - but "which operator and which stage actually create the observed model-level speed difference?"
 
-Based on the currently checked-in evidence, the first operator to investigate is large-`prefill` GEMM on compressed `K/N` dimensions.
+Based on the currently checked-in evidence, the next open operator question is token-eviction-style `M` sensitivity. For PaLU itself, issue 32 already narrows the changed path to attention-adjacent projection GEMM rather than SDPA width changes.

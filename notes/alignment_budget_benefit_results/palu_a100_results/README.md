@@ -18,6 +18,7 @@ It preserves the older actual A100 partial baseline evidence and now points the 
 - `latency_comparison.json`: normalized comparison summary with explicit `baseline` / `unaligned` / `aligned_gac` latency and alignment fields, now pointing at the issue-30 fixed-length rerun
 - `fixed_length_decode_comparison.json`: current fixed-length summary that pairs same-run prefill numbers with decode numbers and records whether the main aligned gain is still decode
 - `decode_root_cause_summary.json`: structured note explaining why the historical decode throughput looked too good on some shapes and how the benchmark contract was fixed
+- `operator_split_issue32/`: structural operator-split bundle showing that issue-30 PaLU keeps the SDPA shape contract unchanged and only changes the attention-adjacent projection GEMM path
 - `README.md`: human-readable summary of the current PaLU A100 comparison
 
 ## Fixed-Length Rerun Result
@@ -42,6 +43,7 @@ It preserves the older actual A100 partial baseline evidence and now points the 
 - Under the issue-30 fixed-length rerun, decode improves from `2803.90 ms` to `2678.13 ms`
 - In throughput terms, prefill rises by `2.18%` over unaligned PaLU and decode rises by `4.37%`
 - The clean rerun still shows a decode-side gain, but it is moderate and now backed by rebuilt checkpoints plus the fixed-token contract
+- Issue 32 further narrows the changed operator family: `HeadwiseLowRankModule` reconstructs back to the original attention width, so the checked-in gain should be attributed to the `k_proj` / `v_proj` low-rank projection path rather than an SDPA width cliff
 
 ## Comparison Shape
 
@@ -67,6 +69,14 @@ For the current checked-in fixed-length evidence:
 - prefill does not have the same ambiguity because it is measured with a fixed forward pass over an explicit input tensor
 - `scripts/run_c5_e2e_comparison.py` now enforces `min_new_tokens=gen` and records `actual_new_tokens`
 - `fixed_length_decode_comparison.json` and `latency_comparison.json` should be read from the issue-30 rerun; the 2026-04-08 and 2026-04-09 runs remain historical provenance only
+
+## Operator Split
+
+- `operator_split_issue32/operator_split_summary.json` is the current checked-in PaLU split artifact under the corrected fixed-length contract
+- it uses the issue-30 fixed-length rerun, the `rb1` / `gac-a100` checkpoint configs, and `third_party/palu/palu/model/modules/svd_linear.py`
+- the key finding is structural: both PaLU checkpoints keep `head_dim=128`, `num_attention_heads=32`, and `num_key_value_heads=8`
+- because `HeadwiseLowRankModule` reconstructs back to the original output width before attention, SDPA shape does not change between unaligned and aligned PaLU
+- the changed operator family is therefore the attention-adjacent projection GEMM path inside `k_proj` / `v_proj`
 
 ## Provenance
 
