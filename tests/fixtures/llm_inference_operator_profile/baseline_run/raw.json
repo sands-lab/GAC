@@ -1,0 +1,96 @@
+{
+  "variant": "baseline",
+  "stages": {
+    "prefill": {
+      "profile": {
+        "batch": 1,
+        "seq_len": 1024,
+        "mode": "forward"
+      },
+      "events": [
+        {
+          "name": "aten::mm",
+          "count": 96,
+          "self_cuda_time_us": 5200,
+          "self_cpu_time_us": 320
+        },
+        {
+          "name": "aten::linear",
+          "count": 96,
+          "self_cuda_time_us": 2800,
+          "self_cpu_time_us": 240
+        },
+        {
+          "name": "aten::scaled_dot_product_attention",
+          "count": 32,
+          "self_cuda_time_us": 2100,
+          "self_cpu_time_us": 180
+        },
+        {
+          "name": "aten::native_layer_norm",
+          "count": 64,
+          "self_cuda_time_us": 900,
+          "self_cpu_time_us": 140
+        },
+        {
+          "name": "aten::add",
+          "count": 160,
+          "self_cuda_time_us": 700,
+          "self_cpu_time_us": 110
+        },
+        {
+          "name": "aten::copy_",
+          "count": 48,
+          "self_cuda_time_us": 500,
+          "self_cpu_time_us": 90
+        }
+      ]
+    },
+    "decode": {
+      "profile": {
+        "batch": 1,
+        "context_len": 1024,
+        "decode_tokens": 1,
+        "mode": "single_token_with_cache"
+      },
+      "events": [
+        {
+          "name": "aten::mm",
+          "count": 32,
+          "self_cuda_time_us": 1800,
+          "self_cpu_time_us": 160
+        },
+        {
+          "name": "aten::linear",
+          "count": 32,
+          "self_cuda_time_us": 900,
+          "self_cpu_time_us": 80
+        },
+        {
+          "name": "aten::scaled_dot_product_attention",
+          "count": 32,
+          "self_cuda_time_us": 1400,
+          "self_cpu_time_us": 140
+        },
+        {
+          "name": "aten::native_layer_norm",
+          "count": 32,
+          "self_cuda_time_us": 500,
+          "self_cpu_time_us": 75
+        },
+        {
+          "name": "aten::add",
+          "count": 96,
+          "self_cuda_time_us": 350,
+          "self_cpu_time_us": 60
+        },
+        {
+          "name": "aten::copy_",
+          "count": 32,
+          "self_cuda_time_us": 250,
+          "self_cpu_time_us": 50
+        }
+      ]
+    }
+  }
+}

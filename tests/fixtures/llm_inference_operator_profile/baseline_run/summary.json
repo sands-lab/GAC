@@ -1,0 +1,11 @@
+{
+  "variant": "baseline",
+  "stages": {
+    "prefill": {
+      "total_self_cuda_time_ms": 12.2
+    },
+    "decode": {
+      "total_self_cuda_time_ms": 5.2
+    }
+  }
+}
