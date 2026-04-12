@@ -1,0 +1,778 @@
+{
+  "experiment": "G5_gemm_m_dense_sequence_like",
+  "config": {
+    "type": "gemm_m_dense",
+    "dtypes": [
+      "fp16",
+      "bf16"
+    ],
+    "shape": {
+      "K": 4096,
+      "N": 4096
+    }
+  },
+  "measurements": [
+    {
+      "shape": {
+        "M": 255,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.2,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.2
+      ],
+      "derived": {
+        "tflops_mean": 145.0,
+        "bandwidth_gbs_mean": 900.0
+      }
+    },
+    {
+      "shape": {
+        "M": 256,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.0,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.0
+      ],
+      "derived": {
+        "tflops_mean": 170.0,
+        "bandwidth_gbs_mean": 980.0
+      }
+    },
+    {
+      "shape": {
+        "M": 257,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.18,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.18
+      ],
+      "derived": {
+        "tflops_mean": 147.0,
+        "bandwidth_gbs_mean": 908.0
+      }
+    },
+    {
+      "shape": {
+        "M": 511,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.25,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.25
+      ],
+      "derived": {
+        "tflops_mean": 148.0,
+        "bandwidth_gbs_mean": 905.0
+      }
+    },
+    {
+      "shape": {
+        "M": 512,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.0,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.0
+      ],
+      "derived": {
+        "tflops_mean": 171.0,
+        "bandwidth_gbs_mean": 981.0
+      }
+    },
+    {
+      "shape": {
+        "M": 513,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.22,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.22
+      ],
+      "derived": {
+        "tflops_mean": 149.0,
+        "bandwidth_gbs_mean": 907.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1023,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 4.35,
+        "std": 0.03
+      },
+      "timing_raw": [
+        4.35
+      ],
+      "derived": {
+        "tflops_mean": 150.0,
+        "bandwidth_gbs_mean": 910.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1024,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 3.9,
+        "std": 0.03
+      },
+      "timing_raw": [
+        3.9
+      ],
+      "derived": {
+        "tflops_mean": 172.0,
+        "bandwidth_gbs_mean": 982.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1025,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 4.3,
+        "std": 0.03
+      },
+      "timing_raw": [
+        4.3
+      ],
+      "derived": {
+        "tflops_mean": 151.0,
+        "bandwidth_gbs_mean": 911.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2047,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 8.55,
+        "std": 0.04
+      },
+      "timing_raw": [
+        8.55
+      ],
+      "derived": {
+        "tflops_mean": 152.0,
+        "bandwidth_gbs_mean": 912.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2048,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 7.8,
+        "std": 0.04
+      },
+      "timing_raw": [
+        7.8
+      ],
+      "derived": {
+        "tflops_mean": 173.0,
+        "bandwidth_gbs_mean": 983.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2049,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 8.48,
+        "std": 0.04
+      },
+      "timing_raw": [
+        8.48
+      ],
+      "derived": {
+        "tflops_mean": 153.0,
+        "bandwidth_gbs_mean": 913.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4095,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 16.9,
+        "std": 0.05
+      },
+      "timing_raw": [
+        16.9
+      ],
+      "derived": {
+        "tflops_mean": 154.0,
+        "bandwidth_gbs_mean": 914.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4096,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 15.6,
+        "std": 0.05
+      },
+      "timing_raw": [
+        15.6
+      ],
+      "derived": {
+        "tflops_mean": 174.0,
+        "bandwidth_gbs_mean": 984.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4097,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 16.82,
+        "std": 0.05
+      },
+      "timing_raw": [
+        16.82
+      ],
+      "derived": {
+        "tflops_mean": 155.0,
+        "bandwidth_gbs_mean": 915.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8191,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 33.7,
+        "std": 0.08
+      },
+      "timing_raw": [
+        33.7
+      ],
+      "derived": {
+        "tflops_mean": 156.0,
+        "bandwidth_gbs_mean": 916.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8192,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 31.2,
+        "std": 0.08
+      },
+      "timing_raw": [
+        31.2
+      ],
+      "derived": {
+        "tflops_mean": 175.0,
+        "bandwidth_gbs_mean": 985.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8193,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 33.55,
+        "std": 0.08
+      },
+      "timing_raw": [
+        33.55
+      ],
+      "derived": {
+        "tflops_mean": 157.0,
+        "bandwidth_gbs_mean": 917.0
+      }
+    },
+    {
+      "shape": {
+        "M": 255,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.28,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.28
+      ],
+      "derived": {
+        "tflops_mean": 138.0,
+        "bandwidth_gbs_mean": 880.0
+      }
+    },
+    {
+      "shape": {
+        "M": 256,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.08,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.08
+      ],
+      "derived": {
+        "tflops_mean": 161.0,
+        "bandwidth_gbs_mean": 958.0
+      }
+    },
+    {
+      "shape": {
+        "M": 257,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.26,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.26
+      ],
+      "derived": {
+        "tflops_mean": 139.0,
+        "bandwidth_gbs_mean": 888.0
+      }
+    },
+    {
+      "shape": {
+        "M": 511,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.38,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.38
+      ],
+      "derived": {
+        "tflops_mean": 140.0,
+        "bandwidth_gbs_mean": 885.0
+      }
+    },
+    {
+      "shape": {
+        "M": 512,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.12,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.12
+      ],
+      "derived": {
+        "tflops_mean": 162.0,
+        "bandwidth_gbs_mean": 959.0
+      }
+    },
+    {
+      "shape": {
+        "M": 513,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.35,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.35
+      ],
+      "derived": {
+        "tflops_mean": 141.0,
+        "bandwidth_gbs_mean": 887.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1023,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 4.58,
+        "std": 0.03
+      },
+      "timing_raw": [
+        4.58
+      ],
+      "derived": {
+        "tflops_mean": 142.0,
+        "bandwidth_gbs_mean": 889.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1024,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 4.08,
+        "std": 0.03
+      },
+      "timing_raw": [
+        4.08
+      ],
+      "derived": {
+        "tflops_mean": 163.0,
+        "bandwidth_gbs_mean": 960.0
+      }
+    },
+    {
+      "shape": {
+        "M": 1025,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 4.52,
+        "std": 0.03
+      },
+      "timing_raw": [
+        4.52
+      ],
+      "derived": {
+        "tflops_mean": 143.0,
+        "bandwidth_gbs_mean": 890.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2047,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 9.05,
+        "std": 0.04
+      },
+      "timing_raw": [
+        9.05
+      ],
+      "derived": {
+        "tflops_mean": 144.0,
+        "bandwidth_gbs_mean": 891.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2048,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 8.18,
+        "std": 0.04
+      },
+      "timing_raw": [
+        8.18
+      ],
+      "derived": {
+        "tflops_mean": 164.0,
+        "bandwidth_gbs_mean": 961.0
+      }
+    },
+    {
+      "shape": {
+        "M": 2049,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 8.95,
+        "std": 0.04
+      },
+      "timing_raw": [
+        8.95
+      ],
+      "derived": {
+        "tflops_mean": 145.0,
+        "bandwidth_gbs_mean": 892.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4095,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 17.9,
+        "std": 0.05
+      },
+      "timing_raw": [
+        17.9
+      ],
+      "derived": {
+        "tflops_mean": 146.0,
+        "bandwidth_gbs_mean": 893.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4096,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 16.42,
+        "std": 0.05
+      },
+      "timing_raw": [
+        16.42
+      ],
+      "derived": {
+        "tflops_mean": 165.0,
+        "bandwidth_gbs_mean": 962.0
+      }
+    },
+    {
+      "shape": {
+        "M": 4097,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 17.82,
+        "std": 0.05
+      },
+      "timing_raw": [
+        17.82
+      ],
+      "derived": {
+        "tflops_mean": 147.0,
+        "bandwidth_gbs_mean": 894.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8191,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 35.2,
+        "std": 0.08
+      },
+      "timing_raw": [
+        35.2
+      ],
+      "derived": {
+        "tflops_mean": 148.0,
+        "bandwidth_gbs_mean": 895.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8192,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 32.4,
+        "std": 0.08
+      },
+      "timing_raw": [
+        32.4
+      ],
+      "derived": {
+        "tflops_mean": 166.0,
+        "bandwidth_gbs_mean": 963.0
+      }
+    },
+    {
+      "shape": {
+        "M": 8193,
+        "K": 4096,
+        "N": 4096
+      },
+      "dtype": "bf16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 35.05,
+        "std": 0.08
+      },
+      "timing_raw": [
+        35.05
+      ],
+      "derived": {
+        "tflops_mean": 149.0,
+        "bandwidth_gbs_mean": 896.0
+      }
+    }
+  ],
+  "metadata": {
+    "run_id": "fixture_prefill_run",
+    "experiment_name": "TOKENEVICTION_prefill_gemm_m_real_shapes",
+    "device": "cuda:0",
+    "seed": 42
+  }
+}

@@ -47,6 +47,7 @@ This folder isolates the smallest repo-tracked artifact set that demonstrates th
 - `palu_a100_results/`: repo-tracked PaLU A100 evidence bundle combining the actual partial baseline run, the historical PaLU failure provenance, the local checkpoint-build metadata, and a comparison-shaped latency summary with explicit baseline / unaligned / aligned status fields.
 - `palu_a100_results/operator_split_issue32/`: repo-tracked structural split for PaLU under the corrected fixed-length contract, proving that the changed path is the `k_proj` / `v_proj` low-rank projection GEMM rather than SDPA shape changes.
 - `prefill_operator_attribution/`: repo-tracked landing zone for ASVD / LLM-Pruner `prefill` operator attribution runs, including a publish script contract and the expected summary / provenance layout.
+- `token_eviction_operator_attribution/`: repo-tracked landing zone for token-eviction `prefill` GEMM `M` and `decode` SDPA context-length runs, including a publish script contract and the expected summary / provenance layout.
 
 ## Key Takeaway
 
@@ -65,3 +66,5 @@ The `palu_a100_results/` bundle complements that hardware-level bundle with meth
 The `palu_a100_results/operator_split_issue32/` bundle sharpens that PaLU story further: because `HeadwiseLowRankModule` reconstructs back to the original attention width, the checked-in fixed-length PaLU gain should be attributed to attention-adjacent projection GEMM alignment, not to an SDPA head-dim cliff.
 
 The `prefill_operator_attribution/` directory is the next tracked bridge from high-level hypotheses to runnable evidence. Issue `29-inference-operator-hotspots` already added the real-shape experiment spec; issue `31-inference-operator-impact` adds the publisher and bundle contract so those ASVD / LLM-Pruner `prefill` runs can be cited as a structured artifact instead of staying as ad hoc raw outputs.
+
+The `token_eviction_operator_attribution/` directory does the same for the sequence-length story. Issue `33-token-eviction-m-sweep` added the runnable token-eviction spec; issue `34-token-eviction-bundle` adds the publisher and bundle contract so future `prefill M` and `decode context-length` runs can be published in the same repo-tracked format.
