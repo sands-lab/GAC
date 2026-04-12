@@ -1,0 +1,235 @@
+{
+  "experiment": "S1_sdpa_dense_sweep",
+  "config": {
+    "type": "sdpa_dense",
+    "dtype": "fp16",
+    "head_dim_range": [
+      128,
+      128
+    ]
+  },
+  "measurements": [
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 255,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 0.82,
+        "std": 0.01
+      },
+      "timing_raw": [
+        0.82
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 256,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 0.78,
+        "std": 0.01
+      },
+      "timing_raw": [
+        0.78
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 257,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 0.81,
+        "std": 0.01
+      },
+      "timing_raw": [
+        0.81
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 511,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.54,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.54
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 512,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.47,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.47
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 513,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 1.55,
+        "std": 0.01
+      },
+      "timing_raw": [
+        1.55
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 1023,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.98,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.98
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 1024,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.86,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.86
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 1025,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 2.99,
+        "std": 0.02
+      },
+      "timing_raw": [
+        2.99
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 2047,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 5.86,
+        "std": 0.03
+      },
+      "timing_raw": [
+        5.86
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 2048,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 5.62,
+        "std": 0.03
+      },
+      "timing_raw": [
+        5.62
+      ]
+    },
+    {
+      "shape": {
+        "batch": 1,
+        "seq_len": 2049,
+        "n_heads": 32,
+        "head_dim": 128
+      },
+      "dtype": "fp16",
+      "trials": 1,
+      "total_measurements": 1,
+      "timing": {
+        "mean": 5.89,
+        "std": 0.03
+      },
+      "timing_raw": [
+        5.89
+      ]
+    }
+  ],
+  "metadata": {
+    "run_id": "fixture_decode_run",
+    "experiment_name": "TOKENEVICTION_decode_sdpa_context_real_shapes",
+    "device": "cuda:0",
+    "seed": 42
+  }
+}

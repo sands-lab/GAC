@@ -1,0 +1,6 @@
+{
+  "experiment": "G5_gemm_m_dense_sequence_like",
+  "num_measurements": 36,
+  "successful": 36,
+  "failed": 0
+}

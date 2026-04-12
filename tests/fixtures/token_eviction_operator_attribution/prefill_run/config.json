@@ -1,0 +1,53 @@
+{
+  "type": "gemm_m_dense",
+  "dtypes": [
+    "fp16",
+    "bf16"
+  ],
+  "shape": {
+    "K": 4096,
+    "N": 4096
+  },
+  "M_values": [
+    255,
+    256,
+    257,
+    511,
+    512,
+    513,
+    1023,
+    1024,
+    1025,
+    2047,
+    2048,
+    2049,
+    4095,
+    4096,
+    4097,
+    8191,
+    8192,
+    8193
+  ],
+  "warmup": 50,
+  "measure": 200,
+  "trials": 3,
+  "provenance": {
+    "method": "token_eviction",
+    "aliases": [
+      "H2O",
+      "PyramidKV",
+      "SnapKV"
+    ],
+    "stage": "prefill",
+    "operator_family": "GEMM",
+    "changed_axis": "M",
+    "sources": [
+      "notes/operator_impact_map.md",
+      "notes/full_paper_plan.md",
+      "notes/paper_plan.md",
+      "scripts/profile_alignment.py",
+      "scripts/create_paper_figures.py"
+    ],
+    "rationale": "Synthetic fixture for issue 34 token-eviction publisher validation."
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "type": "sdpa_dense",
+  "dtype": "fp16",
+  "shapes": [
+    {
+      "batch": 1,
+      "seq_len": 255,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 256,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 257,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 511,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 512,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 513,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 1023,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 1024,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 1025,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 2047,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 2048,
+      "n_heads": 32
+    },
+    {
+      "batch": 1,
+      "seq_len": 2049,
+      "n_heads": 32
+    }
+  ],
+  "head_dim_range": [
+    128,
+    128
+  ],
+  "head_dim_step_1": 1,
+  "warmup": 50,
+  "measure": 200,
+  "trials": 3,
+  "provenance": {
+    "method": "token_eviction",
+    "aliases": [
+      "H2O",
+      "PyramidKV",
+      "SnapKV"
+    ],
+    "stage": "decode",
+    "operator_family": "SDPA",
+    "changed_axis": "context_length",
+    "sources": [
+      "notes/operator_impact_map.md",
+      "notes/full_paper_plan.md",
+      "notes/paper_plan.md",
+      "Latex/main.tex"
+    ],
+    "rationale": "Synthetic fixture for issue 34 token-eviction publisher validation."
+  }
+}
