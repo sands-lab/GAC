@@ -1,0 +1,11 @@
+{
+  "variant": "aligned_gac",
+  "stages": {
+    "prefill": {
+      "total_self_cuda_time_ms": 14.13
+    },
+    "decode": {
+      "total_self_cuda_time_ms": 5.695
+    }
+  }
+}

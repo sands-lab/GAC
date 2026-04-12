@@ -1,0 +1,9 @@
+{
+  "variant": "baseline",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "model_source": "meta-llama/Meta-Llama-3-8B-Instruct",
+  "stages": "both",
+  "prefill_seq_len": 1024,
+  "decode_context_len": 1024
+}
