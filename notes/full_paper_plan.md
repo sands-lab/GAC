@@ -113,7 +113,7 @@ What to say:
 What to say:
 
 - No fully checked-in raw A100 CSV / NCU dumps yet
-- No repo-tracked token eviction attribution artifact yet
+- No measured repo-tracked token eviction attribution artifact yet; issue 33 only adds a runnable spec / plan
 - No full operator-level decomposition of PaLU `prefill` vs `decode`
 - Limited H100 scope today
 
@@ -128,7 +128,7 @@ What to say:
 | A100 vs H100 | shows whether the operator story generalizes across GPU generations | partial; H100 contract exists but full evidence is still thinner | Discussion / Appendix |
 | GAC vs naive round-to-8 | clarifies whether the main benefit comes from global budget reallocation or simple local rounding | not yet ready as a checked-in end-to-end comparison | Missing Experiments |
 | GAC vs serving-side mitigation | distinguishes compression-time alignment from runtime padding / fallback handling | conceptual argument exists; measured comparison still missing | Discussion |
-| Compression families vs token eviction | broadens the claim beyond `K/N/head_dim` changes | not yet ready | Missing Experiments |
+| Compression families vs token eviction | broadens the claim beyond `K/N/head_dim` changes | runnable spec is now ready, but measured artifact is not yet ready | Missing Experiments |
 
 ## Missing Experiments
 
@@ -148,6 +148,7 @@ What to say:
 
 4. Token eviction line
    - Goal: test whether changing sequence-driven `M` produces a different dominant bottleneck story
+   - Current checked-in state: issue 33 adds the runnable spec in `notes/token_eviction_m_sweep.md` and `experiments/token_eviction_m_sweep.yaml`
    - Comparison: token-eviction method vs GAC-style constrained variant or at least an operator sweep
 
 ### Nice-to-have
@@ -163,7 +164,7 @@ What to say:
 | ASVD | strong `prefill` story; issue-30 fixed-length `decode` rerun still shows no win | operator-level `prefill` attribution |
 | LLM-Pruner | strong `prefill` story; issue-30 fixed-length `decode` rerun now shows a moderate aligned gain | replication, MLP-only operator attribution, and naive-round baseline |
 | PaLU | strong motivation for `head_dim` cliffs; corrected `decode` story is now conservative | per-operator timing and stronger `prefill` attribution |
-| token eviction | conceptual fit is strong because it changes `M` | almost all checked-in evaluation evidence is still missing |
+| token eviction | conceptual fit is strong because it changes `M`; issue 33 now provides a runnable plan/spec | measured evaluation evidence is still missing |
 
 ## Writing Order
 

@@ -105,7 +105,7 @@ If the question is "what should we investigate first to explain model-level infe
 | ASVD | GEMM `K` during factorized projections | strongest checked-in speedup is prefill; method changes the low-rank middle dimension directly | high |
 | LLM-Pruner | MLP GEMM `N/K` | method only prunes MLP widths; checked-in prefill slowdown and recovery are large | high |
 | PaLU | attention-adjacent projection GEMM in the `k_proj` / `v_proj` low-rank path | issue-32 structural split shows `HeadwiseLowRankModule` reconstructs back to the original attention width, so the changed operator family is projection GEMM rather than SDPA shape | high |
-| Token eviction | attention context length and GEMM `M` | paper plan identifies `M` as the changed axis, but the repo lacks a checked-in end-to-end attribution artifact | low |
+| Token eviction | attention context length and GEMM `M` | paper plan identifies `M` as the changed axis, and issue 33 now adds a runnable `M`-sweep spec, but the repo still lacks measured token-eviction attribution results | low |
 
 ## Experiment Matrix
 
@@ -116,7 +116,7 @@ The next experiments should answer operator attribution directly instead of only
 | Is the ASVD slowdown mostly projection GEMM? | ASVD | GEMM | `K` around real ranks | `prefill` | A100 prefill win is large; fixed-length `decode` win is absent | per-layer or per-op prefill attribution table |
 | Does LLM-Pruner slow down mainly in MLP blocks? | LLM-Pruner | GEMM/GEMV | `N` and paired `K` | `prefill` | paper-side result already shows large prefill penalty | MLP-only operator attribution bundle |
 | Which PaLU operator family actually changes under the corrected contract? | PaLU | attention-adjacent projection GEMM | low-rank `k_proj` / `v_proj` widths | `prefill` and `decode` | issue-32 structural split shows SDPA shape is unchanged while projection-path ranks change | direct per-kernel projection timing if a stronger paper figure is still needed |
-| When token count changes, is the dominant effect on attention or GEMM? | token eviction / KV eviction | SDPA + GEMM | `M` / context length | `decode` and long-context `prefill` | only planning evidence exists today | token-eviction-specific operator sweep |
+| When token count changes, is the dominant effect on attention or GEMM? | token eviction / KV eviction | SDPA + GEMM | `M` / context length | `decode` and long-context `prefill` | issue 33 now defines the runnable spec in `notes/token_eviction_m_sweep.md` and `experiments/token_eviction_m_sweep.yaml` | measured token-eviction-specific operator sweep / bundle |
 
 ## Recommended Issue Order
 
@@ -124,7 +124,7 @@ To keep the next backlog slices concrete:
 
 1. Build a repo-tracked ASVD/LLM-Pruner prefill operator-attribution artifact focused on GEMM `K/N`
 2. Treat PaLU's issue-32 operator-split bundle as the current checked-in answer: SDPA shape is unchanged, so any stronger follow-up should time projection-path kernels directly
-3. Add a token-eviction-oriented `M`-sweep plan or artifact, because that line likely follows a different bottleneck story
+3. Use issue 33's token-eviction-oriented `M`-sweep plan as the source of truth for the next measured artifact, because that line likely follows a different bottleneck story
 
 ## Deliverable Boundary
 
@@ -134,4 +134,4 @@ Its job is to narrow the next question:
 - not "are aligned dimensions good?"
 - but "which operator and which stage actually create the observed model-level speed difference?"
 
-Based on the currently checked-in evidence, the next open operator question is token-eviction-style `M` sensitivity. For PaLU itself, issue 32 already narrows the changed path to attention-adjacent projection GEMM rather than SDPA width changes.
+Based on the currently checked-in evidence, the next open operator question is still token-eviction-style `M` sensitivity. Issue 33 now turns that question into a runnable spec in `notes/token_eviction_m_sweep.md`, while PaLU itself is already narrowed to attention-adjacent projection GEMM rather than SDPA width changes.

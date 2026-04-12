@@ -352,6 +352,65 @@ def run_g4_gemm_n_dense(exp_spec: Dict, device: str = "cuda:0", seed: int = 42) 
     return results
 
 
+def run_g5_gemm_m_dense(exp_spec: Dict, device: str = "cuda:0", seed: int = 42) -> Dict:
+    """G5: GEMM with M dimension sweep (sequence-like)."""
+    set_deterministic(seed)
+    dtypes = exp_spec["dtypes"]
+    shape = exp_spec["shape"]
+    K = shape["K"]
+    N = shape["N"]
+    M_values = resolve_dense_sweep_values(exp_spec, "M")
+    warmup = exp_spec.get("warmup", 50)
+    measure = exp_spec.get("measure", 200)
+    trials = exp_spec.get("trials", 3)
+
+    results = {
+        "experiment": "G5_gemm_m_dense_sequence_like",
+        "config": exp_spec,
+        "measurements": [],
+    }
+
+    for dtype_str in dtypes:
+        dtype = get_dtype(dtype_str)
+
+        for M in M_values:
+            a, b = allocate_tensors((M, K), (K, N), dtype=dtype, device=device, seed=seed)
+
+            def kernel_fn():
+                torch.matmul(a, b)
+
+            try:
+                trial_results = run_multiple_trials(kernel_fn, warmup, measure, trials, device)
+
+                mean_time_s = trial_results["timing"]["mean"] / 1000.0
+                tflops = compute_gemm_tflops(M, N, K, mean_time_s)
+                bandwidth = compute_gemm_bandwidth(M, N, K, dtype, mean_time_s)
+
+                tflops_list = [compute_gemm_tflops(M, N, K, t / 1000.0) for t in trial_results["timing_raw"]]
+
+                results["measurements"].append({
+                    "shape": {"M": M, "K": K, "N": N},
+                    "dtype": dtype_str,
+                    **trial_results,
+                    "derived": {
+                        "tflops_mean": tflops,
+                        "tflops_stats": compute_statistics(tflops_list),
+                        "bandwidth_gbs_mean": bandwidth,
+                    },
+                })
+            except Exception as e:
+                results["measurements"].append({
+                    "shape": {"M": M, "K": K, "N": N},
+                    "dtype": dtype_str,
+                    "error": str(e),
+                })
+
+            del a, b
+            torch.cuda.empty_cache()
+
+    return results
+
+
 def run_p1_padding_rescue(exp_spec: Dict, device: str = "cuda:0", seed: int = 42) -> Dict:
     """P1: Padding rescue comparison."""
     set_deterministic(seed)
@@ -709,6 +768,7 @@ EXPERIMENT_RUNNERS = {
     "sdpa_backend_selection": run_c21_backend_selection,
     "gemm_k_dense": run_g3_gemm_k_dense,
     "gemm_n_dense": run_g4_gemm_n_dense,
+    "gemm_m_dense": run_g5_gemm_m_dense,
     "padding_rescue": run_p1_padding_rescue,
     "hetero_batching": run_het1_hetero_batching,
 }
