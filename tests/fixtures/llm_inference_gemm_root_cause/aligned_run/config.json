@@ -1,0 +1,11 @@
+{
+  "variant": "aligned_gac",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "stages": [
+    "prefill",
+    "decode"
+  ],
+  "prefill_seq_len": 1024,
+  "decode_context_len": 1024
+}

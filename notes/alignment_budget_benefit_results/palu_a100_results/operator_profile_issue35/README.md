@@ -13,8 +13,10 @@ when alignment changes real LLM inference latency, which operator family actuall
 
 - The tracked real-A100 collection completed as Slurm job `26081` on `acclnode06`; see `submission_status.json` for provenance.
 - The human-readable interpretation now lives in `analysis.md`.
+- The deeper kernel-level explanation now lives in `gemm_root_cause_analysis.md`, with machine-readable bucket totals in `gemm_root_cause_summary.json`.
 - The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
 - `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
+- The root-cause follow-up shows why the cliff is muted in full inference: prefill is still dispatch-heavy, the `align1/align2` kernel tail is only a few milliseconds, decode is dominated by a small `gemv` tail, and the coarse prefill GEMM view also contains flash-attention leakage.
 
 ## Runtime Boundary
 
@@ -106,6 +108,8 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 
 - `palu_inference_operator_profile_summary.json`: structured summary with per-stage total self CUDA time, operator-family shares, and baseline / unaligned / aligned comparisons.
 - `analysis.md`: human-readable interpretation of the tracked summary, including stage tables and pairwise delta analysis.
+- `gemm_root_cause_summary.json`: machine-readable kernel-level split for dispatch ops, alignment-sensitive kernels, align8 kernels, `gemv` tails, attention leakage, and other GEMM kernels.
+- `gemm_root_cause_analysis.md`: human-readable root-cause explanation for why the 8-aligned cliff from simulation becomes a small end-to-end gain in real inference.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
 - `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed outputs, and where to find the final tracked bundle.
 
@@ -114,3 +118,4 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 - `prefill` is profiled as a single forward pass over a fixed input tensor.
 - `decode` is profiled as a single cached token step after a fixed-length context prefill.
 - `gemm`, `sdpa`, `norm`, `elementwise`, `data_movement`, and `other` are coarse profiler families meant for stable comparison, not for claiming kernel-level root cause in isolation.
+- When the question is specifically "why did 8-aligned repair not create a larger inference win?", use `gemm_root_cause_analysis.md` / `gemm_root_cause_summary.json` instead of the coarse family summary alone.
