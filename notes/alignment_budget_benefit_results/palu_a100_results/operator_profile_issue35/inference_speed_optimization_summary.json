@@ -1,0 +1,119 @@
+{
+  "focus": "palu_inference_speed_optimization",
+  "generated_at": "2026-04-13T13:20:29.519722+00:00",
+  "source_focus": {
+    "operator_profile_summary": "palu_inference_operator_profile",
+    "gemm_root_cause_summary": "palu_inference_gemm_root_cause"
+  },
+  "high_level_summary": {
+    "primary_stage": "prefill",
+    "current_aligned_gain_vs_palu": {
+      "prefill_ms": 1.278135,
+      "prefill_pct": 0.7094,
+      "decode_ms": 0.204055,
+      "decode_pct": 0.5455
+    },
+    "residual_gap_vs_baseline_pct": {
+      "prefill": 3.1141,
+      "decode": 3.1167
+    },
+    "current_bottleneck_summary": "Prefill still dominates the next optimization pass: the selected GEMM view is 48.10% `aten::mm` dispatch, while the recoverable align1/align2 tail is only 3.43 ms. Decode `gemv` micro-tuning stays low leverage because the current tail is only 1.09 ms."
+  },
+  "stage_metrics": {
+    "prefill": {
+      "aligned_vs_palu_delta_ms": 1.278135,
+      "aligned_vs_palu_improvement_pct": 0.7094,
+      "largest_recovered_family": "gemm",
+      "aligned_vs_baseline_residual_gap_ms": 5.402624,
+      "aligned_vs_baseline_residual_gap_pct": 3.1141,
+      "dispatch_share_of_selected_pct": 48.0994,
+      "alignment_sensitive_tail_ms": 3.427298,
+      "attention_leakage_ms": 5.87135,
+      "gemv_tail_ms": 0.0,
+      "alignment_sensitive_recovery_ms": 3.427298,
+      "other_gemm_regression_ms": -2.366672,
+      "gemv_delta_ms": 0.0
+    },
+    "decode": {
+      "aligned_vs_palu_delta_ms": 0.204055,
+      "aligned_vs_palu_improvement_pct": 0.5455,
+      "largest_recovered_family": "gemm",
+      "aligned_vs_baseline_residual_gap_ms": 1.124421,
+      "aligned_vs_baseline_residual_gap_pct": 3.1167,
+      "dispatch_share_of_selected_pct": 42.8299,
+      "alignment_sensitive_tail_ms": 0.0,
+      "attention_leakage_ms": 3.906584,
+      "gemv_tail_ms": 1.085226,
+      "alignment_sensitive_recovery_ms": 0.0,
+      "other_gemm_regression_ms": 0.078723,
+      "gemv_delta_ms": -0.015008
+    }
+  },
+  "opportunities": [
+    {
+      "id": "prefill_dispatch_reduction",
+      "priority": "high",
+      "stage": "prefill",
+      "title": "Prefill dispatch reduction on the projection path",
+      "target_module": "HeadwiseLowRankModule (`k_proj` / `v_proj` low-rank path)",
+      "why_now": "The current 8-aligned repair only recovers a small prefill win, while the selected GEMM view remains dominated by `aten::mm` dispatch rather than by the removable align1/align2 tail.",
+      "evidence": {
+        "largest_recovered_family": "gemm",
+        "aligned_vs_palu_delta_ms": 1.278135,
+        "aligned_vs_palu_improvement_pct": 0.7094,
+        "aligned_vs_baseline_residual_gap_pct": 3.1141,
+        "dispatch_share_of_selected_pct": 48.0994,
+        "alignment_sensitive_tail_ms": 3.427298,
+        "dominant_dispatch_op": "aten::mm"
+      },
+      "candidate_actions": [
+        "Prototype grouped or fused execution for the `HeadwiseLowRankModule` projection path so prefill pays fewer `aten::mm` launches.",
+        "Audit whether `k_proj` / `v_proj` `VT` + `U[*]` can be materialized as fewer larger GEMMs during prefill instead of many small dispatches.",
+        "Treat success as a dispatch-share reduction, not just an align1/align2-kernel elimination."
+      ],
+      "success_signal": "Prefill total self CUDA time improves materially beyond the current 0.71% versus unaligned PaLU, and the selected-view dispatch share falls from the current 48.10%."
+    },
+    {
+      "id": "prefill_profile_guided_rank_retuning",
+      "priority": "medium",
+      "stage": "prefill",
+      "title": "Profile-guided rank retuning beyond simple 8-alignment",
+      "target_module": "Alignment-budget search for PaLU `k_proj` / `v_proj` ranks",
+      "why_now": "The current repair removes the measurable align1/align2 tail, but a large fraction of that gain is given back by regressions in `other_gemm_kernels`, which means nearest 8-alignment is too coarse as an optimization objective.",
+      "evidence": {
+        "alignment_sensitive_recovery_ms": 3.427298,
+        "other_gemm_regression_ms": -2.366672,
+        "attention_leakage_ms": 5.87135,
+        "dominant_regression_bucket": "other_gemm_kernels",
+        "current_summary_caveat": "Do not score candidates from the coarse GEMM family alone because that view still contains attention leakage."
+      },
+      "candidate_actions": [
+        "Extend the PaLU path from simple round-to-8 repair to contract-aware candidate search over profiled `recommended_values` and cliff-aware rank choices.",
+        "Score candidates against both eliminated `alignment_sensitive_kernels` and regressions in `other_gemm_kernels` instead of minimizing alignment penalty alone.",
+        "Reuse the repo-native `alignment_budget` machinery for a small DP or global re-allocation pass on the attention-adjacent projection ranks."
+      ],
+      "success_signal": "A follow-up retuning pass keeps the recovered align1/align2 benefit while reducing the current 2.37 ms give-back in `other_gemm_kernels`."
+    }
+  ],
+  "deprioritized_paths": [
+    {
+      "id": "decode_gemv_micro_tuning",
+      "stage": "decode",
+      "title": "Decode GEMV micro-tuning",
+      "why_not_now": "Decode is not where the current PaLU gap is being created. The `gemv` tail is small and alignment barely changes it.",
+      "evidence": {
+        "aligned_vs_palu_delta_ms": 0.204055,
+        "aligned_vs_palu_improvement_pct": 0.5455,
+        "aligned_vs_baseline_residual_gap_pct": 3.1167,
+        "gemv_tail_ms": 1.085226,
+        "gemv_delta_ms": -0.015008
+      },
+      "revisit_when": "Only revisit this path if future traces show a materially larger decode `gemv` tail than the current 1.09 ms, or if decode becomes the dominant residual gap after prefill work."
+    }
+  ],
+  "guardrails": [
+    "Treat this artifact as offline prioritization, not as proof of a new measured speedup.",
+    "Use the issue-38 bucketed root-cause split when ranking GEMM optimizations; the coarse GEMM family still mixes in attention leakage.",
+    "For PaLU, optimize the attention-adjacent projection path first; do not start from decode-only GEMV micro-tuning."
+  ]
+}

@@ -1,0 +1,1905 @@
+{
+  "focus": "palu_inference_gemm_root_cause",
+  "generated_at": "2026-04-13T12:04:08.720544+00:00",
+  "source_run_dirs": {
+    "baseline": "results/operator_profiles/palu_issue35/baseline",
+    "palu": "results/operator_profiles/palu_issue35/palu",
+    "aligned_gac": "results/operator_profiles/palu_issue35/aligned_gac"
+  },
+  "bucket_order": [
+    "dispatch_ops",
+    "alignment_sensitive_kernels",
+    "align8_tensorcore_kernels",
+    "gemv_kernels",
+    "attention_leakage",
+    "other_gemm_kernels"
+  ],
+  "stages": {
+    "decode": {
+      "variants": {
+        "baseline": {
+          "all_event_total_ms": 36.077729,
+          "selected_total_ms": 26.271762,
+          "dispatch_total_ms": 11.180217,
+          "kernel_total_ms": 15.091545,
+          "dispatch_share_of_selected_pct": 42.556,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 11.180217,
+              "share_of_selected_pct": 42.556,
+              "share_of_stage_pct": 30.9892,
+              "count": 677,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 11.177657
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.00256
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 0.67783,
+              "share_of_selected_pct": 2.5801,
+              "share_of_stage_pct": 1.8788,
+              "count": 65,
+              "top_events": [
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.67527
+                },
+                {
+                  "name": "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)",
+                  "self_cuda_time_ms": 0.00256
+                }
+              ]
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 3.911328,
+              "share_of_selected_pct": 14.888,
+              "share_of_stage_pct": 10.8414,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "self_cuda_time_ms": 1.955664
+                },
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "self_cuda_time_ms": 1.955664
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_efficient_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 10.502387,
+              "share_of_selected_pct": 39.976,
+              "share_of_stage_pct": 29.1104,
+              "count": 225,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "self_cuda_time_ms": 5.18795
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "self_cuda_time_ms": 4.414654
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+                  "self_cuda_time_ms": 0.604197
+                },
+                {
+                  "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+                  "self_cuda_time_ms": 0.295586
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 11.177657,
+              "share_of_selected_pct": 42.5463
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 5.18795,
+              "share_of_selected_pct": 19.7472
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 4.414654,
+              "share_of_selected_pct": 16.8038
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.955664,
+              "share_of_selected_pct": 7.444
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.955664,
+              "share_of_selected_pct": 7.444
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "self_cuda_time_ms": 0.67527,
+              "share_of_selected_pct": 2.5703
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.604197,
+              "share_of_selected_pct": 2.2998
+            },
+            {
+              "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.295586,
+              "share_of_selected_pct": 1.1251
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.00256,
+            "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)": 0.00256,
+            "aten::linear": 0.0,
+            "aten::mm": 11.177657,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn": 4.414654,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.67527,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_efficient_attention": 0.0,
+            "aten::_efficient_attention_forward": 1.955664,
+            "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)": 1.955664,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn": 5.18795,
+            "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)": 0.295586,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn": 0.604197
+          },
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          },
+          "config": {
+            "variant": "baseline",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        },
+        "palu": {
+          "all_event_total_ms": 37.406205,
+          "selected_total_ms": 27.24229,
+          "dispatch_total_ms": 11.667853,
+          "kernel_total_ms": 15.574437,
+          "dispatch_share_of_selected_pct": 42.8299,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 11.667853,
+              "share_of_selected_pct": 42.8299,
+              "share_of_stage_pct": 31.1923,
+              "count": 1061,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 11.665453
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.0024
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 1.085226,
+              "share_of_selected_pct": 3.9836,
+              "share_of_stage_pct": 2.9012,
+              "count": 193,
+              "top_events": [
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.615243
+                },
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.278977
+                },
+                {
+                  "name": "void gemv2T_kernel_val<int, int, __half, float, float, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>, float, float)",
+                  "self_cuda_time_ms": 0.119615
+                },
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.0464
+                },
+                {
+                  "name": "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 2, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>, float, float)",
+                  "self_cuda_time_ms": 0.015456
+                }
+              ]
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 3.906584,
+              "share_of_selected_pct": 14.3401,
+              "share_of_stage_pct": 10.4437,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "self_cuda_time_ms": 1.953292
+                },
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "self_cuda_time_ms": 1.953292
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_efficient_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 10.582627,
+              "share_of_selected_pct": 38.8463,
+              "share_of_stage_pct": 28.2911,
+              "count": 244,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "self_cuda_time_ms": 5.192479
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "self_cuda_time_ms": 4.431739
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+                  "self_cuda_time_ms": 0.598212
+                },
+                {
+                  "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+                  "self_cuda_time_ms": 0.301446
+                },
+                {
+                  "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+                  "self_cuda_time_ms": 0.058751
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 11.665453,
+              "share_of_selected_pct": 42.8211
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 5.192479,
+              "share_of_selected_pct": 19.0604
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 4.431739,
+              "share_of_selected_pct": 16.2679
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.953292,
+              "share_of_selected_pct": 7.1701
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.953292,
+              "share_of_selected_pct": 7.1701
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "self_cuda_time_ms": 0.615243,
+              "share_of_selected_pct": 2.2584
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.598212,
+              "share_of_selected_pct": 2.1959
+            },
+            {
+              "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.301446,
+              "share_of_selected_pct": 1.1065
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.0024,
+            "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)": 0.0024,
+            "aten::linear": 0.0,
+            "aten::mm": 11.665453,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn": 4.431739,
+            "void gemv2T_kernel_val<int, int, __half, float, float, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>, float, float)": 0.119615,
+            "void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)": 0.058751,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.615243,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.278977,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_efficient_attention": 0.0,
+            "aten::_efficient_attention_forward": 1.953292,
+            "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)": 1.953292,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn": 5.192479,
+            "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)": 0.301446,
+            "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 2, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>, float, float)": 0.015456,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.0464,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.007135,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn": 0.598212
+          },
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          },
+          "config": {
+            "variant": "palu",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        },
+        "aligned_gac": {
+          "all_event_total_ms": 37.20215,
+          "selected_total_ms": 27.124906,
+          "dispatch_total_ms": 11.604138,
+          "kernel_total_ms": 15.520768,
+          "dispatch_share_of_selected_pct": 42.7804,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 11.604138,
+              "share_of_selected_pct": 42.7804,
+              "share_of_stage_pct": 31.1921,
+              "count": 1061,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 11.601578
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.00256
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 1.100234,
+              "share_of_selected_pct": 4.0562,
+              "share_of_stage_pct": 2.9574,
+              "count": 193,
+              "top_events": [
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.591205
+                },
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.349092
+                },
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.135553
+                },
+                {
+                  "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+                  "self_cuda_time_ms": 0.021824
+                },
+                {
+                  "name": "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)",
+                  "self_cuda_time_ms": 0.00256
+                }
+              ]
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 3.91663,
+              "share_of_selected_pct": 14.4392,
+              "share_of_stage_pct": 10.528,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "self_cuda_time_ms": 1.958315
+                },
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "self_cuda_time_ms": 1.958315
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_efficient_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 10.503904,
+              "share_of_selected_pct": 38.7242,
+              "share_of_stage_pct": 28.2347,
+              "count": 225,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "self_cuda_time_ms": 5.187378
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "self_cuda_time_ms": 4.417228
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+                  "self_cuda_time_ms": 0.602885
+                },
+                {
+                  "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+                  "self_cuda_time_ms": 0.296413
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 11.601578,
+              "share_of_selected_pct": 42.7709
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 5.187378,
+              "share_of_selected_pct": 19.124
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 4.417228,
+              "share_of_selected_pct": 16.2848
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.958315,
+              "share_of_selected_pct": 7.2196
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 1.958315,
+              "share_of_selected_pct": 7.2196
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.602885,
+              "share_of_selected_pct": 2.2226
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "self_cuda_time_ms": 0.591205,
+              "share_of_selected_pct": 2.1796
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "self_cuda_time_ms": 0.349092,
+              "share_of_selected_pct": 1.287
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.00256,
+            "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)": 0.00256,
+            "aten::linear": 0.0,
+            "aten::mm": 11.601578,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn": 4.417228,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.591205,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.021824,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.349092,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_efficient_attention": 0.0,
+            "aten::_efficient_attention_forward": 1.958315,
+            "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)": 1.958315,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn": 5.187378,
+            "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)": 0.296413,
+            "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)": 0.135553,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn": 0.602885
+          },
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          },
+          "config": {
+            "variant": "aligned_gac",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        }
+      },
+      "comparisons": {
+        "palu_vs_baseline": {
+          "selected_total_delta_ms": -0.970528,
+          "selected_total_improvement_pct": -3.6942,
+          "kernel_total_delta_ms": -0.482892,
+          "largest_recovered_bucket": "attention_leakage",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 11.180217,
+              "candidate_ms": 11.667853,
+              "delta_ms": -0.487636
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 0.67783,
+              "candidate_ms": 1.085226,
+              "delta_ms": -0.407396
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 3.911328,
+              "candidate_ms": 3.906584,
+              "delta_ms": 0.004744
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 10.502387,
+              "candidate_ms": 10.582627,
+              "delta_ms": -0.08024
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.67527,
+              "candidate_ms": 0.615243,
+              "delta_ms": 0.060027
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.604197,
+              "candidate_ms": 0.598212,
+              "delta_ms": 0.005985
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "reference_ms": 1.955664,
+              "candidate_ms": 1.953292,
+              "delta_ms": 0.002372
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "bucket": "attention_leakage",
+              "reference_ms": 1.955664,
+              "candidate_ms": 1.953292,
+              "delta_ms": 0.002372
+            },
+            {
+              "name": "aten::bmm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 0.00256,
+              "candidate_ms": 0.0024,
+              "delta_ms": 0.00016
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 11.177657,
+              "candidate_ms": 11.665453,
+              "delta_ms": -0.487796
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.278977,
+              "delta_ms": -0.278977
+            },
+            {
+              "name": "void gemv2T_kernel_val<int, int, __half, float, float, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>, float, float)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.119615,
+              "delta_ms": -0.119615
+            },
+            {
+              "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.058751,
+              "delta_ms": -0.058751
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0464,
+              "delta_ms": -0.0464
+            }
+          ]
+        },
+        "aligned_gac_vs_palu": {
+          "selected_total_delta_ms": 0.117384,
+          "selected_total_improvement_pct": 0.4309,
+          "kernel_total_delta_ms": 0.053669,
+          "largest_recovered_bucket": "other_gemm_kernels",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 11.667853,
+              "candidate_ms": 11.604138,
+              "delta_ms": 0.063715
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 1.085226,
+              "candidate_ms": 1.100234,
+              "delta_ms": -0.015008
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 3.906584,
+              "candidate_ms": 3.91663,
+              "delta_ms": -0.010046
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 10.582627,
+              "candidate_ms": 10.503904,
+              "delta_ms": 0.078723
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "void gemv2T_kernel_val<int, int, __half, float, float, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>, float, float)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.119615,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.119615
+            },
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 11.665453,
+              "candidate_ms": 11.601578,
+              "delta_ms": 0.063875
+            },
+            {
+              "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.058751,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.058751
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.615243,
+              "candidate_ms": 0.591205,
+              "delta_ms": 0.024038
+            },
+            {
+              "name": "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 2, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>, float, float)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.015456,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.015456
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0464,
+              "candidate_ms": 0.135553,
+              "delta_ms": -0.089153
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.278977,
+              "candidate_ms": 0.349092,
+              "delta_ms": -0.070115
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.007135,
+              "candidate_ms": 0.021824,
+              "delta_ms": -0.014689
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "reference_ms": 1.953292,
+              "candidate_ms": 1.958315,
+              "delta_ms": -0.005023
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "bucket": "attention_leakage",
+              "reference_ms": 1.953292,
+              "candidate_ms": 1.958315,
+              "delta_ms": -0.005023
+            }
+          ]
+        },
+        "aligned_gac_vs_baseline": {
+          "selected_total_delta_ms": -0.853144,
+          "selected_total_improvement_pct": -3.2474,
+          "kernel_total_delta_ms": -0.429223,
+          "largest_recovered_bucket": "alignment_sensitive_kernels",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 11.180217,
+              "candidate_ms": 11.604138,
+              "delta_ms": -0.423921
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 0.67783,
+              "candidate_ms": 1.100234,
+              "delta_ms": -0.422404
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 3.911328,
+              "candidate_ms": 3.91663,
+              "delta_ms": -0.005302
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 10.502387,
+              "candidate_ms": 10.503904,
+              "delta_ms": -0.001517
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.67527,
+              "candidate_ms": 0.591205,
+              "delta_ms": 0.084065
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.604197,
+              "candidate_ms": 0.602885,
+              "delta_ms": 0.001312
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 5.18795,
+              "candidate_ms": 5.187378,
+              "delta_ms": 0.000572
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 11.177657,
+              "candidate_ms": 11.601578,
+              "delta_ms": -0.423921
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.349092,
+              "delta_ms": -0.349092
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.135553,
+              "delta_ms": -0.135553
+            },
+            {
+              "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+              "bucket": "gemv_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.021824,
+              "delta_ms": -0.021824
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "bucket": "attention_leakage",
+              "reference_ms": 1.955664,
+              "candidate_ms": 1.958315,
+              "delta_ms": -0.002651
+            }
+          ]
+        }
+      },
+      "takeaway": "`palu` decode has no large 8-aligned cliff to recover: the `gemv` tail is only 1.09 ms, while dispatch still contributes 11.67 ms (42.83%) of the selected view. `aligned_gac` changes the `gemv` bucket by -0.02 ms, so decode mostly reshuffles small GEMV variants instead of eliminating a dominant kernel."
+    },
+    "prefill": {
+      "variants": {
+        "baseline": {
+          "all_event_total_ms": 173.487448,
+          "selected_total_ms": 142.119249,
+          "dispatch_total_ms": 68.285764,
+          "kernel_total_ms": 73.833485,
+          "dispatch_share_of_selected_pct": 48.0482,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 68.285764,
+              "share_of_selected_pct": 48.0482,
+              "share_of_stage_pct": 39.3606,
+              "count": 677,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 68.281124
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.00464
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 10.14361,
+              "share_of_selected_pct": 7.1374,
+              "share_of_stage_pct": 5.8469,
+              "count": 64,
+              "top_events": [
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+                  "self_cuda_time_ms": 10.14361
+                }
+              ]
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 5.79319,
+              "share_of_selected_pct": 4.0763,
+              "share_of_stage_pct": 3.3393,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "self_cuda_time_ms": 2.896595
+                },
+                {
+                  "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+                  "self_cuda_time_ms": 2.896595
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_flash_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 57.896685,
+              "share_of_selected_pct": 40.7381,
+              "share_of_stage_pct": 33.3723,
+              "count": 162,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 34.225344
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 20.536306
+                },
+                {
+                  "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+                  "self_cuda_time_ms": 3.130395
+                },
+                {
+                  "name": "ampere_sgemm_128x32_nn",
+                  "self_cuda_time_ms": 0.00464
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 68.281124,
+              "share_of_selected_pct": 48.045
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 34.225344,
+              "share_of_selected_pct": 24.0821
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 20.536306,
+              "share_of_selected_pct": 14.4501
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "bucket": "align8_tensorcore_kernels",
+              "self_cuda_time_ms": 10.14361,
+              "share_of_selected_pct": 7.1374
+            },
+            {
+              "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 3.130395,
+              "share_of_selected_pct": 2.2027
+            },
+            {
+              "name": "aten::_flash_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.896595,
+              "share_of_selected_pct": 2.0381
+            },
+            {
+              "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.896595,
+              "share_of_selected_pct": 2.0381
+            },
+            {
+              "name": "aten::bmm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 0.00464,
+              "share_of_selected_pct": 0.0033
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.00464,
+            "ampere_sgemm_128x32_nn": 0.00464,
+            "aten::linear": 0.0,
+            "aten::mm": 68.281124,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)": 10.14361,
+            "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel": 3.130395,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_flash_attention": 0.0,
+            "aten::_flash_attention_forward": 2.896595,
+            "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)": 2.896595,
+            "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn": 34.225344,
+            "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn": 20.536306
+          },
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          },
+          "config": {
+            "variant": "baseline",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        },
+        "palu": {
+          "all_event_total_ms": 180.168207,
+          "selected_total_ms": 147.64856,
+          "dispatch_total_ms": 71.018015,
+          "kernel_total_ms": 76.630545,
+          "dispatch_share_of_selected_pct": 48.0994,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 71.018015,
+              "share_of_selected_pct": 48.0994,
+              "share_of_stage_pct": 39.4176,
+              "count": 1061,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 71.013311
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.004704
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 3.427298,
+              "share_of_selected_pct": 2.3213,
+              "share_of_stage_pct": 1.9023,
+              "count": 117,
+              "top_events": [
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)",
+                  "self_cuda_time_ms": 1.537101
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)",
+                  "self_cuda_time_ms": 1.15531
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2>(cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2::Params)",
+                  "self_cuda_time_ms": 0.337633
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2::Params)",
+                  "self_cuda_time_ms": 0.310309
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2::Params)",
+                  "self_cuda_time_ms": 0.086945
+                }
+              ]
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 10.210881,
+              "share_of_selected_pct": 6.9157,
+              "share_of_stage_pct": 5.6674,
+              "count": 66,
+              "top_events": [
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+                  "self_cuda_time_ms": 10.197088
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8::Params)",
+                  "self_cuda_time_ms": 0.013793
+                }
+              ]
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 5.87135,
+              "share_of_selected_pct": 3.9766,
+              "share_of_stage_pct": 3.2588,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "self_cuda_time_ms": 2.935675
+                },
+                {
+                  "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+                  "self_cuda_time_ms": 2.935675
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_flash_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 57.121016,
+              "share_of_selected_pct": 38.6871,
+              "share_of_stage_pct": 31.7043,
+              "count": 196,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 34.577251
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 20.686338
+                },
+                {
+                  "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+                  "self_cuda_time_ms": 1.091433
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+                  "self_cuda_time_ms": 0.371717
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "self_cuda_time_ms": 0.212418
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 71.013311,
+              "share_of_selected_pct": 48.0962
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 34.577251,
+              "share_of_selected_pct": 23.4186
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 20.686338,
+              "share_of_selected_pct": 14.0105
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "bucket": "align8_tensorcore_kernels",
+              "self_cuda_time_ms": 10.197088,
+              "share_of_selected_pct": 6.9063
+            },
+            {
+              "name": "aten::_flash_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.935675,
+              "share_of_selected_pct": 1.9883
+            },
+            {
+              "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.935675,
+              "share_of_selected_pct": 1.9883
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "self_cuda_time_ms": 1.537101,
+              "share_of_selected_pct": 1.0411
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "self_cuda_time_ms": 1.15531,
+              "share_of_selected_pct": 0.7825
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.004704,
+            "ampere_sgemm_128x32_nn": 0.004704,
+            "aten::linear": 0.0,
+            "aten::mm": 71.013311,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)": 10.197088,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)": 1.537101,
+            "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)": 0.149091,
+            "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)": 1.15531,
+            "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel": 1.091433,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn": 0.371717,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_flash_attention": 0.0,
+            "aten::_flash_attention_forward": 2.935675,
+            "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)": 2.935675,
+            "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn": 34.577251,
+            "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn": 20.686338,
+            "void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2>(cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2::Params)": 0.337633,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2::Params)": 0.310309,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn": 0.212418,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn": 0.028064,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8::Params)": 0.013793,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2::Params)": 0.086945
+          },
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          },
+          "config": {
+            "variant": "palu",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        },
+        "aligned_gac": {
+          "all_event_total_ms": 178.890072,
+          "selected_total_ms": 145.995856,
+          "dispatch_total_ms": 70.16336,
+          "kernel_total_ms": 75.832496,
+          "dispatch_share_of_selected_pct": 48.0585,
+          "bucket_totals": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "self_cuda_time_ms": 70.16336,
+              "share_of_selected_pct": 48.0585,
+              "share_of_stage_pct": 39.2215,
+              "count": 1061,
+              "top_events": [
+                {
+                  "name": "aten::mm",
+                  "self_cuda_time_ms": 70.15824
+                },
+                {
+                  "name": "aten::bmm",
+                  "self_cuda_time_ms": 0.00512
+                },
+                {
+                  "name": "aten::matmul",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::linear",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "self_cuda_time_ms": 10.424696,
+              "share_of_selected_pct": 7.1404,
+              "share_of_stage_pct": 5.8274,
+              "count": 70,
+              "top_events": [
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+                  "self_cuda_time_ms": 10.382968
+                },
+                {
+                  "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8::Params)",
+                  "self_cuda_time_ms": 0.041728
+                }
+              ]
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "self_cuda_time_ms": 0.0,
+              "share_of_selected_pct": 0.0,
+              "share_of_stage_pct": 0.0,
+              "count": 0,
+              "top_events": []
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "self_cuda_time_ms": 5.920112,
+              "share_of_selected_pct": 4.055,
+              "share_of_stage_pct": 3.3094,
+              "count": 128,
+              "top_events": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "self_cuda_time_ms": 2.960056
+                },
+                {
+                  "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+                  "self_cuda_time_ms": 2.960056
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "self_cuda_time_ms": 0.0
+                },
+                {
+                  "name": "aten::_scaled_dot_product_flash_attention",
+                  "self_cuda_time_ms": 0.0
+                }
+              ]
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "self_cuda_time_ms": 59.487688,
+              "share_of_selected_pct": 40.7461,
+              "share_of_stage_pct": 33.2538,
+              "count": 284,
+              "top_events": [
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 34.988047
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "self_cuda_time_ms": 20.836333
+                },
+                {
+                  "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+                  "self_cuda_time_ms": 1.596302
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+                  "self_cuda_time_ms": 0.981968
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "self_cuda_time_ms": 0.784746
+                }
+              ]
+            }
+          },
+          "top_selected_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "self_cuda_time_ms": 70.15824,
+              "share_of_selected_pct": 48.055
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 34.988047,
+              "share_of_selected_pct": 23.9651
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 20.836333,
+              "share_of_selected_pct": 14.2719
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "bucket": "align8_tensorcore_kernels",
+              "self_cuda_time_ms": 10.382968,
+              "share_of_selected_pct": 7.1118
+            },
+            {
+              "name": "aten::_flash_attention_forward",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.960056,
+              "share_of_selected_pct": 2.0275
+            },
+            {
+              "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+              "bucket": "attention_leakage",
+              "self_cuda_time_ms": 2.960056,
+              "share_of_selected_pct": 2.0275
+            },
+            {
+              "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 1.596302,
+              "share_of_selected_pct": 1.0934
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+              "bucket": "other_gemm_kernels",
+              "self_cuda_time_ms": 0.981968,
+              "share_of_selected_pct": 0.6726
+            }
+          ],
+          "event_totals_ms": {
+            "aten::matmul": 0.0,
+            "aten::bmm": 0.00512,
+            "ampere_sgemm_128x32_nn": 0.00512,
+            "aten::linear": 0.0,
+            "aten::mm": 70.15824,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)": 10.382968,
+            "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn": 0.295172,
+            "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8::Params)": 0.041728,
+            "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel": 1.596302,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn": 0.981968,
+            "aten::scaled_dot_product_attention": 0.0,
+            "aten::_scaled_dot_product_flash_attention": 0.0,
+            "aten::_flash_attention_forward": 2.960056,
+            "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)": 2.960056,
+            "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn": 34.988047,
+            "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn": 20.836333,
+            "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn": 0.784746
+          },
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          },
+          "config": {
+            "variant": "aligned_gac",
+            "device": "cuda:0",
+            "dtype": "float16"
+          }
+        }
+      },
+      "comparisons": {
+        "palu_vs_baseline": {
+          "selected_total_delta_ms": -5.529311,
+          "selected_total_improvement_pct": -3.8906,
+          "kernel_total_delta_ms": -2.79706,
+          "largest_recovered_bucket": "other_gemm_kernels",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 68.285764,
+              "candidate_ms": 71.018015,
+              "delta_ms": -2.732251
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 3.427298,
+              "delta_ms": -3.427298
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 10.14361,
+              "candidate_ms": 10.210881,
+              "delta_ms": -0.067271
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 5.79319,
+              "candidate_ms": 5.87135,
+              "delta_ms": -0.07816
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 57.896685,
+              "candidate_ms": 57.121016,
+              "delta_ms": 0.775669
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 3.130395,
+              "candidate_ms": 1.091433,
+              "delta_ms": 2.038962
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 68.281124,
+              "candidate_ms": 71.013311,
+              "delta_ms": -2.732187
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 1.537101,
+              "delta_ms": -1.537101
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 1.15531,
+              "delta_ms": -1.15531
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.371717,
+              "delta_ms": -0.371717
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 34.225344,
+              "candidate_ms": 34.577251,
+              "delta_ms": -0.351907
+            }
+          ]
+        },
+        "aligned_gac_vs_palu": {
+          "selected_total_delta_ms": 1.652704,
+          "selected_total_improvement_pct": 1.1193,
+          "kernel_total_delta_ms": 0.798049,
+          "largest_recovered_bucket": "alignment_sensitive_kernels",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 71.018015,
+              "candidate_ms": 70.16336,
+              "delta_ms": 0.854655
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 3.427298,
+              "candidate_ms": 0.0,
+              "delta_ms": 3.427298
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 10.210881,
+              "candidate_ms": 10.424696,
+              "delta_ms": -0.213815
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 5.87135,
+              "candidate_ms": 5.920112,
+              "delta_ms": -0.048762
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 57.121016,
+              "candidate_ms": 59.487688,
+              "delta_ms": -2.366672
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 1.537101,
+              "candidate_ms": 0.0,
+              "delta_ms": 1.537101
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 1.15531,
+              "candidate_ms": 0.0,
+              "delta_ms": 1.15531
+            },
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 71.013311,
+              "candidate_ms": 70.15824,
+              "delta_ms": 0.855071
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2>(cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 0.337633,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.337633
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2::Params)",
+              "bucket": "alignment_sensitive_kernels",
+              "reference_ms": 0.310309,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.310309
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.371717,
+              "candidate_ms": 0.981968,
+              "delta_ms": -0.610251
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.212418,
+              "candidate_ms": 0.784746,
+              "delta_ms": -0.572328
+            },
+            {
+              "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 1.091433,
+              "candidate_ms": 1.596302,
+              "delta_ms": -0.504869
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 34.577251,
+              "candidate_ms": 34.988047,
+              "delta_ms": -0.410796
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.028064,
+              "candidate_ms": 0.295172,
+              "delta_ms": -0.267108
+            }
+          ]
+        },
+        "aligned_gac_vs_baseline": {
+          "selected_total_delta_ms": -3.876607,
+          "selected_total_improvement_pct": -2.7277,
+          "kernel_total_delta_ms": -1.999011,
+          "largest_recovered_bucket": "alignment_sensitive_kernels",
+          "bucket_deltas": {
+            "dispatch_ops": {
+              "label": "Dispatch ops",
+              "reference_ms": 68.285764,
+              "candidate_ms": 70.16336,
+              "delta_ms": -1.877596
+            },
+            "alignment_sensitive_kernels": {
+              "label": "Alignment-sensitive kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "align8_tensorcore_kernels": {
+              "label": "Align8 tensorcore kernels",
+              "reference_ms": 10.14361,
+              "candidate_ms": 10.424696,
+              "delta_ms": -0.281086
+            },
+            "gemv_kernels": {
+              "label": "GEMV kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.0,
+              "delta_ms": 0.0
+            },
+            "attention_leakage": {
+              "label": "Attention leakage",
+              "reference_ms": 5.79319,
+              "candidate_ms": 5.920112,
+              "delta_ms": -0.126922
+            },
+            "other_gemm_kernels": {
+              "label": "Other GEMM kernels",
+              "reference_ms": 57.896685,
+              "candidate_ms": 59.487688,
+              "delta_ms": -1.591003
+            }
+          },
+          "top_recovered_events": [
+            {
+              "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 3.130395,
+              "candidate_ms": 1.596302,
+              "delta_ms": 1.534093
+            }
+          ],
+          "top_regressed_events": [
+            {
+              "name": "aten::mm",
+              "bucket": "dispatch_ops",
+              "reference_ms": 68.281124,
+              "candidate_ms": 70.15824,
+              "delta_ms": -1.877116
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.981968,
+              "delta_ms": -0.981968
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 0.0,
+              "candidate_ms": 0.784746,
+              "delta_ms": -0.784746
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 34.225344,
+              "candidate_ms": 34.988047,
+              "delta_ms": -0.762703
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "bucket": "other_gemm_kernels",
+              "reference_ms": 20.536306,
+              "candidate_ms": 20.836333,
+              "delta_ms": -0.300027
+            }
+          ]
+        }
+      },
+      "takeaway": "`palu` prefill is dispatch-heavy rather than purely kernel-heavy: `aten::mm`-style dispatch contributes 71.02 ms (48.10%) of the selected view, while `align1/align2` alignment-sensitive kernels contribute only 3.43 ms. `aligned_gac` removes 3.43 ms from that alignment-sensitive tail, but some of the gain is offset by already-large tensorcore kernels. Prefill also carries 5.87 ms of attention leakage from flash-attention kernels."
+    }
+  }
+}

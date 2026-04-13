@@ -14,6 +14,7 @@ when alignment changes real LLM inference latency, which operator family actuall
 - The tracked real-A100 collection completed as Slurm job `26081` on `acclnode06`; see `submission_status.json` for provenance.
 - The human-readable interpretation now lives in `analysis.md`.
 - The deeper kernel-level explanation now lives in `gemm_root_cause_analysis.md`, with machine-readable bucket totals in `gemm_root_cause_summary.json`.
+- The optimization follow-up now lives in `inference_speed_optimization.md` and `inference_speed_optimization_summary.json`; the current recommendation is to prioritize prefill-side projection-path dispatch reduction and profile-guided rank retuning, not decode-side GEMV micro-tuning.
 - The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
 - `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
 - The root-cause follow-up shows why the cliff is muted in full inference: prefill is still dispatch-heavy, the `align1/align2` kernel tail is only a few milliseconds, decode is dominated by a small `gemv` tail, and the coarse prefill GEMM view also contains flash-attention leakage.
@@ -110,6 +111,8 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 - `analysis.md`: human-readable interpretation of the tracked summary, including stage tables and pairwise delta analysis.
 - `gemm_root_cause_summary.json`: machine-readable kernel-level split for dispatch ops, alignment-sensitive kernels, align8 kernels, `gemv` tails, attention leakage, and other GEMM kernels.
 - `gemm_root_cause_analysis.md`: human-readable root-cause explanation for why the 8-aligned cliff from simulation becomes a small end-to-end gain in real inference.
+- `inference_speed_optimization_summary.json`: machine-readable ranking of the next optimization opportunities, including prioritized prefill paths and explicitly deprioritized decode work.
+- `inference_speed_optimization.md`: human-readable follow-up note translating the tracked summaries into a concrete optimization order for future implementation work.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
 - `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed outputs, and where to find the final tracked bundle.
 
