@@ -1,0 +1,154 @@
+{
+  "focus": "palu_prefill_dispatch_reduction",
+  "generated_at": "2026-04-13T15:41:50.350335+00:00",
+  "checkpoint_config": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1/config.json",
+  "prototype_spec": "tests/fixtures/palu_prefill_dispatch_reduction/prototype_spec.json",
+  "checkpoint_dispatch": {
+    "module_count": 64,
+    "group_count": 128,
+    "avg_groups_per_module": 2.0,
+    "vt_total_calls": 64,
+    "u_dispatch_before": 128,
+    "u_dispatch_after": 64,
+    "u_reduction_factor": 2.0,
+    "per_group_total_calls": 192,
+    "grouped_total_calls": 128,
+    "reduction_factor": 1.5,
+    "rank_slots_before": 45880,
+    "rank_slots_after_padding": 45880,
+    "padding_rank_slots": 0,
+    "padding_overhead_pct": 0.0,
+    "by_operator": {
+      "k_proj": {
+        "module_count": 32,
+        "group_count": 64,
+        "per_group_total_calls": 96,
+        "grouped_total_calls": 64,
+        "rank_slots_before": 14672,
+        "rank_slots_after_padding": 14672,
+        "reduction_factor": 1.5,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0
+      },
+      "v_proj": {
+        "module_count": 32,
+        "group_count": 64,
+        "per_group_total_calls": 96,
+        "grouped_total_calls": 64,
+        "rank_slots_before": 31208,
+        "rank_slots_after_padding": 31208,
+        "reduction_factor": 1.5,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0
+      }
+    },
+    "top_modules_by_padding_overhead": [
+      {
+        "name": "model.layers.9.self_attn.v_proj",
+        "operator": "v_proj",
+        "group_count": 2,
+        "min_rank": 512,
+        "max_rank": 512,
+        "rank_slots_before": 1024,
+        "rank_slots_after_padding": 1024,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0,
+        "per_group_total_calls": 3,
+        "grouped_total_calls": 2,
+        "u_dispatch_before": 2,
+        "u_dispatch_after": 1
+      },
+      {
+        "name": "model.layers.9.self_attn.k_proj",
+        "operator": "k_proj",
+        "group_count": 2,
+        "min_rank": 254,
+        "max_rank": 254,
+        "rank_slots_before": 508,
+        "rank_slots_after_padding": 508,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0,
+        "per_group_total_calls": 3,
+        "grouped_total_calls": 2,
+        "u_dispatch_before": 2,
+        "u_dispatch_after": 1
+      },
+      {
+        "name": "model.layers.8.self_attn.v_proj",
+        "operator": "v_proj",
+        "group_count": 2,
+        "min_rank": 512,
+        "max_rank": 512,
+        "rank_slots_before": 1024,
+        "rank_slots_after_padding": 1024,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0,
+        "per_group_total_calls": 3,
+        "grouped_total_calls": 2,
+        "u_dispatch_before": 2,
+        "u_dispatch_after": 1
+      },
+      {
+        "name": "model.layers.8.self_attn.k_proj",
+        "operator": "k_proj",
+        "group_count": 2,
+        "min_rank": 232,
+        "max_rank": 232,
+        "rank_slots_before": 464,
+        "rank_slots_after_padding": 464,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0,
+        "per_group_total_calls": 3,
+        "grouped_total_calls": 2,
+        "u_dispatch_before": 2,
+        "u_dispatch_after": 1
+      },
+      {
+        "name": "model.layers.7.self_attn.v_proj",
+        "operator": "v_proj",
+        "group_count": 2,
+        "min_rank": 512,
+        "max_rank": 512,
+        "rank_slots_before": 1024,
+        "rank_slots_after_padding": 1024,
+        "padding_rank_slots": 0,
+        "padding_overhead_pct": 0.0,
+        "per_group_total_calls": 3,
+        "grouped_total_calls": 2,
+        "u_dispatch_before": 2,
+        "u_dispatch_after": 1
+      }
+    ]
+  },
+  "prototype_validation": {
+    "ranks": [
+      3,
+      5,
+      2,
+      4
+    ],
+    "hidden_states_shape": [
+      2,
+      3,
+      12
+    ],
+    "output_shape": [
+      2,
+      3,
+      16
+    ],
+    "legacy_reconstruct_calls": 4,
+    "grouped_reconstruct_calls": 1,
+    "grouped_u_linear_calls_observed": 0,
+    "padding_rank_slots": 6,
+    "padding_overhead_pct": 42.8571,
+    "max_abs_diff": 1.91e-06,
+    "seed": 7
+  },
+  "summary": "Grouping HeadwiseLowRankModule reconstruction reduces projection-path dispatches by collapsing per-group U[*] linears into one grouped reconstruction call, while preserving outputs on a deterministic prototype.",
+  "guardrails": [
+    "This is a code-path prototype for grouped reconstruction, not a measured GPU speedup.",
+    "The checkpoint summary reports dispatch-count and padding-overhead tradeoffs only; real prefill gains still require Slurm/A100 profiling.",
+    "The current prototype reduces U[*] reconstruction dispatches but does not fuse the VT projection itself."
+  ]
+}
