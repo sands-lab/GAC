@@ -9,6 +9,13 @@ This directory is the tracked landing zone for direct operator-profiler snapshot
 The goal is to answer one question with a repo-native artifact instead of an ad hoc profiler dump:
 when alignment changes real LLM inference latency, which operator family actually shrinks?
 
+## Result Snapshot
+
+- The tracked real-A100 collection completed as Slurm job `26081` on `acclnode06`; see `submission_status.json` for provenance.
+- The human-readable interpretation now lives in `analysis.md`.
+- The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
+- `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
+
 ## Runtime Boundary
 
 - Real collection must run on a Slurm GPU compute node.
@@ -98,8 +105,9 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 ## Published Artifacts
 
 - `palu_inference_operator_profile_summary.json`: structured summary with per-stage total self CUDA time, operator-family shares, and baseline / unaligned / aligned comparisons.
+- `analysis.md`: human-readable interpretation of the tracked summary, including stage tables and pairwise delta analysis.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
-- `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed partial outputs, and the next handoff action while the real A100 job is still in flight.
+- `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed outputs, and where to find the final tracked bundle.
 
 ## Interpretation Contract
 

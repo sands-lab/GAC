@@ -1,13 +1,14 @@
 {
   "focus": "palu_inference_operator_profile_submission",
-  "generated_at": "2026-04-13T08:47:34Z",
+  "generated_at": "2026-04-13T10:59:24Z",
   "issue_id": "36-llm-operator-profile-results",
+  "latest_followup_issue_id": "37-llm-operator-profile-analysis",
   "entrypoint": "slurm/run_llm_operator_profile.sbatch",
   "latest_submission": {
     "job_id": 26081,
-    "state": "RUNNING",
+    "state": "COMPLETED",
     "exit_code": "0:0",
-    "elapsed": "00:14:14",
+    "elapsed": "00:41:54",
     "node": "acclnode06",
     "stdout": "slurm_logs/26081_llm_operator_profile.out",
     "stderr": "slurm_logs/26081_llm_operator_profile.err",
@@ -30,12 +31,27 @@
       "results/operator_profiles/palu_issue35/baseline/run_summary.json",
       "results/operator_profiles/palu_issue35/baseline/summary.json"
     ],
-    "palu_run_files": [],
-    "aligned_gac_run_files": [],
+    "palu_run_files": [
+      "results/operator_profiles/palu_issue35/palu/config.json",
+      "results/operator_profiles/palu_issue35/palu/env.json",
+      "results/operator_profiles/palu_issue35/palu/raw.json",
+      "results/operator_profiles/palu_issue35/palu/run_summary.json",
+      "results/operator_profiles/palu_issue35/palu/summary.json"
+    ],
+    "aligned_gac_run_files": [
+      "results/operator_profiles/palu_issue35/aligned_gac/config.json",
+      "results/operator_profiles/palu_issue35/aligned_gac/env.json",
+      "results/operator_profiles/palu_issue35/aligned_gac/raw.json",
+      "results/operator_profiles/palu_issue35/aligned_gac/run_summary.json",
+      "results/operator_profiles/palu_issue35/aligned_gac/summary.json"
+    ],
     "published_bundle_files": [
       "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/README.md",
+      "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/analysis.md",
+      "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/palu_inference_operator_profile_summary.json",
+      "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/source_manifest.json",
       "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/submission_status.json"
     ]
   },
-  "next_action": "Wait for job 26081 to finish. If palu/aligned run directories and the bundle summary are complete, review and commit the generated tracked artifacts; otherwise inspect slurm_logs/26081_llm_operator_profile.err for the next failure point."
+  "next_action": "Final tracked results are ready. See analysis.md for the text summary, palu_inference_operator_profile_summary.json for structured metrics, and source_manifest.json for provenance."
 }

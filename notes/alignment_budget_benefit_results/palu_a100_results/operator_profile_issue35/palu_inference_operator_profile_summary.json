@@ -1,0 +1,1344 @@
+{
+  "focus": "palu_inference_operator_profile",
+  "generated_at": "2026-04-13T10:58:35.881877+00:00",
+  "variants": {
+    "baseline": {
+      "config": {
+        "variant": "baseline",
+        "device": "cuda:0",
+        "dtype": "float16",
+        "model_source": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "stages": "both",
+        "prefill_seq_len": 1024,
+        "decode_context_len": 1024
+      },
+      "stages": {
+        "prefill": {
+          "event_count": 81,
+          "total_self_cuda_time_ms": 173.487448,
+          "total_self_cpu_time_ms": 118.370535,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 139.222654,
+              "self_cpu_time_ms": 6.490638,
+              "share_pct": 80.2494,
+              "count": 935,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 225,
+                  "self_cuda_time_ms": 68.281124,
+                  "self_cpu_time_ms": 4.781146
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 34.225344,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "count": 33,
+                  "self_cuda_time_ms": 20.536306,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 20.15119,
+              "self_cpu_time_ms": 4.956172,
+              "share_pct": 11.6154,
+              "count": 1261,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 6.16232,
+                  "self_cpu_time_ms": 2.326745
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 193,
+                  "self_cuda_time_ms": 3.008119,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 1.86824,
+                  "self_cpu_time_ms": 1.588986
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 7.129078,
+              "self_cpu_time_ms": 79.801455,
+              "share_pct": 4.1093,
+              "count": 3898,
+              "top_ops": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 2.896595,
+                  "self_cpu_time_ms": 0.381319
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.38734,
+                  "self_cpu_time_ms": 0.697051
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.38734,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 6.984526,
+              "self_cpu_time_ms": 15.442439,
+              "share_pct": 4.026,
+              "count": 1994,
+              "top_ops": [
+                {
+                  "name": "aten::copy_",
+                  "count": 134,
+                  "self_cuda_time_ms": 1.882856,
+                  "self_cpu_time_ms": 0.799469
+                },
+                {
+                  "name": "aten::cat",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.563247,
+                  "self_cpu_time_ms": 0.717022
+                },
+                {
+                  "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 64, 64>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.557231,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 0.0,
+              "self_cpu_time_ms": 11.679831,
+              "share_pct": 0.0,
+              "count": 32,
+              "top_ops": [
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 11.679831
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 225,
+              "self_cuda_time_ms": 68.281124,
+              "share_pct": 39.358
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 34.225344,
+              "share_pct": 19.7279
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 33,
+              "self_cuda_time_ms": 20.536306,
+              "share_pct": 11.8373
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 10.14361,
+              "share_pct": 5.8469
+            },
+            {
+              "name": "aten::mul",
+              "operator_family": "elementwise",
+              "count": 292,
+              "self_cuda_time_ms": 6.16232,
+              "share_pct": 3.552
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          }
+        },
+        "decode": {
+          "event_count": 108,
+          "total_self_cuda_time_ms": 36.077729,
+          "total_self_cpu_time_ms": 60.628664,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 22.360434,
+              "self_cpu_time_ms": 5.568453,
+              "share_pct": 61.9785,
+              "count": 967,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 225,
+                  "self_cuda_time_ms": 11.177657,
+                  "self_cpu_time_ms": 3.744355
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 5.18795,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "count": 96,
+                  "self_cuda_time_ms": 4.414654,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 4.86877,
+              "self_cpu_time_ms": 17.947513,
+              "share_pct": 13.4952,
+              "count": 2912,
+              "top_ops": [
+                {
+                  "name": "aten::copy_",
+                  "count": 232,
+                  "self_cuda_time_ms": 1.559652,
+                  "self_cpu_time_ms": 1.316441
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.062341,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::cat",
+                  "count": 129,
+                  "self_cuda_time_ms": 0.894956,
+                  "self_cpu_time_ms": 1.167416
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 3.552607,
+              "self_cpu_time_ms": 26.773218,
+              "share_pct": 9.8471,
+              "count": 5147,
+              "top_ops": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.955664,
+                  "self_cpu_time_ms": 0.395545
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.276804,
+                  "self_cpu_time_ms": 0.652014
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.276804,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 3.340254,
+              "self_cpu_time_ms": 5.158475,
+              "share_pct": 9.2585,
+              "count": 1263,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 0.908965,
+                  "self_cpu_time_ms": 2.211633
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 128,
+                  "self_cuda_time_ms": 0.484224,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 0.385353,
+                  "self_cpu_time_ms": 1.437796
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 1.955664,
+              "self_cpu_time_ms": 5.181005,
+              "share_pct": 5.4207,
+              "count": 64,
+              "top_ops": [
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.955664,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 5.181005
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 225,
+              "self_cuda_time_ms": 11.177657,
+              "share_pct": 30.9822
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 5.18795,
+              "share_pct": 14.3799
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "operator_family": "gemm",
+              "count": 96,
+              "self_cuda_time_ms": 4.414654,
+              "share_pct": 12.2365
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "operator_family": "other",
+              "count": 32,
+              "self_cuda_time_ms": 1.955664,
+              "share_pct": 5.4207
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "operator_family": "sdpa",
+              "count": 32,
+              "self_cuda_time_ms": 1.955664,
+              "share_pct": 5.4207
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          }
+        }
+      }
+    },
+    "palu": {
+      "config": {
+        "variant": "palu",
+        "device": "cuda:0",
+        "dtype": "float16",
+        "model_source": "/home/lyut/GAC/results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1",
+        "stages": "both",
+        "prefill_seq_len": 1024,
+        "decode_context_len": 1024
+      },
+      "stages": {
+        "prefill": {
+          "event_count": 93,
+          "total_self_cuda_time_ms": 180.168207,
+          "total_self_cpu_time_ms": 81.183204,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 144.712885,
+              "self_cpu_time_ms": 9.296138,
+              "share_pct": 80.321,
+              "count": 1472,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 353,
+                  "self_cuda_time_ms": 71.013311,
+                  "self_cpu_time_ms": 6.491782
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 34.577251,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "count": 33,
+                  "self_cuda_time_ms": 20.686338,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 20.296776,
+              "self_cpu_time_ms": 4.684204,
+              "share_pct": 11.2655,
+              "count": 1309,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 6.191388,
+                  "self_cpu_time_ms": 2.160615
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 193,
+                  "self_cuda_time_ms": 3.03321,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 1.89087,
+                  "self_cpu_time_ms": 1.495587
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 7.978902,
+              "self_cpu_time_ms": 5.856588,
+              "share_pct": 4.4286,
+              "count": 3018,
+              "top_ops": [
+                {
+                  "name": "aten::cat",
+                  "count": 129,
+                  "self_cuda_time_ms": 2.031064,
+                  "self_cpu_time_ms": 1.336877
+                },
+                {
+                  "name": "aten::copy_",
+                  "count": 134,
+                  "self_cuda_time_ms": 1.911922,
+                  "self_cpu_time_ms": 0.700922
+                },
+                {
+                  "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 64, 64>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.57359,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 7.179644,
+              "self_cpu_time_ms": 61.072303,
+              "share_pct": 3.985,
+              "count": 4808,
+              "top_ops": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 2.935675,
+                  "self_cpu_time_ms": 0.436838
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.380141,
+                  "self_cpu_time_ms": 0.628169
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.380141,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 0.0,
+              "self_cpu_time_ms": 0.273971,
+              "share_pct": 0.0,
+              "count": 32,
+              "top_ops": [
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 0.273971
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 353,
+              "self_cuda_time_ms": 71.013311,
+              "share_pct": 39.415
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 34.577251,
+              "share_pct": 19.1916
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 33,
+              "self_cuda_time_ms": 20.686338,
+              "share_pct": 11.4817
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 10.197088,
+              "share_pct": 5.6598
+            },
+            {
+              "name": "aten::mul",
+              "operator_family": "elementwise",
+              "count": 292,
+              "self_cuda_time_ms": 6.191388,
+              "share_pct": 3.4364
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          }
+        },
+        "decode": {
+          "event_count": 115,
+          "total_self_cuda_time_ms": 37.406205,
+          "total_self_cpu_time_ms": 41.629448,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 23.335706,
+              "self_cpu_time_ms": 7.91057,
+              "share_pct": 62.3846,
+              "count": 1498,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 353,
+                  "self_cuda_time_ms": 11.665453,
+                  "self_cpu_time_ms": 5.479331
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 5.192479,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "count": 96,
+                  "self_cuda_time_ms": 4.431739,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 5.22288,
+              "self_cpu_time_ms": 8.620215,
+              "share_pct": 13.9626,
+              "count": 3936,
+              "top_ops": [
+                {
+                  "name": "aten::copy_",
+                  "count": 232,
+                  "self_cuda_time_ms": 1.555433,
+                  "self_cpu_time_ms": 1.260571
+                },
+                {
+                  "name": "aten::cat",
+                  "count": 193,
+                  "self_cuda_time_ms": 1.073286,
+                  "self_cpu_time_ms": 1.800034
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.062752,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 3.596127,
+              "self_cpu_time_ms": 19.615966,
+              "share_pct": 9.6137,
+              "count": 5998,
+              "top_ops": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.953292,
+                  "self_cpu_time_ms": 0.316179
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.276868,
+                  "self_cpu_time_ms": 0.643474
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.276868,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 3.2982,
+              "self_cpu_time_ms": 4.983721,
+              "share_pct": 8.8173,
+              "count": 1263,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 0.88926,
+                  "self_cpu_time_ms": 2.143085
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 128,
+                  "self_cuda_time_ms": 0.463881,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 0.397955,
+                  "self_cpu_time_ms": 1.427446
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 1.953292,
+              "self_cpu_time_ms": 0.498976,
+              "share_pct": 5.2218,
+              "count": 64,
+              "top_ops": [
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.953292,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 0.498976
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 353,
+              "self_cuda_time_ms": 11.665453,
+              "share_pct": 31.1859
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 5.192479,
+              "share_pct": 13.8813
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "operator_family": "gemm",
+              "count": 96,
+              "self_cuda_time_ms": 4.431739,
+              "share_pct": 11.8476
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "operator_family": "other",
+              "count": 32,
+              "self_cuda_time_ms": 1.953292,
+              "share_pct": 5.2218
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "operator_family": "sdpa",
+              "count": 32,
+              "self_cuda_time_ms": 1.953292,
+              "share_pct": 5.2218
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          }
+        }
+      }
+    },
+    "aligned_gac": {
+      "config": {
+        "variant": "aligned_gac",
+        "device": "cuda:0",
+        "dtype": "float16",
+        "model_source": "/home/lyut/GAC/results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1-gac-a100",
+        "stages": "both",
+        "prefill_seq_len": 1024,
+        "decode_context_len": 1024
+      },
+      "stages": {
+        "prefill": {
+          "event_count": 87,
+          "total_self_cuda_time_ms": 178.890072,
+          "total_self_cpu_time_ms": 79.949112,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 143.0358,
+              "self_cpu_time_ms": 9.704154,
+              "share_pct": 79.9574,
+              "count": 1447,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 353,
+                  "self_cuda_time_ms": 70.15824,
+                  "self_cpu_time_ms": 6.693833
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 34.988047,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+                  "count": 33,
+                  "self_cuda_time_ms": 20.836333,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 20.44441,
+              "self_cpu_time_ms": 4.975677,
+              "share_pct": 11.4285,
+              "count": 1397,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 6.231995,
+                  "self_cpu_time_ms": 2.259834
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 193,
+                  "self_cuda_time_ms": 3.063902,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 1.917805,
+                  "self_cpu_time_ms": 1.576661
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 8.054454,
+              "self_cpu_time_ms": 6.248988,
+              "share_pct": 4.5025,
+              "count": 3018,
+              "top_ops": [
+                {
+                  "name": "aten::cat",
+                  "count": 129,
+                  "self_cuda_time_ms": 2.056179,
+                  "self_cpu_time_ms": 1.372499
+                },
+                {
+                  "name": "aten::copy_",
+                  "count": 134,
+                  "self_cuda_time_ms": 1.920376,
+                  "self_cpu_time_ms": 0.742174
+                },
+                {
+                  "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 64, 64>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.589772,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 7.355408,
+              "self_cpu_time_ms": 58.723136,
+              "share_pct": 4.1117,
+              "count": 4672,
+              "top_ops": [
+                {
+                  "name": "aten::_flash_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 2.960056,
+                  "self_cpu_time_ms": 0.473276
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.448618,
+                  "self_cpu_time_ms": 0.653769
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 1.448618,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 0.0,
+              "self_cpu_time_ms": 0.297157,
+              "share_pct": 0.0,
+              "count": 32,
+              "top_ops": [
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 0.297157
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 353,
+              "self_cuda_time_ms": 70.15824,
+              "share_pct": 39.2186
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 34.988047,
+              "share_pct": 19.5584
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+              "operator_family": "gemm",
+              "count": 33,
+              "self_cuda_time_ms": 20.836333,
+              "share_pct": 11.6476
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 10.382968,
+              "share_pct": 5.8041
+            },
+            {
+              "name": "aten::mul",
+              "operator_family": "elementwise",
+              "count": 292,
+              "self_cuda_time_ms": 6.231995,
+              "share_pct": 3.4837
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "seq_len": 1024,
+            "mode": "forward"
+          }
+        },
+        "decode": {
+          "event_count": 112,
+          "total_self_cuda_time_ms": 37.20215,
+          "total_self_cpu_time_ms": 42.082931,
+          "operator_families": {
+            "gemm": {
+              "self_cuda_time_ms": 23.208276,
+              "self_cpu_time_ms": 8.166418,
+              "share_pct": 62.3842,
+              "count": 1479,
+              "top_ops": [
+                {
+                  "name": "aten::mm",
+                  "count": 353,
+                  "self_cuda_time_ms": 11.601578,
+                  "self_cpu_time_ms": 5.744454
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+                  "count": 64,
+                  "self_cuda_time_ms": 5.187378,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                  "count": 96,
+                  "self_cuda_time_ms": 4.417228,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "data_movement": {
+              "self_cuda_time_ms": 5.219986,
+              "self_cpu_time_ms": 8.722142,
+              "share_pct": 14.0314,
+              "count": 3936,
+              "top_ops": [
+                {
+                  "name": "aten::copy_",
+                  "count": 232,
+                  "self_cuda_time_ms": 1.556522,
+                  "self_cpu_time_ms": 1.299603
+                },
+                {
+                  "name": "aten::cat",
+                  "count": 193,
+                  "self_cuda_time_ms": 1.071471,
+                  "self_cpu_time_ms": 1.841503
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+                  "count": 64,
+                  "self_cuda_time_ms": 1.060036,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "other": {
+              "self_cuda_time_ms": 3.551967,
+              "self_cpu_time_ms": 19.657372,
+              "share_pct": 9.5477,
+              "count": 5979,
+              "top_ops": [
+                {
+                  "name": "aten::_efficient_attention_forward",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.958315,
+                  "self_cpu_time_ms": 0.318921
+                },
+                {
+                  "name": "aten::mean",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.277598,
+                  "self_cpu_time_ms": 0.615167
+                },
+                {
+                  "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+                  "count": 65,
+                  "self_cuda_time_ms": 0.277598,
+                  "self_cpu_time_ms": 0.0
+                }
+              ]
+            },
+            "elementwise": {
+              "self_cuda_time_ms": 3.263606,
+              "self_cpu_time_ms": 5.040686,
+              "share_pct": 8.7726,
+              "count": 1263,
+              "top_ops": [
+                {
+                  "name": "aten::mul",
+                  "count": 292,
+                  "self_cuda_time_ms": 0.879599,
+                  "self_cpu_time_ms": 2.213415
+                },
+                {
+                  "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+                  "count": 128,
+                  "self_cuda_time_ms": 0.456329,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::add",
+                  "count": 193,
+                  "self_cuda_time_ms": 0.387659,
+                  "self_cpu_time_ms": 1.435335
+                }
+              ]
+            },
+            "sdpa": {
+              "self_cuda_time_ms": 1.958315,
+              "self_cpu_time_ms": 0.496313,
+              "share_pct": 5.264,
+              "count": 64,
+              "top_ops": [
+                {
+                  "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+                  "count": 32,
+                  "self_cuda_time_ms": 1.958315,
+                  "self_cpu_time_ms": 0.0
+                },
+                {
+                  "name": "aten::scaled_dot_product_attention",
+                  "count": 32,
+                  "self_cuda_time_ms": 0.0,
+                  "self_cpu_time_ms": 0.496313
+                }
+              ]
+            }
+          },
+          "top_cuda_ops": [
+            {
+              "name": "aten::mm",
+              "operator_family": "gemm",
+              "count": 353,
+              "self_cuda_time_ms": 11.601578,
+              "share_pct": 31.1852
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+              "operator_family": "gemm",
+              "count": 64,
+              "self_cuda_time_ms": 5.187378,
+              "share_pct": 13.9438
+            },
+            {
+              "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+              "operator_family": "gemm",
+              "count": 96,
+              "self_cuda_time_ms": 4.417228,
+              "share_pct": 11.8736
+            },
+            {
+              "name": "aten::_efficient_attention_forward",
+              "operator_family": "other",
+              "count": 32,
+              "self_cuda_time_ms": 1.958315,
+              "share_pct": 5.264
+            },
+            {
+              "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+              "operator_family": "sdpa",
+              "count": 32,
+              "self_cuda_time_ms": 1.958315,
+              "share_pct": 5.264
+            }
+          ],
+          "profile": {
+            "batch": 1,
+            "context_len": 1024,
+            "decode_tokens": 1,
+            "mode": "single_token_with_cache"
+          }
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "palu_vs_baseline": {
+      "decode": {
+        "reference_total_self_cuda_time_ms": 36.077729,
+        "candidate_total_self_cuda_time_ms": 37.406205,
+        "delta_ms": -1.328476,
+        "total_self_cuda_time_improvement_pct": -3.6823,
+        "largest_recovered_family": "elementwise",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 4.86877,
+            "candidate_self_cuda_time_ms": 5.22288,
+            "delta_ms": -0.35411,
+            "improvement_pct": -7.2731,
+            "share_delta_pct_points": -0.4674
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 3.340254,
+            "candidate_self_cuda_time_ms": 3.2982,
+            "delta_ms": 0.042054,
+            "improvement_pct": 1.259,
+            "share_delta_pct_points": 0.4412
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 22.360434,
+            "candidate_self_cuda_time_ms": 23.335706,
+            "delta_ms": -0.975272,
+            "improvement_pct": -4.3616,
+            "share_delta_pct_points": -0.4061
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 3.552607,
+            "candidate_self_cuda_time_ms": 3.596127,
+            "delta_ms": -0.04352,
+            "improvement_pct": -1.225,
+            "share_delta_pct_points": 0.2334
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 1.955664,
+            "candidate_self_cuda_time_ms": 1.953292,
+            "delta_ms": 0.002372,
+            "improvement_pct": 0.1213,
+            "share_delta_pct_points": 0.1989
+          }
+        }
+      },
+      "prefill": {
+        "reference_total_self_cuda_time_ms": 173.487448,
+        "candidate_total_self_cuda_time_ms": 180.168207,
+        "delta_ms": -6.680759,
+        "total_self_cuda_time_improvement_pct": -3.8509,
+        "largest_recovered_family": "sdpa",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 6.984526,
+            "candidate_self_cuda_time_ms": 7.978902,
+            "delta_ms": -0.994376,
+            "improvement_pct": -14.2368,
+            "share_delta_pct_points": -0.4026
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 20.15119,
+            "candidate_self_cuda_time_ms": 20.296776,
+            "delta_ms": -0.145586,
+            "improvement_pct": -0.7225,
+            "share_delta_pct_points": 0.3499
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 139.222654,
+            "candidate_self_cuda_time_ms": 144.712885,
+            "delta_ms": -5.490231,
+            "improvement_pct": -3.9435,
+            "share_delta_pct_points": -0.0716
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 7.129078,
+            "candidate_self_cuda_time_ms": 7.179644,
+            "delta_ms": -0.050566,
+            "improvement_pct": -0.7093,
+            "share_delta_pct_points": 0.1243
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 0.0,
+            "candidate_self_cuda_time_ms": 0.0,
+            "delta_ms": 0.0,
+            "improvement_pct": null,
+            "share_delta_pct_points": 0.0
+          }
+        }
+      }
+    },
+    "aligned_gac_vs_palu": {
+      "decode": {
+        "reference_total_self_cuda_time_ms": 37.406205,
+        "candidate_total_self_cuda_time_ms": 37.20215,
+        "delta_ms": 0.204055,
+        "total_self_cuda_time_improvement_pct": 0.5455,
+        "largest_recovered_family": "gemm",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 5.22288,
+            "candidate_self_cuda_time_ms": 5.219986,
+            "delta_ms": 0.002894,
+            "improvement_pct": 0.0554,
+            "share_delta_pct_points": -0.0688
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 3.2982,
+            "candidate_self_cuda_time_ms": 3.263606,
+            "delta_ms": 0.034594,
+            "improvement_pct": 1.0489,
+            "share_delta_pct_points": 0.0447
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 23.335706,
+            "candidate_self_cuda_time_ms": 23.208276,
+            "delta_ms": 0.12743,
+            "improvement_pct": 0.5461,
+            "share_delta_pct_points": 0.0004
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 3.596127,
+            "candidate_self_cuda_time_ms": 3.551967,
+            "delta_ms": 0.04416,
+            "improvement_pct": 1.228,
+            "share_delta_pct_points": 0.066
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 1.953292,
+            "candidate_self_cuda_time_ms": 1.958315,
+            "delta_ms": -0.005023,
+            "improvement_pct": -0.2572,
+            "share_delta_pct_points": -0.0422
+          }
+        }
+      },
+      "prefill": {
+        "reference_total_self_cuda_time_ms": 180.168207,
+        "candidate_total_self_cuda_time_ms": 178.890072,
+        "delta_ms": 1.278135,
+        "total_self_cuda_time_improvement_pct": 0.7094,
+        "largest_recovered_family": "gemm",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 7.978902,
+            "candidate_self_cuda_time_ms": 8.054454,
+            "delta_ms": -0.075552,
+            "improvement_pct": -0.9469,
+            "share_delta_pct_points": -0.0739
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 20.296776,
+            "candidate_self_cuda_time_ms": 20.44441,
+            "delta_ms": -0.147634,
+            "improvement_pct": -0.7274,
+            "share_delta_pct_points": -0.163
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 144.712885,
+            "candidate_self_cuda_time_ms": 143.0358,
+            "delta_ms": 1.677085,
+            "improvement_pct": 1.1589,
+            "share_delta_pct_points": 0.3636
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 7.179644,
+            "candidate_self_cuda_time_ms": 7.355408,
+            "delta_ms": -0.175764,
+            "improvement_pct": -2.4481,
+            "share_delta_pct_points": -0.1267
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 0.0,
+            "candidate_self_cuda_time_ms": 0.0,
+            "delta_ms": 0.0,
+            "improvement_pct": null,
+            "share_delta_pct_points": 0.0
+          }
+        }
+      }
+    },
+    "aligned_gac_vs_baseline": {
+      "decode": {
+        "reference_total_self_cuda_time_ms": 36.077729,
+        "candidate_total_self_cuda_time_ms": 37.20215,
+        "delta_ms": -1.124421,
+        "total_self_cuda_time_improvement_pct": -3.1167,
+        "largest_recovered_family": "elementwise",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 4.86877,
+            "candidate_self_cuda_time_ms": 5.219986,
+            "delta_ms": -0.351216,
+            "improvement_pct": -7.2136,
+            "share_delta_pct_points": -0.5362
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 3.340254,
+            "candidate_self_cuda_time_ms": 3.263606,
+            "delta_ms": 0.076648,
+            "improvement_pct": 2.2947,
+            "share_delta_pct_points": 0.4859
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 22.360434,
+            "candidate_self_cuda_time_ms": 23.208276,
+            "delta_ms": -0.847842,
+            "improvement_pct": -3.7917,
+            "share_delta_pct_points": -0.4057
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 3.552607,
+            "candidate_self_cuda_time_ms": 3.551967,
+            "delta_ms": 0.00064,
+            "improvement_pct": 0.018,
+            "share_delta_pct_points": 0.2994
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 1.955664,
+            "candidate_self_cuda_time_ms": 1.958315,
+            "delta_ms": -0.002651,
+            "improvement_pct": -0.1356,
+            "share_delta_pct_points": 0.1567
+          }
+        }
+      },
+      "prefill": {
+        "reference_total_self_cuda_time_ms": 173.487448,
+        "candidate_total_self_cuda_time_ms": 178.890072,
+        "delta_ms": -5.402624,
+        "total_self_cuda_time_improvement_pct": -3.1141,
+        "largest_recovered_family": "sdpa",
+        "family_deltas": {
+          "data_movement": {
+            "reference_self_cuda_time_ms": 6.984526,
+            "candidate_self_cuda_time_ms": 8.054454,
+            "delta_ms": -1.069928,
+            "improvement_pct": -15.3185,
+            "share_delta_pct_points": -0.4765
+          },
+          "elementwise": {
+            "reference_self_cuda_time_ms": 20.15119,
+            "candidate_self_cuda_time_ms": 20.44441,
+            "delta_ms": -0.29322,
+            "improvement_pct": -1.4551,
+            "share_delta_pct_points": 0.1869
+          },
+          "gemm": {
+            "reference_self_cuda_time_ms": 139.222654,
+            "candidate_self_cuda_time_ms": 143.0358,
+            "delta_ms": -3.813146,
+            "improvement_pct": -2.7389,
+            "share_delta_pct_points": 0.292
+          },
+          "other": {
+            "reference_self_cuda_time_ms": 7.129078,
+            "candidate_self_cuda_time_ms": 7.355408,
+            "delta_ms": -0.22633,
+            "improvement_pct": -3.1747,
+            "share_delta_pct_points": -0.0024
+          },
+          "sdpa": {
+            "reference_self_cuda_time_ms": 0.0,
+            "candidate_self_cuda_time_ms": 0.0,
+            "delta_ms": 0.0,
+            "improvement_pct": null,
+            "share_delta_pct_points": 0.0
+          }
+        }
+      }
+    }
+  },
+  "takeaways": {
+    "decode": "Aligned GAC changes decode total self CUDA time by 0.55% versus unaligned PaLU; largest recovered family: gemm.",
+    "prefill": "Aligned GAC changes prefill total self CUDA time by 0.71% versus unaligned PaLU; largest recovered family: gemm."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "focus": "palu_inference_operator_profile",
+  "generated_at": "2026-04-13T10:58:35.881907+00:00",
+  "bundle_script": "scripts/publish_llm_inference_operator_profile_bundle.py",
+  "published_runs": {
+    "baseline": {
+      "source_run_dir": "results/operator_profiles/palu_issue35/baseline",
+      "published_files": {
+        "raw": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/baseline/raw.json",
+        "config": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/baseline/config.json",
+        "summary": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/baseline/summary.json",
+        "env": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/baseline/env.json"
+      }
+    },
+    "palu": {
+      "source_run_dir": "results/operator_profiles/palu_issue35/palu",
+      "published_files": {
+        "raw": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/palu/raw.json",
+        "config": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/palu/config.json",
+        "summary": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/palu/summary.json",
+        "env": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/palu/env.json"
+      }
+    },
+    "aligned_gac": {
+      "source_run_dir": "results/operator_profiles/palu_issue35/aligned_gac",
+      "published_files": {
+        "raw": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/aligned_gac/raw.json",
+        "config": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/aligned_gac/config.json",
+        "summary": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/aligned_gac/summary.json",
+        "env": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/aligned_gac/env.json"
+      }
+    }
+  }
+}

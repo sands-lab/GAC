@@ -1,0 +1,15 @@
+{
+  "variant": "palu",
+  "baseline_model_id": "meta-llama/Meta-Llama-3-8B-Instruct",
+  "dtype": "float16",
+  "device": "cuda:0",
+  "stages": "both",
+  "prefill_batch": 1,
+  "prefill_seq_len": 1024,
+  "decode_batch": 1,
+  "decode_context_len": 1024,
+  "warmup": 3,
+  "model_source": "/home/lyut/GAC/results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1",
+  "palu_pattern": "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1",
+  "palu_aligned_pattern": null
+}
