@@ -15,6 +15,35 @@ when alignment changes real LLM inference latency, which operator family actuall
 - The current login / management node should not be treated as a CUDA profiling target.
 - The deterministic issue test only validates the summary contract and bundle publisher using fixture runs.
 
+## Tracked Slurm Entrypoint
+
+The repo-tracked way to collect all three variants and publish the bundle in one job is:
+
+```bash
+sbatch slurm/run_llm_operator_profile.sbatch
+```
+
+Useful overrides:
+
+```bash
+sbatch slurm/run_llm_operator_profile.sbatch \
+  --output-root results/operator_profiles/palu_issue35 \
+  --bundle-output notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35 \
+  --prefill-seq-len 1024 \
+  --decode-context-len 1024
+```
+
+For local contract verification without a Slurm allocation or conda activation, use:
+
+```bash
+bash slurm/run_llm_operator_profile.sbatch --dry-run --skip-env-setup
+```
+
+The batch entrypoint temporarily switches from `set -u` to `set +u` around
+`conda activate palu`, because the current `activate-binutils_linux-64.sh`
+hook in that environment expects some shell variables to remain unset and
+otherwise fails with `ADDR2LINE: unbound variable`.
+
 ## Collection Commands
 
 Run the profiler once per variant:
@@ -70,6 +99,7 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 
 - `palu_inference_operator_profile_summary.json`: structured summary with per-stage total self CUDA time, operator-family shares, and baseline / unaligned / aligned comparisons.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
+- `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed partial outputs, and the next handoff action while the real A100 job is still in flight.
 
 ## Interpretation Contract
 

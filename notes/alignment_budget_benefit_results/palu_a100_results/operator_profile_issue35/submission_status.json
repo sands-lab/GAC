@@ -1,0 +1,41 @@
+{
+  "focus": "palu_inference_operator_profile_submission",
+  "generated_at": "2026-04-13T08:47:34Z",
+  "issue_id": "36-llm-operator-profile-results",
+  "entrypoint": "slurm/run_llm_operator_profile.sbatch",
+  "latest_submission": {
+    "job_id": 26081,
+    "state": "RUNNING",
+    "exit_code": "0:0",
+    "elapsed": "00:14:14",
+    "node": "acclnode06",
+    "stdout": "slurm_logs/26081_llm_operator_profile.out",
+    "stderr": "slurm_logs/26081_llm_operator_profile.err",
+    "output_root": "results/operator_profiles/palu_issue35",
+    "bundle_output": "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35"
+  },
+  "previous_failed_submission": {
+    "job_id": 26068,
+    "state": "FAILED",
+    "exit_code": "1:0",
+    "elapsed": "00:00:08",
+    "node": "acclnode06",
+    "stderr_excerpt": "activate-binutils_linux-64.sh: line 68: ADDR2LINE: unbound variable"
+  },
+  "observed_artifacts": {
+    "baseline_run_files": [
+      "results/operator_profiles/palu_issue35/baseline/config.json",
+      "results/operator_profiles/palu_issue35/baseline/env.json",
+      "results/operator_profiles/palu_issue35/baseline/raw.json",
+      "results/operator_profiles/palu_issue35/baseline/run_summary.json",
+      "results/operator_profiles/palu_issue35/baseline/summary.json"
+    ],
+    "palu_run_files": [],
+    "aligned_gac_run_files": [],
+    "published_bundle_files": [
+      "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/README.md",
+      "notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35/submission_status.json"
+    ]
+  },
+  "next_action": "Wait for job 26081 to finish. If palu/aligned run directories and the bundle summary are complete, review and commit the generated tracked artifacts; otherwise inspect slurm_logs/26081_llm_operator_profile.err for the next failure point."
+}
