@@ -14,8 +14,9 @@ when alignment changes real LLM inference latency, which operator family actuall
 - The tracked real-A100 collection completed as Slurm job `26081` on `acclnode06`; see `submission_status.json` for provenance.
 - The human-readable interpretation now lives in `analysis.md`.
 - The deeper kernel-level explanation now lives in `gemm_root_cause_analysis.md`, with machine-readable bucket totals in `gemm_root_cause_summary.json`.
-- The optimization follow-up now lives in `inference_speed_optimization.md` and `inference_speed_optimization_summary.json`; after landing the prefill-side projection-path dispatch prototype, the next active follow-up is profile-guided rank retuning, while decode-side GEMV micro-tuning stays deprioritized.
+- The optimization follow-up now lives in `inference_speed_optimization.md` and `inference_speed_optimization_summary.json`; decode-side GEMV micro-tuning still stays deprioritized.
 - The current code-path prototype for the completed dispatch-reduction follow-up now lives in `prefill_dispatch_reduction.md` and `prefill_dispatch_reduction_summary.json`; it verifies grouped reconstruction dispatch reduction and padding overhead, but is not a measured GPU speedup.
+- The current offline profile-guided retuning follow-up now lives in `profile_guided_rank_retuning.md`, `profile_guided_rank_retuning_summary.json`, and `profile_guided_rank_retuning_config.json`; it preserves the simple aligned budget, lowers the proxy hardware penalty below the simple aligned baseline, and is still not a measured GPU speedup.
 - The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
 - `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
 - The root-cause follow-up shows why the cliff is muted in full inference: prefill is still dispatch-heavy, the `align1/align2` kernel tail is only a few milliseconds, decode is dominated by a small `gemv` tail, and the coarse prefill GEMM view also contains flash-attention leakage.
@@ -116,6 +117,9 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 - `inference_speed_optimization.md`: human-readable follow-up note translating the tracked summaries into a concrete optimization order for future implementation work.
 - `prefill_dispatch_reduction_summary.json`: machine-readable grouped-reconstruction prototype summary, including checkpoint dispatch counts, reduction factors, and padding-overhead tradeoffs.
 - `prefill_dispatch_reduction.md`: human-readable note for the grouped `HeadwiseLowRankModule` reconstruction prototype; this is a code-path artifact, not a measured GPU speedup.
+- `profile_guided_rank_retuning_summary.json`: machine-readable summary of the budget-preserving profile-guided retuning pass, including base / simple-aligned / retuned comparisons and movement deltas.
+- `profile_guided_rank_retuning.md`: human-readable note for the offline profile-guided retuning pass; this is still not a measured GPU speedup.
+- `profile_guided_rank_retuning_config.json`: deterministic PaLU `head_wise_ranks` candidate emitted by the retuning analyzer for follow-up recompression or profiling.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
 - `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed outputs, and where to find the final tracked bundle.
 
