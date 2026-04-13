@@ -1,0 +1,9 @@
+{
+  "seed": 7,
+  "ranks": [3, 5, 2, 4],
+  "in_features": 12,
+  "out_features": 16,
+  "bias": true,
+  "batch_size": 2,
+  "seq_len": 3
+}

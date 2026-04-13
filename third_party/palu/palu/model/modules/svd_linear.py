@@ -92,6 +92,10 @@ class HeadwiseLowRankModule(nn.Module):
         
         self.quantized_latents = False
         self.latent_quantizer = None
+        self.reconstruct_strategy = "per_group"
+        self._grouped_weight = None
+        self._grouped_bias = None
+        self._grouped_max_rank = 0
         
     def forward(self, 
                 hidden_states: torch.Tensor):
@@ -116,10 +120,81 @@ class HeadwiseLowRankModule(nn.Module):
         """
         return hidden_states
 
+    def set_reconstruct_strategy(self, strategy: str):
+        if strategy not in ("per_group", "grouped_bmm"):
+            raise ValueError(
+                f"Unsupported reconstruct strategy {strategy!r}; "
+                "expected 'per_group' or 'grouped_bmm'."
+            )
+        self.reconstruct_strategy = strategy
+        if strategy == "grouped_bmm":
+            self.refresh_grouped_reconstruct_cache()
+
+    def refresh_grouped_reconstruct_cache(self):
+        max_rank = max(self.ranks)
+        grouped_weight = self.VT.weight.new_zeros(
+            self.num_groups,
+            max_rank,
+            self.group_dim,
+        )
+        grouped_bias = None
+
+        if any(layer.bias is not None for layer in self.U):
+            grouped_bias = self.VT.weight.new_zeros(self.num_groups, self.group_dim)
+
+        for i, layer in enumerate(self.U):
+            rank = self.ranks[i]
+            grouped_weight[i, :rank, :] = layer.weight.data.t()
+            if grouped_bias is not None and layer.bias is not None:
+                grouped_bias[i, :] = layer.bias.data
+
+        self._grouped_weight = grouped_weight
+        self._grouped_bias = grouped_bias
+        self._grouped_max_rank = max_rank
+
+    def _ensure_grouped_reconstruct_cache(self):
+        if (
+            self._grouped_weight is None
+            or self._grouped_weight.device != self.VT.weight.device
+            or self._grouped_weight.dtype != self.VT.weight.dtype
+        ):
+            self.refresh_grouped_reconstruct_cache()
+
+    def _reconstruct_grouped_bmm(self, low_rank_latents: torch.Tensor):
+        self._ensure_grouped_reconstruct_cache()
+
+        batch_size, seq_len, _ = low_rank_latents.shape
+        flat_latents = low_rank_latents.reshape(-1, low_rank_latents.shape[-1])
+        grouped_latents = flat_latents.new_zeros(
+            flat_latents.shape[0],
+            self.num_groups,
+            self._grouped_max_rank,
+        )
+
+        total_ranks = 0
+        for i in range(self.num_groups):
+            rank = self.ranks[i]
+            grouped_latents[:, i, :rank] = flat_latents[:, total_ranks: total_ranks + rank]
+            total_ranks += rank
+
+        grouped_latents = grouped_latents.transpose(0, 1).contiguous()
+        outputs = torch.bmm(grouped_latents, self._grouped_weight)
+        outputs = outputs.transpose(0, 1)
+
+        if self._grouped_bias is not None:
+            outputs = outputs + self._grouped_bias.unsqueeze(0)
+
+        return outputs.reshape(batch_size, seq_len, self.out_features)
+
     def reconstruct(self, low_rank_latents: torch.Tensor):
         """
             low_rank_latents: Tensor of shape (batch_size, seq_len, r1 + r2 + ... )
         """
+        if self.reconstruct_strategy == "grouped_bmm":
+            return self._reconstruct_grouped_bmm(low_rank_latents)
+        if self.reconstruct_strategy != "per_group":
+            raise ValueError(f"Unknown reconstruct strategy {self.reconstruct_strategy!r}")
+
         outputs = []
         total_ranks = 0
         for i in range(self.num_groups):
@@ -178,6 +253,9 @@ class HeadwiseLowRankModule(nn.Module):
             self.U[i].weight.data = U_weight_i
             
             total_ranks += self.ranks[i]
+
+        if self.reconstruct_strategy == "grouped_bmm":
+            self.refresh_grouped_reconstruct_cache()
     
     @staticmethod
     def from_linear_whiten(
