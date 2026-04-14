@@ -1,0 +1,11 @@
+{
+  "variant": "palu",
+  "stages": {
+    "prefill": {
+      "total_self_cuda_time_ms": 144.299
+    },
+    "decode": {
+      "total_self_cuda_time_ms": 24.305
+    }
+  }
+}

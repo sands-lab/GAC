@@ -1,0 +1,11 @@
+{
+  "variant": "palu_grouped_bmm",
+  "stages": {
+    "prefill": {
+      "total_self_cuda_time_ms": 126.14
+    },
+    "decode": {
+      "total_self_cuda_time_ms": 23.013
+    }
+  }
+}

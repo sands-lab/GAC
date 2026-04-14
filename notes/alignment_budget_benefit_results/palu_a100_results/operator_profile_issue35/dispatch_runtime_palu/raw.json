@@ -1,0 +1,2107 @@
+{
+  "variant": "palu",
+  "generated_at": "2026-04-14T11:08:00.744723+00:00",
+  "model_source": "/home/lyut/GAC/results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1",
+  "parameter_count": 7973240832,
+  "stages": {
+    "prefill": {
+      "events": [
+        {
+          "name": "aten::embedding",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 94.40199999999959,
+          "self_cpu_time_us": 24.936999999999898,
+          "cpu_time_us": 1678.904
+        },
+        {
+          "name": "aten::reshape",
+          "operator_family": "data_movement",
+          "count": 388,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 651.4909999999345,
+          "cpu_time_us": 924.2170000000003
+        },
+        {
+          "name": "aten::view",
+          "operator_family": "data_movement",
+          "count": 357,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 298.14400000005844,
+          "cpu_time_us": 298.14400000005844
+        },
+        {
+          "name": "aten::index_select",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 47.200999999999794,
+          "cuda_time_us": 94.40199999999959,
+          "self_cpu_time_us": 28.815000000000055,
+          "cpu_time_us": 1645.38
+        },
+        {
+          "name": "Unrecognized",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 47.200999999999794,
+          "cuda_time_us": 47.200999999999794,
+          "self_cpu_time_us": 1586.528,
+          "cpu_time_us": 1586.528
+        },
+        {
+          "name": "aten::empty",
+          "operator_family": "other",
+          "count": 130,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 359.73500000001627,
+          "cpu_time_us": 359.73500000001627
+        },
+        {
+          "name": "aten::resize_",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 8.134999999999991,
+          "cpu_time_us": 8.134999999999991
+        },
+        {
+          "name": "cudaLaunchKernel",
+          "operator_family": "other",
+          "count": 1272,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 6411.003999999962,
+          "cpu_time_us": 6411.003999999962
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::indexSelectLargeIndex<c10::Half, long, unsigned int, 2, 2, -2, true>(at::cuda::detail::TensorInfo<c10::Half, unsigned int>, at::cuda::detail::TensorInfo<c10::Half const, unsigned int>, at::cuda::detail::TensorInfo<long const, unsigned int>, int, int, unsigned int, unsigned int, long)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 47.200999999999794,
+          "cuda_time_us": 47.200999999999794,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::arange",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.080999999999676,
+          "cuda_time_us": 4.161999999999352,
+          "self_cpu_time_us": 8.538000000000011,
+          "cpu_time_us": 38.68399999999997
+        },
+        {
+          "name": "void (anonymous namespace)::elementwise_kernel_with_index<int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>(int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, function_traits<at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>::result_type*)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.080999999999676,
+          "cuda_time_us": 2.080999999999676,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::unsqueeze",
+          "operator_family": "other",
+          "count": 68,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 101.34199999997918,
+          "cpu_time_us": 124.81499999999187
+        },
+        {
+          "name": "aten::as_strided",
+          "operator_family": "other",
+          "count": 1200,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 837.0609999999688,
+          "cpu_time_us": 837.0609999999688
+        },
+        {
+          "name": "aten::to",
+          "operator_family": "other",
+          "count": 203,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1939.3409999999558,
+          "self_cpu_time_us": 146.66399999989244,
+          "cpu_time_us": 2705.856999999925
+        },
+        {
+          "name": "aten::_to_copy",
+          "operator_family": "data_movement",
+          "count": 134,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1939.3409999999558,
+          "self_cpu_time_us": 559.2500000000368,
+          "cpu_time_us": 2559.1930000000325
+        },
+        {
+          "name": "aten::empty_strided",
+          "operator_family": "other",
+          "count": 166,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 719.3160000000048,
+          "cpu_time_us": 719.3160000000048
+        },
+        {
+          "name": "aten::copy_",
+          "operator_family": "data_movement",
+          "count": 134,
+          "input_shapes": [],
+          "self_cuda_time_us": 1939.3409999999558,
+          "cuda_time_us": 1939.3409999999558,
+          "self_cpu_time_us": 698.8900000000367,
+          "cpu_time_us": 1431.0239999999885
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#11}::operator()() const::{lambda(bool)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#11}::operator()() const::{lambda(bool)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 5.119999999999891,
+          "cuda_time_us": 5.119999999999891,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::all",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.0949999999998,
+          "cuda_time_us": 4.0949999999998,
+          "self_cpu_time_us": 14.939000000000306,
+          "cpu_time_us": 22.492999999999938
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<bool, at::native::func_wrapper_t<bool, at::native::and_kernel_cuda(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#12}::operator()() const::{lambda(bool, bool)#1}>, unsigned int, bool, 4, 4> >(at::native::ReduceOp<bool, at::native::func_wrapper_t<bool, at::native::and_kernel_cuda(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#12}::operator()() const::{lambda(bool, bool)#1}>, unsigned int, bool, 4, 4>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.0949999999998,
+          "cuda_time_us": 4.0949999999998,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::is_nonzero",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1.7269999999998618,
+          "self_cpu_time_us": 1.4630000000001928,
+          "cpu_time_us": 28.264000000000124
+        },
+        {
+          "name": "aten::item",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1.7269999999998618,
+          "self_cpu_time_us": 3.08600000000024,
+          "cpu_time_us": 26.80099999999993
+        },
+        {
+          "name": "aten::_local_scalar_dense",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.7269999999998618,
+          "cuda_time_us": 1.7269999999998618,
+          "self_cpu_time_us": 5.789999999999509,
+          "cpu_time_us": 23.71499999999969
+        },
+        {
+          "name": "cudaMemcpyAsync",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 10.25,
+          "cpu_time_us": 10.25
+        },
+        {
+          "name": "cudaStreamSynchronize",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 7.675000000000182,
+          "cpu_time_us": 7.675000000000182
+        },
+        {
+          "name": "Memcpy DtoH (Device -> Pinned)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.7269999999998618,
+          "cuda_time_us": 1.7269999999998618,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::slice",
+          "operator_family": "data_movement",
+          "count": 518,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 828.0469999999677,
+          "cpu_time_us": 1130.258999999975
+        },
+        {
+          "name": "aten::expand",
+          "operator_family": "other",
+          "count": 3,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 5.668999999999869,
+          "cpu_time_us": 7.163000000000011
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "operator_family": "data_movement",
+          "count": 66,
+          "input_shapes": [],
+          "self_cuda_time_us": 1257.415999999982,
+          "cuda_time_us": 1257.415999999982,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::matmul",
+          "operator_family": "gemm",
+          "count": 354,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 71756.34599999987,
+          "self_cpu_time_us": 1970.237000000015,
+          "cpu_time_us": 13329.885000000046
+        },
+        {
+          "name": "aten::bmm",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.799999999999727,
+          "cuda_time_us": 4.799999999999727,
+          "self_cpu_time_us": 26.86200000000008,
+          "cpu_time_us": 35.2170000000001
+        },
+        {
+          "name": "ampere_sgemm_128x32_nn",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.799999999999727,
+          "cuda_time_us": 4.799999999999727,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::_unsafe_view",
+          "operator_family": "data_movement",
+          "count": 354,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 357.30199999995966,
+          "cpu_time_us": 357.30199999995966
+        },
+        {
+          "name": "aten::transpose",
+          "operator_family": "data_movement",
+          "count": 610,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1207.8750000000168,
+          "cpu_time_us": 1717.0259999999657
+        },
+        {
+          "name": "aten::cat",
+          "operator_family": "data_movement",
+          "count": 129,
+          "input_shapes": [],
+          "self_cuda_time_us": 2048.628000000037,
+          "cuda_time_us": 2048.628000000037,
+          "self_cpu_time_us": 1334.794999999986,
+          "cpu_time_us": 2019.2119999999754
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 3, 64, 64>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 6.2719999999999345,
+          "cuda_time_us": 6.2719999999999345,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::cos",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.8399999999996908,
+          "cuda_time_us": 3.8399999999996908,
+          "self_cpu_time_us": 8.115000000000236,
+          "cpu_time_us": 12.99499999999989
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::cos_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::cos_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.8399999999996908,
+          "cuda_time_us": 3.8399999999996908,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::mul",
+          "operator_family": "elementwise",
+          "count": 292,
+          "input_shapes": [],
+          "self_cuda_time_us": 6224.435999999994,
+          "cuda_time_us": 6224.435999999994,
+          "self_cpu_time_us": 2146.609000000002,
+          "cpu_time_us": 3422.939000000005
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::AUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.833000000000084,
+          "cuda_time_us": 4.833000000000084,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::sin",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.519000000000233,
+          "cuda_time_us": 3.519000000000233,
+          "self_cpu_time_us": 6.302000000000135,
+          "cpu_time_us": 10.880999999999858
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::sin_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::sin_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.519000000000233,
+          "cuda_time_us": 3.519000000000233,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "data_movement",
+          "count": 67,
+          "input_shapes": [],
+          "self_cuda_time_us": 676.8049999999739,
+          "cuda_time_us": 676.8049999999739,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::pow",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 908.5779999999618,
+          "cuda_time_us": 908.5779999999618,
+          "self_cpu_time_us": 600.0909999999781,
+          "cpu_time_us": 932.7839999999837
+        },
+        {
+          "name": "aten::result_type",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 26.93500000002996,
+          "cpu_time_us": 26.93500000002996
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 908.5779999999618,
+          "cuda_time_us": 908.5779999999618,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::mean",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 1391.7529999999779,
+          "cuda_time_us": 1391.7529999999779,
+          "self_cpu_time_us": 630.3469999999638,
+          "cpu_time_us": 925.317999999982
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 1391.7529999999779,
+          "cuda_time_us": 1391.7529999999779,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::add",
+          "operator_family": "elementwise",
+          "count": 193,
+          "input_shapes": [],
+          "self_cuda_time_us": 1906.543000000036,
+          "cuda_time_us": 1906.543000000036,
+          "self_cpu_time_us": 1501.3989999999599,
+          "cpu_time_us": 2395.702999999983
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul> >(int, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 133.5080000000239,
+          "cuda_time_us": 133.5080000000239,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::rsqrt",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 112.41900000000714,
+          "cuda_time_us": 112.41900000000714,
+          "self_cpu_time_us": 371.0959999999918,
+          "cpu_time_us": 621.6509999999935
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 112.41900000000714,
+          "cuda_time_us": 112.41900000000714,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 1596.1430000000082,
+          "cuda_time_us": 1596.1430000000082,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 193,
+          "input_shapes": [],
+          "self_cuda_time_us": 3057.237999999967,
+          "cuda_time_us": 3057.237999999967,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::linear",
+          "operator_family": "gemm",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 71751.54599999987,
+          "self_cpu_time_us": 837.8840000000691,
+          "cpu_time_us": 15855.591000000059
+        },
+        {
+          "name": "aten::t",
+          "operator_family": "other",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 671.2509999999152,
+          "cpu_time_us": 1742.0449999999437
+        },
+        {
+          "name": "aten::mm",
+          "operator_family": "gemm",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 71751.54599999987,
+          "cuda_time_us": 71751.54599999987,
+          "self_cpu_time_us": 6603.164000000117,
+          "cpu_time_us": 10123.006000000067
+        },
+        {
+          "name": "cudaDeviceGetAttribute",
+          "operator_family": "other",
+          "count": 247,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 106.02200000005132,
+          "cpu_time_us": 106.02200000005132
+        },
+        {
+          "name": "cudaMemsetAsync",
+          "operator_family": "other",
+          "count": 169,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 886.4159999999988,
+          "cpu_time_us": 886.4159999999988
+        },
+        {
+          "name": "cuLaunchKernel",
+          "operator_family": "other",
+          "count": 183,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1213.4479999999662,
+          "cpu_time_us": 1213.4479999999662
+        },
+        {
+          "name": "Memset (Device)",
+          "operator_family": "other",
+          "count": 169,
+          "input_shapes": [],
+          "self_cuda_time_us": 260.446999999986,
+          "cuda_time_us": 260.446999999986,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x4_tn_align8::Params)",
+          "operator_family": "gemm",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 10264.200999999963,
+          "cuda_time_us": 10264.200999999963,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::_reshape_alias",
+          "operator_family": "data_movement",
+          "count": 128,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 74.16300000003093,
+          "cpu_time_us": 74.16300000003093
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x128_64x3_tn_align2::Params)",
+          "operator_family": "gemm",
+          "count": 28,
+          "input_shapes": [],
+          "self_cuda_time_us": 1560.4550000000095,
+          "cuda_time_us": 1560.4550000000095,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+          "operator_family": "gemm",
+          "count": 25,
+          "input_shapes": [],
+          "self_cuda_time_us": 152.0659999999889,
+          "cuda_time_us": 152.0659999999889,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1>(cutlass_75_wmma_tensorop_f16_s161616gemm_f16_32x32_64x2_tn_align1::Params)",
+          "operator_family": "gemm",
+          "count": 56,
+          "input_shapes": [],
+          "self_cuda_time_us": 1168.0420000000258,
+          "cuda_time_us": 1168.0420000000258,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 3, 128, 1>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 455.62300000003324,
+          "cuda_time_us": 455.62300000003324,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "cudaFuncSetAttribute",
+          "operator_family": "other",
+          "count": 76,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 74.31000000000176,
+          "cpu_time_us": 74.31000000000176
+        },
+        {
+          "name": "sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize96x128x32_stage4_warpsize2x2x1_tensor16x8x16_kernel",
+          "operator_family": "gemm",
+          "count": 22,
+          "input_shapes": [],
+          "self_cuda_time_us": 1095.6550000000034,
+          "cuda_time_us": 1095.6550000000034,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "cudaOccupancyMaxActiveBlocksPerMultiprocessor",
+          "operator_family": "elementwise",
+          "count": 145,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 126.60899999998628,
+          "cpu_time_us": 126.60899999998628
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_32x6_tn",
+          "operator_family": "gemm",
+          "count": 44,
+          "input_shapes": [],
+          "self_cuda_time_us": 375.5529999999726,
+          "cuda_time_us": 375.5529999999726,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::neg",
+          "operator_family": "other",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 469.250999999987,
+          "cuda_time_us": 469.250999999987,
+          "self_cpu_time_us": 470.9320000000198,
+          "cpu_time_us": 814.2520000000177
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+          "operator_family": "other",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 469.250999999987,
+          "cuda_time_us": 469.250999999987,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 64, 64>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 1586.7330000000038,
+          "cuda_time_us": 1586.7330000000038,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::Half> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::Half> const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::Half> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::Half> const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 1033.9329999999836,
+          "cuda_time_us": 1033.9329999999836,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::scaled_dot_product_attention",
+          "operator_family": "sdpa",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 3010.6429999999846,
+          "self_cpu_time_us": 280.05300000002126,
+          "cpu_time_us": 2144.709000000019
+        },
+        {
+          "name": "aten::_scaled_dot_product_flash_attention",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 3010.6429999999846,
+          "self_cpu_time_us": 253.19200000003093,
+          "cpu_time_us": 1864.6559999999977
+        },
+        {
+          "name": "aten::_flash_attention_forward",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 3010.6429999999846,
+          "cuda_time_us": 3010.6429999999846,
+          "self_cpu_time_us": 443.27699999995866,
+          "cpu_time_us": 1298.4579999999937
+        },
+        {
+          "name": "aten::empty_like",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 62.425999999984015,
+          "cpu_time_us": 212.82299999998168
+        },
+        {
+          "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::half_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::half_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
+          "operator_family": "gemm",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 3010.6429999999846,
+          "cuda_time_us": 3010.6429999999846,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array<char*, 3ul> >(int, at::native::CUDAFunctor_add<c10::Half>, std::array<char*, 3ul>)",
+          "operator_family": "elementwise",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 739.1020000000285,
+          "cuda_time_us": 739.1020000000285,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::silu",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 1159.8790000000135,
+          "cuda_time_us": 1159.8790000000135,
+          "self_cpu_time_us": 286.8239999999928,
+          "cpu_time_us": 467.05799999999044
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_128x256_ldg8_f2f_stages_64x3_tn",
+          "operator_family": "gemm",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 34925.84899999997,
+          "cuda_time_us": 34925.84899999997,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#5}::operator()() const::{lambda(c10::Half)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#5}::operator()() const::{lambda(c10::Half)#1}, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 1159.8790000000135,
+          "cuda_time_us": 1159.8790000000135,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 1566.2220000000189,
+          "cuda_time_us": 1566.2220000000189,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_256x128_ldg8_f2f_stages_64x3_tn",
+          "operator_family": "gemm",
+          "count": 33,
+          "input_shapes": [],
+          "self_cuda_time_us": 20934.489,
+          "cuda_time_us": 20934.489,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2>(cutlass_80_wmma_tensorop_f16_s161616gemm_f16_32x32_64x1_tn_align2::Params)",
+          "operator_family": "gemm",
+          "count": 26,
+          "input_shapes": [],
+          "self_cuda_time_us": 341.8579999999947,
+          "cuda_time_us": 341.8579999999947,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_256x128_64x3_tn_align2::Params)",
+          "operator_family": "gemm",
+          "count": 6,
+          "input_shapes": [],
+          "self_cuda_time_us": 321.4739999999874,
+          "cuda_time_us": 321.4739999999874,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+          "operator_family": "gemm",
+          "count": 6,
+          "input_shapes": [],
+          "self_cuda_time_us": 219.58399999999529,
+          "cuda_time_us": 219.58399999999529,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "cudaDeviceSynchronize",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 46096.59199999999,
+          "cpu_time_us": 46096.59199999999
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 28.99199999999837,
+          "cuda_time_us": 28.99199999999837,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_tn_align8::Params)",
+          "operator_family": "gemm",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 14.015999999988708,
+          "cuda_time_us": 14.015999999988708,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_64x128_64x6_tn_align2::Params)",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 88.86499999999069,
+          "cuda_time_us": 88.86499999999069,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        }
+      ],
+      "profile": {
+        "batch": 1,
+        "seq_len": 1024,
+        "mode": "forward"
+      }
+    },
+    "decode": {
+      "events": [
+        {
+          "name": "aten::embedding",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 7.872000000000298,
+          "self_cpu_time_us": 11.813000000000102,
+          "cpu_time_us": 1718.008
+        },
+        {
+          "name": "aten::reshape",
+          "operator_family": "data_movement",
+          "count": 454,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1060.679000000001,
+          "self_cpu_time_us": 664.1030000000635,
+          "cpu_time_us": 2451.156999999991
+        },
+        {
+          "name": "aten::view",
+          "operator_family": "data_movement",
+          "count": 491,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 350.852000000021,
+          "cpu_time_us": 350.852000000021
+        },
+        {
+          "name": "aten::index_select",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.936000000000149,
+          "cuda_time_us": 7.872000000000298,
+          "self_cpu_time_us": 24.095999999999776,
+          "cpu_time_us": 1698.521
+        },
+        {
+          "name": "Unrecognized",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.936000000000149,
+          "cuda_time_us": 3.936000000000149,
+          "self_cpu_time_us": 1646.232,
+          "cpu_time_us": 1646.232
+        },
+        {
+          "name": "aten::empty",
+          "operator_family": "other",
+          "count": 328,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1054.4620000000198,
+          "cpu_time_us": 1054.4620000000198
+        },
+        {
+          "name": "aten::resize_",
+          "operator_family": "other",
+          "count": 37,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 110.20599999998899,
+          "cpu_time_us": 110.20599999998899
+        },
+        {
+          "name": "cudaLaunchKernel",
+          "operator_family": "other",
+          "count": 1780,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 9419.70300000009,
+          "cpu_time_us": 9419.70300000009
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::indexSelectSmallIndex<c10::Half, long, unsigned int, 2, 2, -2>(at::cuda::detail::TensorInfo<c10::Half, unsigned int>, at::cuda::detail::TensorInfo<c10::Half const, unsigned int>, at::cuda::detail::TensorInfo<long const, unsigned int>, int, int, unsigned int, long)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.936000000000149,
+          "cuda_time_us": 3.936000000000149,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::arange",
+          "operator_family": "other",
+          "count": 8,
+          "input_shapes": [],
+          "self_cuda_time_us": 6.399000000000569,
+          "cuda_time_us": 12.798000000001139,
+          "self_cpu_time_us": 24.829000000000406,
+          "cpu_time_us": 116.15200000000073
+        },
+        {
+          "name": "void (anonymous namespace)::elementwise_kernel_with_index<int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>(int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, function_traits<at::native::arange_cuda_out(c10::Scalar const&, c10::Scalar const&, c10::Scalar const&, at::Tensor&)::{lambda()#1}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>::result_type*)",
+          "operator_family": "data_movement",
+          "count": 4,
+          "input_shapes": [],
+          "self_cuda_time_us": 6.399000000000569,
+          "cuda_time_us": 6.399000000000569,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::unsqueeze",
+          "operator_family": "other",
+          "count": 132,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 209.5579999999684,
+          "cpu_time_us": 270.07700000000546
+        },
+        {
+          "name": "aten::as_strided",
+          "operator_family": "other",
+          "count": 1783,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1152.935000000216,
+          "cpu_time_us": 1152.935000000216
+        },
+        {
+          "name": "aten::to",
+          "operator_family": "other",
+          "count": 237,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 427.3069999999948,
+          "self_cpu_time_us": 221.68400000000338,
+          "cpu_time_us": 2805.3780000000042
+        },
+        {
+          "name": "aten::_to_copy",
+          "operator_family": "data_movement",
+          "count": 134,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 427.3069999999948,
+          "self_cpu_time_us": 602.9710000000571,
+          "cpu_time_us": 2583.6940000000004
+        },
+        {
+          "name": "aten::empty_strided",
+          "operator_family": "other",
+          "count": 134,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 563.2409999999545,
+          "cpu_time_us": 563.2409999999545
+        },
+        {
+          "name": "aten::copy_",
+          "operator_family": "data_movement",
+          "count": 232,
+          "input_shapes": [],
+          "self_cuda_time_us": 1554.0979999999745,
+          "cuda_time_us": 1554.0979999999745,
+          "self_cpu_time_us": 1232.1529999999723,
+          "cpu_time_us": 2752.021000000003
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#11}::operator()() const::{lambda(bool)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#11}::operator()() const::{lambda(bool)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 5.023999999999887,
+          "cuda_time_us": 5.023999999999887,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::pad",
+          "operator_family": "other",
+          "count": 33,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 122.33699999999953,
+          "self_cpu_time_us": 53.25400000003765,
+          "cpu_time_us": 1183.612000000032
+        },
+        {
+          "name": "aten::constant_pad_nd",
+          "operator_family": "other",
+          "count": 33,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 122.33699999999953,
+          "self_cpu_time_us": 183.51499999997532,
+          "cpu_time_us": 1130.3579999999943
+        },
+        {
+          "name": "aten::fill_",
+          "operator_family": "other",
+          "count": 98,
+          "input_shapes": [],
+          "self_cuda_time_us": 151.13900000000194,
+          "cuda_time_us": 151.13900000000194,
+          "self_cpu_time_us": 314.06999999994287,
+          "cpu_time_us": 796.7369999999605
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<bool>, std::array<char*, 1ul> >(int, at::native::FillFunctor<bool>, std::array<char*, 1ul>)",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.8479999999999563,
+          "cuda_time_us": 2.8479999999999563,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::narrow",
+          "operator_family": "other",
+          "count": 33,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 70.01199999998062,
+          "cpu_time_us": 176.1860000000006
+        },
+        {
+          "name": "aten::slice",
+          "operator_family": "data_movement",
+          "count": 935,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1663.7829999998025,
+          "cpu_time_us": 2193.0449999998464
+        },
+        {
+          "name": "cudaMemcpyAsync",
+          "operator_family": "other",
+          "count": 34,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 306.573999999991,
+          "cpu_time_us": 306.573999999991
+        },
+        {
+          "name": "Memcpy DtoD (Device -> Device)",
+          "operator_family": "other",
+          "count": 33,
+          "input_shapes": [],
+          "self_cuda_time_us": 63.29599999997845,
+          "cuda_time_us": 63.29599999997845,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::all",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.3530000000000655,
+          "cuda_time_us": 4.3530000000000655,
+          "self_cpu_time_us": 13.125,
+          "cpu_time_us": 20.228000000000065
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<bool, at::native::func_wrapper_t<bool, at::native::and_kernel_cuda(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#12}::operator()() const::{lambda(bool, bool)#1}>, unsigned int, bool, 4, 4> >(at::native::ReduceOp<bool, at::native::func_wrapper_t<bool, at::native::and_kernel_cuda(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#12}::operator()() const::{lambda(bool, bool)#1}>, unsigned int, bool, 4, 4>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.3530000000000655,
+          "cuda_time_us": 4.3530000000000655,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::is_nonzero",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1.599999999999909,
+          "self_cpu_time_us": 1.413000000000011,
+          "cpu_time_us": 24.45699999999988
+        },
+        {
+          "name": "aten::item",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1.599999999999909,
+          "self_cpu_time_us": 2.705999999999676,
+          "cpu_time_us": 23.04399999999987
+        },
+        {
+          "name": "aten::_local_scalar_dense",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.599999999999909,
+          "cuda_time_us": 1.599999999999909,
+          "self_cpu_time_us": 5.110000000000127,
+          "cpu_time_us": 20.338000000000193
+        },
+        {
+          "name": "cudaStreamSynchronize",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 7.844000000000051,
+          "cpu_time_us": 7.844000000000051
+        },
+        {
+          "name": "Memcpy DtoH (Device -> Pinned)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.599999999999909,
+          "cuda_time_us": 1.599999999999909,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::add_",
+          "operator_family": "elementwise",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.9839999999999236,
+          "cuda_time_us": 1.9839999999999236,
+          "self_cpu_time_us": 7.373999999999796,
+          "cpu_time_us": 12.483999999999924
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<2, at::native::CUDAFunctorOnSelf_add<long>, std::array<char*, 2ul> >(int, at::native::CUDAFunctorOnSelf_add<long>, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 1.9839999999999236,
+          "cuda_time_us": 1.9839999999999236,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::new_ones",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1.3119999999998981,
+          "self_cpu_time_us": 24.32700000000068,
+          "cpu_time_us": 49.12400000000025
+        },
+        {
+          "name": "aten::new_empty",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1.7139999999999418,
+          "cpu_time_us": 9.197999999999865
+        },
+        {
+          "name": "aten::le",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.0,
+          "cuda_time_us": 8.0,
+          "self_cpu_time_us": 22.60199999999986,
+          "cpu_time_us": 58.460000000000036
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::CompareFunctor<long> >(at::TensorIteratorBase&, at::native::(anonymous namespace)::CompareFunctor<long> const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::CompareFunctor<long> >(at::TensorIteratorBase&, at::native::(anonymous namespace)::CompareFunctor<long> const&)::{lambda(int)#1})",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 4.0,
+          "cuda_time_us": 4.0,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::__and__",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 6.0799999999994725,
+          "self_cpu_time_us": 4.9699999999998,
+          "cpu_time_us": 103.02599999999939
+        },
+        {
+          "name": "aten::bitwise_and",
+          "operator_family": "other",
+          "count": 5,
+          "input_shapes": [],
+          "self_cuda_time_us": 6.0799999999994725,
+          "cuda_time_us": 15.903999999998632,
+          "self_cpu_time_us": 52.58899999999994,
+          "cpu_time_us": 189.53999999999996
+        },
+        {
+          "name": "aten::select",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 14.707000000000335,
+          "cpu_time_us": 16.101000000000113
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> > const&)::{lambda(int)#1})",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.743999999999687,
+          "cuda_time_us": 3.743999999999687,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "VmappedVmappedVmappedVmappedModIndex",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 9.952000000000226,
+          "self_cpu_time_us": 557.2290000000003,
+          "cpu_time_us": 659.895
+        },
+        {
+          "name": "aten::index",
+          "operator_family": "data_movement",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 7.135999999999967,
+          "cuda_time_us": 19.90400000000045,
+          "self_cpu_time_us": 41.210999999999785,
+          "cpu_time_us": 181.97699999999986
+        },
+        {
+          "name": "aten::expand",
+          "operator_family": "other",
+          "count": 103,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 196.73899999998184,
+          "cpu_time_us": 277.41400000002113
+        },
+        {
+          "name": "aten::_reshape_alias",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 0.4810000000002219,
+          "cpu_time_us": 0.4810000000002219
+        },
+        {
+          "name": "aten::contiguous",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 2.8160000000002583,
+          "self_cpu_time_us": 1.3929999999995744,
+          "cpu_time_us": 38.572999999999865
+        },
+        {
+          "name": "aten::clone",
+          "operator_family": "data_movement",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1063.4950000000013,
+          "self_cpu_time_us": 169.62499999996407,
+          "cpu_time_us": 1511.6639999999616
+        },
+        {
+          "name": "aten::empty_like",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 87.91600000000426,
+          "cpu_time_us": 429.652999999998
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1} const&)::{lambda(int)#1})",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.8160000000002583,
+          "cuda_time_us": 2.8160000000002583,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<1> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<1> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<1> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<1> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&)::{lambda(int)#1})",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 7.135999999999967,
+          "cuda_time_us": 7.135999999999967,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<bool, bool, bool, at::native::BitwiseAndFunctor<bool> >, std::array<char*, 3ul>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.3359999999997854,
+          "cuda_time_us": 2.3359999999997854,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "operator_family": "data_movement",
+          "count": 66,
+          "input_shapes": [],
+          "self_cuda_time_us": 285.86100000000715,
+          "cuda_time_us": 285.86100000000715,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::matmul",
+          "operator_family": "gemm",
+          "count": 354,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 11677.837000000149,
+          "self_cpu_time_us": 1626.6999999998616,
+          "cpu_time_us": 10684.298999999948
+        },
+        {
+          "name": "aten::bmm",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.399999999999636,
+          "cuda_time_us": 2.399999999999636,
+          "self_cpu_time_us": 20.388999999999214,
+          "cpu_time_us": 28.773999999999432
+        },
+        {
+          "name": "void gemmk1_kernel<int, float, 256, 5, true, false, false, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, 0>(cublasGemmk1Params<float, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float, biasType<cublasGemvTensorStridedBatched<float>::value_type, float>::type>)",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.399999999999636,
+          "cuda_time_us": 2.399999999999636,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::_unsafe_view",
+          "operator_family": "data_movement",
+          "count": 418,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 339.81100000002607,
+          "cpu_time_us": 339.81100000002607
+        },
+        {
+          "name": "aten::transpose",
+          "operator_family": "data_movement",
+          "count": 610,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1123.8499999998585,
+          "cpu_time_us": 1611.327999999954
+        },
+        {
+          "name": "aten::cat",
+          "operator_family": "data_movement",
+          "count": 193,
+          "input_shapes": [],
+          "self_cuda_time_us": 1074.4700000000175,
+          "cuda_time_us": 1074.4700000000175,
+          "self_cpu_time_us": 1747.4210000000012,
+          "cpu_time_us": 2758.4839999999986
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy_aligned16_contig<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 3, 128, 1>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.29700000000048,
+          "cuda_time_us": 3.29700000000048,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::cos",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.880000000000109,
+          "cuda_time_us": 2.880000000000109,
+          "self_cpu_time_us": 7.904999999999745,
+          "cpu_time_us": 12.85399999999936
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::cos_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::cos_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.880000000000109,
+          "cuda_time_us": 2.880000000000109,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::mul",
+          "operator_family": "elementwise",
+          "count": 292,
+          "input_shapes": [],
+          "self_cuda_time_us": 891.3420000000606,
+          "cuda_time_us": 891.3420000000606,
+          "self_cpu_time_us": 2113.460999999981,
+          "cpu_time_us": 3396.604000000005
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::AUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 3.0399999999999636,
+          "cuda_time_us": 3.0399999999999636,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::sin",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.6879999999991924,
+          "cuda_time_us": 2.6879999999991924,
+          "self_cpu_time_us": 5.361000000000786,
+          "cpu_time_us": 9.609000000000378
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::sin_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::sin_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 2.6879999999991924,
+          "cuda_time_us": 2.6879999999991924,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "data_movement",
+          "count": 67,
+          "input_shapes": [],
+          "self_cuda_time_us": 136.42199999998775,
+          "cuda_time_us": 136.42199999998775,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::pow",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 132.4779999999755,
+          "cuda_time_us": 132.4779999999755,
+          "self_cpu_time_us": 604.440000000056,
+          "cpu_time_us": 942.3140000000194
+        },
+        {
+          "name": "aten::result_type",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 26.66899999999896,
+          "cpu_time_us": 26.66899999999896
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 132.4779999999755,
+          "cuda_time_us": 132.4779999999755,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::mean",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 275.9680000000053,
+          "cuda_time_us": 275.9680000000053,
+          "self_cpu_time_us": 624.1580000000204,
+          "cpu_time_us": 929.9200000000073
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 275.9680000000053,
+          "cuda_time_us": 275.9680000000053,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::add",
+          "operator_family": "elementwise",
+          "count": 193,
+          "input_shapes": [],
+          "self_cuda_time_us": 397.3129999999819,
+          "cuda_time_us": 397.3129999999819,
+          "self_cpu_time_us": 1355.4419999999254,
+          "cpu_time_us": 2248.1539999999277
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul> >(int, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 112.28999999996813,
+          "cuda_time_us": 112.28999999996813,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::rsqrt",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 119.39000000001943,
+          "cuda_time_us": 119.39000000001943,
+          "self_cpu_time_us": 362.6339999999527,
+          "cpu_time_us": 616.3019999999642
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "operator_family": "other",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 119.39000000001943,
+          "cuda_time_us": 119.39000000001943,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 65,
+          "input_shapes": [],
+          "self_cuda_time_us": 197.9810000000016,
+          "cuda_time_us": 197.9810000000016,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+          "operator_family": "elementwise",
+          "count": 97,
+          "input_shapes": [],
+          "self_cuda_time_us": 226.28400000003148,
+          "cuda_time_us": 226.28400000003148,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::linear",
+          "operator_family": "gemm",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 11675.437000000149,
+          "self_cpu_time_us": 776.6580000000058,
+          "cpu_time_us": 13209.699999999957
+        },
+        {
+          "name": "aten::t",
+          "operator_family": "other",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 707.9990000000389,
+          "cpu_time_us": 1801.483000000003
+        },
+        {
+          "name": "aten::mm",
+          "operator_family": "gemm",
+          "count": 353,
+          "input_shapes": [],
+          "self_cuda_time_us": 11675.437000000149,
+          "cuda_time_us": 11675.437000000149,
+          "self_cpu_time_us": 5546.651000000034,
+          "cpu_time_us": 8242.731000000043
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+          "operator_family": "gemm",
+          "count": 96,
+          "input_shapes": [],
+          "self_cuda_time_us": 4430.078000000017,
+          "cuda_time_us": 4430.078000000017,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void gemv2T_kernel_val<int, int, __half, float, float, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>, float, float)",
+          "operator_family": "gemm",
+          "count": 19,
+          "input_shapes": [],
+          "self_cuda_time_us": 120.32300000000305,
+          "cuda_time_us": 120.32300000000305,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+          "operator_family": "gemm",
+          "count": 19,
+          "input_shapes": [],
+          "self_cuda_time_us": 58.8159999999998,
+          "cuda_time_us": 58.8159999999998,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+          "operator_family": "gemm",
+          "count": 91,
+          "input_shapes": [],
+          "self_cuda_time_us": 613.1580000000649,
+          "cuda_time_us": 613.1580000000649,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 3, 128, 1>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 179.7069999999867,
+          "cuda_time_us": 179.7069999999867,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+          "operator_family": "gemm",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 278.91699999998855,
+          "cuda_time_us": 278.91699999998855,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 128,
+          "input_shapes": [],
+          "self_cuda_time_us": 464.03700000002755,
+          "cuda_time_us": 464.03700000002755,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::neg",
+          "operator_family": "other",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 216.89800000000014,
+          "cuda_time_us": 216.89800000000014,
+          "self_cpu_time_us": 478.7829999999658,
+          "cpu_time_us": 829.3769999999795
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::neg_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#8}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+          "operator_family": "other",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 216.89800000000014,
+          "cuda_time_us": 216.89800000000014,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 64, 64>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 64, 64>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 321.4779999999928,
+          "cuda_time_us": 321.4779999999928,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array<char*, 3ul> >(int, at::native::CUDAFunctor_add<c10::Half>, std::array<char*, 3ul>)",
+          "operator_family": "elementwise",
+          "count": 128,
+          "input_shapes": [],
+          "self_cuda_time_us": 285.0230000000138,
+          "cuda_time_us": 285.0230000000138,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 128, 1>(at::native::(anonymous namespace)::OpaqueType<2u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int)",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 569.9880000000376,
+          "cuda_time_us": 569.9880000000376,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#10}::operator()() const::{lambda(c10::Half)#1} const&)::{lambda(int)#1})",
+          "operator_family": "data_movement",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 1060.679000000001,
+          "cuda_time_us": 1060.679000000001,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::scaled_dot_product_attention",
+          "operator_family": "sdpa",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 2301.7769999999846,
+          "self_cpu_time_us": 493.6030000000055,
+          "cpu_time_us": 4829.678999999996
+        },
+        {
+          "name": "aten::scalar_tensor",
+          "operator_family": "other",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 90.78599999998096,
+          "self_cpu_time_us": 142.48200000002817,
+          "cpu_time_us": 905.6649999999927
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<c10::Half>, std::array<char*, 1ul> >(int, at::native::FillFunctor<c10::Half>, std::array<char*, 1ul>)",
+          "operator_family": "other",
+          "count": 96,
+          "input_shapes": [],
+          "self_cuda_time_us": 148.291000000002,
+          "cuda_time_us": 148.291000000002,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::where",
+          "operator_family": "elementwise",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 137.37399999999525,
+          "cuda_time_us": 319.2919999999758,
+          "self_cpu_time_us": 489.85599999998703,
+          "cpu_time_us": 1823.4929999999868
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, c10::Half, c10::Half)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, c10::Half, c10::Half)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, c10::Half, c10::Half)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, c10::Half, c10::Half)#1} const&)::{lambda(int)#1})",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 137.37399999999525,
+          "cuda_time_us": 137.37399999999525,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::_scaled_dot_product_efficient_attention",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 1955.0560000000087,
+          "self_cpu_time_us": 265.3719999999985,
+          "cpu_time_us": 1336.757999999978
+        },
+        {
+          "name": "aten::_efficient_attention_forward",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 1955.0560000000087,
+          "cuda_time_us": 1955.0560000000087,
+          "self_cpu_time_us": 307.1339999999818,
+          "cpu_time_us": 848.7419999999902
+        },
+        {
+          "name": "cudaStreamIsCapturing",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 23.93499999998494,
+          "cpu_time_us": 23.93499999998494
+        },
+        {
+          "name": "cudaFuncSetAttribute",
+          "operator_family": "other",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 36.52100000002065,
+          "cpu_time_us": 36.52100000002065
+        },
+        {
+          "name": "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+          "operator_family": "sdpa",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 1955.0560000000087,
+          "cuda_time_us": 1955.0560000000087,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_128x64_ldg8_f2f_stages_64x4_tn",
+          "operator_family": "gemm",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 5200.670000000039,
+          "cuda_time_us": 5200.670000000039,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "aten::silu",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 91.42799999999988,
+          "cuda_time_us": 91.42799999999988,
+          "self_cpu_time_us": 278.03899999998066,
+          "cpu_time_us": 451.836999999985
+        },
+        {
+          "name": "void cublasLt::splitKreduce_kernel<32, 16, int, __half, __half, float, false, __half, __half, __half, true, false, false>(cublasLt::cublasSplitKParams<float>, __half const*, __half const*, __half*, __half*, float const*, float const*, __half const*, __half const*, __half*, void*, long, float*, int*, float*, float const*, float const*, float const*, float const*)",
+          "operator_family": "gemm",
+          "count": 64,
+          "input_shapes": [],
+          "self_cuda_time_us": 300.0000000000309,
+          "cuda_time_us": 300.0000000000309,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#5}::operator()() const::{lambda(c10::Half)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#5}::operator()() const::{lambda(c10::Half)#1}, std::array<char*, 2ul>)",
+          "operator_family": "elementwise",
+          "count": 32,
+          "input_shapes": [],
+          "self_cuda_time_us": 91.42799999999988,
+          "cuda_time_us": 91.42799999999988,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 2, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>, float, float)",
+          "operator_family": "gemm",
+          "count": 4,
+          "input_shapes": [],
+          "self_cuda_time_us": 15.394000000000233,
+          "cuda_time_us": 15.394000000000233,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 6, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+          "operator_family": "gemm",
+          "count": 12,
+          "input_shapes": [],
+          "self_cuda_time_us": 47.5170000000071,
+          "cuda_time_us": 47.5170000000071,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true, false, 5, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)",
+          "operator_family": "gemm",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 7.2629999999990105,
+          "cuda_time_us": 7.2629999999990105,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "cudaOccupancyMaxActiveBlocksPerMultiprocessor",
+          "operator_family": "elementwise",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 1.2930000000051223,
+          "cpu_time_us": 1.2930000000051223
+        },
+        {
+          "name": "ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+          "operator_family": "gemm",
+          "count": 1,
+          "input_shapes": [],
+          "self_cuda_time_us": 603.3009999999995,
+          "cuda_time_us": 603.3009999999995,
+          "self_cpu_time_us": 0.0,
+          "cpu_time_us": 0.0
+        },
+        {
+          "name": "cudaDeviceSynchronize",
+          "operator_family": "other",
+          "count": 2,
+          "input_shapes": [],
+          "self_cuda_time_us": 0.0,
+          "cuda_time_us": 0.0,
+          "self_cpu_time_us": 563.5420000000013,
+          "cpu_time_us": 563.5420000000013
+        }
+      ],
+      "profile": {
+        "batch": 1,
+        "context_len": 1024,
+        "decode_tokens": 1,
+        "mode": "single_token_with_cache"
+      }
+    }
+  }
+}
