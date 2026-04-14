@@ -1,0 +1,13 @@
+{
+  "variant": "palu",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "model_source": "results/palu_checkpoints/Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4-fisher_uniform-whiten-rb1",
+  "stages": [
+    "prefill",
+    "decode"
+  ],
+  "prefill_seq_len": 1024,
+  "decode_context_len": 1024,
+  "reconstruct_strategy": "per_group"
+}

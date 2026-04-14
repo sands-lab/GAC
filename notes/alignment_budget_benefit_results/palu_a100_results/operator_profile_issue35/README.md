@@ -16,6 +16,7 @@ when alignment changes real LLM inference latency, which operator family actuall
 - The deeper kernel-level explanation now lives in `gemm_root_cause_analysis.md`, with machine-readable bucket totals in `gemm_root_cause_summary.json`.
 - The optimization follow-up now lives in `inference_speed_optimization.md` and `inference_speed_optimization_summary.json`; decode-side GEMV micro-tuning still stays deprioritized.
 - The current code-path prototype for the completed dispatch-reduction follow-up now lives in `prefill_dispatch_reduction.md` and `prefill_dispatch_reduction_summary.json`; it verifies grouped reconstruction dispatch reduction and padding overhead, but is not a measured GPU speedup.
+- The runtime grouped-reconstruction follow-up publishes `prefill_dispatch_runtime_profile_summary.json` and `prefill_dispatch_runtime_profile.md`; use `slurm/run_palu_prefill_dispatch_profile.sbatch` to collect the `palu` vs `palu_grouped_bmm` comparison on a real A100 node.
 - The current offline profile-guided retuning follow-up now lives in `profile_guided_rank_retuning.md`, `profile_guided_rank_retuning_summary.json`, and `profile_guided_rank_retuning_config.json`; it preserves the simple aligned budget, lowers the proxy hardware penalty below the simple aligned baseline, and is still not a measured GPU speedup.
 - The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
 - `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
@@ -49,6 +50,22 @@ For local contract verification without a Slurm allocation or conda activation, 
 
 ```bash
 bash slurm/run_llm_operator_profile.sbatch --dry-run --skip-env-setup
+```
+
+For the grouped-runtime dispatch follow-up built from issue40's prototype, use:
+
+```bash
+sbatch slurm/run_palu_prefill_dispatch_profile.sbatch
+```
+
+Useful overrides:
+
+```bash
+bash slurm/run_palu_prefill_dispatch_profile.sbatch \
+  --dry-run \
+  --skip-env-setup \
+  --output-root results/issue45-palu-dispatch-slurm-results/runtime_profiles \
+  --bundle-output notes/alignment_budget_benefit_results/palu_a100_results/operator_profile_issue35
 ```
 
 The batch entrypoint temporarily switches from `set -u` to `set +u` around
@@ -117,6 +134,9 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 - `inference_speed_optimization.md`: human-readable follow-up note translating the tracked summaries into a concrete optimization order for future implementation work.
 - `prefill_dispatch_reduction_summary.json`: machine-readable grouped-reconstruction prototype summary, including checkpoint dispatch counts, reduction factors, and padding-overhead tradeoffs.
 - `prefill_dispatch_reduction.md`: human-readable note for the grouped `HeadwiseLowRankModule` reconstruction prototype; this is a code-path artifact, not a measured GPU speedup.
+- `prefill_dispatch_runtime_profile_summary.json`: machine-readable runtime comparison between `palu` and `palu_grouped_bmm`, including stage-level deltas, dispatch-share changes, and root-cause bucket comparisons.
+- `prefill_dispatch_runtime_profile.md`: human-readable analysis for the runtime grouped-reconstruction follow-up collected via `slurm/run_palu_prefill_dispatch_profile.sbatch`.
+- `dispatch_runtime_palu/` and `dispatch_runtime_grouped_bmm/`: copied `raw/config/summary/env` payloads for the real runtime follow-up, kept separate so the original issue35 `baseline/palu/aligned_gac` contract does not get overwritten.
 - `profile_guided_rank_retuning_summary.json`: machine-readable summary of the budget-preserving profile-guided retuning pass, including base / simple-aligned / retuned comparisons and movement deltas.
 - `profile_guided_rank_retuning.md`: human-readable note for the offline profile-guided retuning pass; this is still not a measured GPU speedup.
 - `profile_guided_rank_retuning_config.json`: deterministic PaLU `head_wise_ranks` candidate emitted by the retuning analyzer for follow-up recompression or profiling.

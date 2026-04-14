@@ -137,6 +137,15 @@ def load_variant_model(args: argparse.Namespace, torch_dtype: torch.dtype):
             baseline_id=args.baseline_model_id,
         )
         source = str(palu_dir)
+    elif args.variant == "palu_grouped_bmm":
+        model, tokenizer, palu_dir = load_palu_model(
+            device=args.device,
+            torch_dtype=torch_dtype,
+            pattern=args.palu_pattern,
+            baseline_id=args.baseline_model_id,
+            reconstruct_strategy="grouped_bmm",
+        )
+        source = f"{palu_dir}::grouped_bmm"
     elif args.variant == "aligned_gac":
         model, tokenizer, palu_dir = load_palu_model(
             device=args.device,
@@ -263,9 +272,14 @@ def build_config(args: argparse.Namespace, source: str) -> Dict[str, Any]:
         "decode_context_len": args.decode_context_len,
         "warmup": args.warmup,
         "model_source": source,
-        "palu_pattern": args.palu_pattern if args.variant == "palu" else None,
+        "palu_pattern": args.palu_pattern if args.variant in {"palu", "palu_grouped_bmm"} else None,
         "palu_aligned_pattern": (
             args.palu_aligned_pattern if args.variant == "aligned_gac" else None
+        ),
+        "reconstruct_strategy": (
+            "grouped_bmm" if args.variant == "palu_grouped_bmm"
+            else "per_group" if args.variant in {"palu", "aligned_gac"}
+            else None
         ),
     }
 
@@ -275,7 +289,7 @@ def main() -> None:
     parser.add_argument(
         "--variant",
         required=True,
-        choices=["baseline", "palu", "aligned_gac"],
+        choices=["baseline", "palu", "palu_grouped_bmm", "aligned_gac"],
     )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")

@@ -5,7 +5,7 @@ Uses the checkpoint's registered config/model type to resolve the right PaLU arc
 import glob
 import sys
 from pathlib import Path
-from typing import Tuple
+from typing import Iterable, Tuple
 
 import torch
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
@@ -27,6 +27,29 @@ DEFAULT_BASELINE_IDS = {
     "qwen2": "Qwen/Qwen2-7B-Instruct",
     "paluqwen2": "Qwen/Qwen2-7B-Instruct",
 }
+
+
+def set_palu_reconstruct_strategy(
+    model: torch.nn.Module,
+    strategy: str,
+    allowed_suffixes: Iterable[str] = ("k_proj", "v_proj"),
+) -> list[str]:
+    """Apply a HeadwiseLowRankModule reconstruct strategy to attention-adjacent modules."""
+    configured = []
+    suffixes = tuple(allowed_suffixes)
+    for name, module in model.named_modules():
+        if not hasattr(module, "set_reconstruct_strategy"):
+            continue
+        if suffixes and not any(name.endswith(suffix) for suffix in suffixes):
+            continue
+        module.set_reconstruct_strategy(strategy)
+        configured.append(name)
+
+    if strategy != "per_group" and not configured:
+        raise ValueError(
+            f"No PaLU modules exposing set_reconstruct_strategy() matched suffixes {suffixes!r}."
+        )
+    return configured
 
 
 def default_palu_base_dir() -> Path:
@@ -83,6 +106,7 @@ def load_palu_model(
     base: str | Path = default_palu_base_dir(),
     pattern: str = "Meta-Llama-3-8B-Instruct_ratio-0.7_gs-4*",
     baseline_id: str | None = None,
+    reconstruct_strategy: str | None = None,
 ) -> Tuple[torch.nn.Module, AutoTokenizer, Path]:
     palu_dir = find_palu_dir(base=base, pattern=pattern)
 
@@ -98,4 +122,6 @@ def load_palu_model(
     # Use the matching baseline tokenizer to avoid tokenizer.json format issues in the PaLU directory.
     baseline_id = _resolve_baseline_id(config, palu_dir, baseline_id=baseline_id)
     tokenizer = AutoTokenizer.from_pretrained(baseline_id, use_fast=True)
+    if reconstruct_strategy is not None:
+        set_palu_reconstruct_strategy(model, reconstruct_strategy)
     return model, tokenizer, palu_dir
