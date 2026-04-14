@@ -1,0 +1,304 @@
+diff --git a/lm-evaluation-harness/lm_eval/tasks/__init__.py b/lm-evaluation-harness/lm_eval/tasks/__init__.py
+index 42e5890..e62f0c8 100644
+--- a/lm-evaluation-harness/lm_eval/tasks/__init__.py
++++ b/lm-evaluation-harness/lm_eval/tasks/__init__.py
+@@ -136,7 +136,7 @@ TASK_REGISTRY = {
+     "openbookqa": openbookqa.OpenBookQA,
+     "squad2": squad.SQuAD2,
+     "race": race.RACE,
+-    # "naturalqs": naturalqs.NaturalQs, # not implemented yet
++    "naturalqs": naturalqs.NaturalQs,
+     "headqa": headqa.HeadQAEsDeprecated,  # for backwards compat - headqa used to default to es
+     "headqa_es": headqa.HeadQAEs,
+     "headqa_en": headqa.HeadQAEn,
+diff --git a/lm-evaluation-harness/lm_eval/tasks/naturalqs.py b/lm-evaluation-harness/lm_eval/tasks/naturalqs.py
+index 29e7c8f..673798f 100644
+--- a/lm-evaluation-harness/lm_eval/tasks/naturalqs.py
++++ b/lm-evaluation-harness/lm_eval/tasks/naturalqs.py
+@@ -9,14 +9,19 @@ inclusion of real user questions, and the requirement that solutions should read
+ an entire page to find the answer, cause NQ to be a more realistic and challenging
+ task than prior QA datasets.
+ 
+-TODO: NaturalQS has a *really* large train set that huggingface just automatically
+-downloads even if you dont use it. we should try and only download the val set and
+-not even bother with the train set.
++This task intentionally loads only the validation split in this vendored harness.
++The Natural Questions training split is too large to make deterministic few-shot
++evaluation practical here, and the original TODO path would otherwise trigger a
++needless full train download even when only validation evaluation is required.
+ 
+ Homepage: https://ai.google.com/research/NaturalQuestions
+ """
+-from lm_eval.base import Task
+-from itertools import islice
++import datasets
++import re
++import string
++
++from lm_eval.base import Task, mean, rf
++from lm_eval.metrics import metric_max_over_ground_truths
+ 
+ 
+ _CITATION = """
+@@ -34,8 +39,20 @@ class NaturalQs(Task):
+     DATASET_PATH = "natural_questions"
+     DATASET_NAME = None
+ 
++    def download(self, data_dir=None, cache_dir=None, download_mode=None):
++        self.dataset = {
++            "validation": datasets.load_dataset(
++                path=self.DATASET_PATH,
++                name=self.DATASET_NAME,
++                data_dir=data_dir,
++                cache_dir=cache_dir,
++                download_mode=download_mode,
++                split="validation",
++            )
++        }
++
+     def has_training_docs(self):
+-        return True
++        return False
+ 
+     def has_validation_docs(self):
+         return True
+@@ -44,49 +61,161 @@ class NaturalQs(Task):
+         return False
+ 
+     def training_docs(self):
+-        # Cache training for faster few-shot.
+-        # Data is too large to fit in memory.
+-        if self._training_docs is None:
+-            self._training_docs = list(self.dataset["train"])
+-        return self._training_docs
++        return []
+ 
+     def validation_docs(self):
+         return self.dataset["validation"]
+ 
+-    def fewshot_examples(self, k, rnd):
+-        # Data is too large to fit in memory. We just sample from the first bit.
+-        if self._training_docs is None:
+-            self._training_docs = list(islice(self.training_docs(), 0, 100000))
+-
+-        return rnd.sample(self._training_docs, k)
+-
+     def doc_to_text(self, doc):
+-        return "Q: " + doc["question"]["text"] + "\n\n" + "A:"
++        return "Q: " + self._question_text(doc) + "\n\nA:"
+ 
+     def should_decontaminate(self):
+         return True
+ 
+     def doc_to_decontamination_query(self, doc):
+-        return doc["question"]["text"]
++        return self._question_text(doc)
+ 
+     def doc_to_target(self, doc):
+-        # There's a short answer and a long answer. Based on the paper, I'm using the long answer.
+-        # short_answer = doc["annotations"]["short_answers"][0]["text"]
+-        long_answer_start = doc["annotations"]["long_answer"][0]["start_token"]
+-        long_answer_end = doc["annotations"]["long_answer"][0]["end_token"]
+-        long_answer_span = doc["document"]["tokens"]["token"][
+-            long_answer_start:long_answer_end
+-        ]
+-        long_answer_is_html = doc["document"]["tokens"]["is_html"][
+-            long_answer_start:long_answer_end
+-        ]
+-        long_answer_chars = [
+-            tok
+-            for (tok, is_html) in zip(long_answer_span, long_answer_is_html)
+-            if not is_html
++        return " " + self.answer_texts(doc)[0]
++
++    @staticmethod
++    def _question_text(doc):
++        question = doc["question"]
++        if isinstance(question, dict):
++            return question["text"]
++        return question
++
++    @staticmethod
++    def _normalize_answer(text):
++        def remove_articles(value):
++            return re.sub(r"\b(a|an|the)\b", " ", value)
++
++        def white_space_fix(value):
++            return " ".join(value.split())
++
++        def remove_punc(value):
++            exclude = set(string.punctuation)
++            return "".join(ch for ch in value if ch not in exclude)
++
++        return white_space_fix(remove_articles(remove_punc(text.lower())))
++
++    @classmethod
++    def _compute_exact(cls, prediction, ground_truth):
++        return float(
++            cls._normalize_answer(prediction) == cls._normalize_answer(ground_truth)
++        )
++
++    @classmethod
++    def _compute_f1(cls, prediction, ground_truth):
++        gold_tokens = cls._normalize_answer(ground_truth).split()
++        pred_tokens = cls._normalize_answer(prediction).split()
++        common = set(gold_tokens) & set(pred_tokens)
++        num_same = sum(
++            min(gold_tokens.count(token), pred_tokens.count(token)) for token in common
++        )
++
++        if not gold_tokens and not pred_tokens:
++            return 1.0
++        if not gold_tokens or not pred_tokens or num_same == 0:
++            return 0.0
++
++        precision = num_same / len(pred_tokens)
++        recall = num_same / len(gold_tokens)
++        return 2 * precision * recall / (precision + recall)
++
++    @staticmethod
++    def _sequence_len(value):
++        if isinstance(value, list):
++            return len(value)
++        if isinstance(value, dict):
++            for nested in value.values():
++                length = NaturalQs._sequence_len(nested)
++                if length is not None:
++                    return length
++        return None
++
++    @staticmethod
++    def _index_nested(value, index):
++        if isinstance(value, list):
++            if index >= len(value):
++                return None
++            return value[index]
++        if isinstance(value, dict):
++            return {
++                key: NaturalQs._index_nested(nested, index)
++                for key, nested in value.items()
++            }
++        return value
++
++    @classmethod
++    def _annotation_items(cls, doc):
++        annotations = doc.get("annotations", {})
++        if isinstance(annotations, list):
++            return annotations
++        if isinstance(annotations, dict):
++            count = cls._sequence_len(annotations)
++            if count is None:
++                return [annotations]
++            return [cls._index_nested(annotations, idx) for idx in range(count)]
++        return []
++
++    @classmethod
++    def _short_answer_items(cls, annotation):
++        short_answers = annotation.get("short_answers", [])
++        if isinstance(short_answers, list):
++            return short_answers
++        if isinstance(short_answers, dict):
++            count = cls._sequence_len(short_answers)
++            if count is None:
++                return [short_answers]
++            return [cls._index_nested(short_answers, idx) for idx in range(count)]
++        return []
++
++    @staticmethod
++    def _span_text(doc, span):
++        if not isinstance(span, dict):
++            return ""
++
++        start_token = span.get("start_token", -1)
++        end_token = span.get("end_token", -1)
++        if start_token is None or end_token is None or start_token < 0:
++            return ""
++        if end_token <= start_token:
++            return ""
++
++        tokens = doc["document"]["tokens"]["token"][start_token:end_token]
++        is_html = doc["document"]["tokens"]["is_html"][start_token:end_token]
++        text_tokens = [
++            token for token, html_flag in zip(tokens, is_html) if not html_flag
+         ]
+-        long_answer = " ".join(long_answer_chars)
+-        return long_answer  # Replace with short_answer[0] for short answer
++        return " ".join(text_tokens).strip()
++
++    @classmethod
++    def answer_texts(cls, doc):
++        answers = []
++
++        for annotation in cls._annotation_items(doc):
++            for short_answer in cls._short_answer_items(annotation):
++                short_text = cls._span_text(doc, short_answer)
++                if short_text and short_text not in answers:
++                    answers.append(short_text)
++
++            long_text = cls._span_text(doc, annotation.get("long_answer", {}))
++            if long_text and long_text not in answers:
++                answers.append(long_text)
++
++        return answers or ["unanswerable"]
++
++    @classmethod
++    def compute_scores(cls, gold_answers, prediction):
++        return {
++            "em": metric_max_over_ground_truths(
++                cls._compute_exact, prediction, gold_answers
++            ),
++            "f1": metric_max_over_ground_truths(
++                cls._compute_f1, prediction, gold_answers
++            ),
++        }
+ 
+     def construct_requests(self, doc, ctx):
+         """Uses RequestFactory to construct Requests and returns an iterable of
+@@ -99,8 +228,7 @@ class NaturalQs(Task):
+             language description, as well as the few shot examples, and the question
+             part of the document for `doc`.
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return rf.greedy_until(ctx, {"until": ["\n"]})
+ 
+     def process_results(self, doc, results):
+         """Take a single document and the LM results and evaluates, returning a
+@@ -112,8 +240,12 @@ class NaturalQs(Task):
+         :param results:
+             The results of the requests created in construct_requests.
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        prediction = results[0].strip().split("\n")[0]
++        scores = self.compute_scores(self.answer_texts(doc), prediction)
++        return {
++            "f1": scores["f1"],
++            "em": scores["em"],
++        }
+ 
+     def aggregation(self):
+         """
+@@ -121,8 +253,10 @@ class NaturalQs(Task):
+             A dictionary where keys are the names of submetrics and values are
+             functions that aggregate a list of metrics
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return {
++            "f1": mean,
++            "em": mean,
++        }
+ 
+     def higher_is_better(self):
+         """
+@@ -130,5 +264,7 @@ class NaturalQs(Task):
+             A dictionary where keys are the names of submetrics and values are
+             whether a higher value of the submetric is better
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return {
++            "f1": True,
++            "em": True,
++        }
