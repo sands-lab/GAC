@@ -18,6 +18,7 @@ when alignment changes real LLM inference latency, which operator family actuall
 - The current code-path prototype for the completed dispatch-reduction follow-up now lives in `prefill_dispatch_reduction.md` and `prefill_dispatch_reduction_summary.json`; it verifies grouped reconstruction dispatch reduction and padding overhead, but is not a measured GPU speedup.
 - The runtime grouped-reconstruction follow-up publishes `prefill_dispatch_runtime_profile_summary.json` and `prefill_dispatch_runtime_profile.md`; use `slurm/run_palu_prefill_dispatch_profile.sbatch` to collect the `palu` vs `palu_grouped_bmm` comparison on a real A100 node.
 - The current offline profile-guided retuning follow-up now lives in `profile_guided_rank_retuning.md`, `profile_guided_rank_retuning_summary.json`, and `profile_guided_rank_retuning_config.json`; it preserves the simple aligned budget, lowers the proxy hardware penalty below the simple aligned baseline, and is still not a measured GPU speedup.
+- The current aligned-GEMM gap bridge now lives in `aligned_gemm_inference_gap_summary.json` and `aligned_gemm_inference_gap.md`; it connects the aligned root-cause summary with the grouped-runtime follow-up to explain where the recovered GEMM time is still getting given back.
 - The current result is directional rather than dramatic: `aligned_gac` recovers `1.28 ms / 0.71%` in `prefill` and `0.20 ms / 0.55%` in `decode` versus `palu`, and the recovered family is `gemm` in both stages.
 - `aligned_gac` still remains about `3.1%` behind `baseline` in both `prefill` and `decode`, so the current alignment closes only part of the compressed-model gap.
 - The root-cause follow-up shows why the cliff is muted in full inference: prefill is still dispatch-heavy, the `align1/align2` kernel tail is only a few milliseconds, decode is dominated by a small `gemv` tail, and the coarse prefill GEMM view also contains flash-attention leakage.
@@ -140,6 +141,8 @@ python3 scripts/publish_llm_inference_operator_profile_bundle.py \
 - `profile_guided_rank_retuning_summary.json`: machine-readable summary of the budget-preserving profile-guided retuning pass, including base / simple-aligned / retuned comparisons and movement deltas.
 - `profile_guided_rank_retuning.md`: human-readable note for the offline profile-guided retuning pass; this is still not a measured GPU speedup.
 - `profile_guided_rank_retuning_config.json`: deterministic PaLU `head_wise_ranks` candidate emitted by the retuning analyzer for follow-up recompression or profiling.
+- `aligned_gemm_inference_gap_summary.json`: machine-readable bridge between the aligned root-cause summary and the grouped-runtime sidecar summary, highlighting where recovered GEMM time is still given back.
+- `aligned_gemm_inference_gap.md`: human-readable explanation of why selected-view GEMM gains still fail to turn into a large end-to-end win.
 - `source_manifest.json`: provenance index for the three source run directories and copied `raw/config/summary/env` files.
 - `submission_status.json`: latest tracked Slurm submission status, including the rerun job id, observed outputs, and where to find the final tracked bundle.
 
