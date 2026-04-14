@@ -1,0 +1,134 @@
+diff --git a/lm-evaluation-harness/lm_eval/tasks/__init__.py b/lm-evaluation-harness/lm_eval/tasks/__init__.py
+index 42e5890..0bc7b3e 100644
+--- a/lm-evaluation-harness/lm_eval/tasks/__init__.py
++++ b/lm-evaluation-harness/lm_eval/tasks/__init__.py
+@@ -129,7 +129,7 @@ TASK_REGISTRY = {
+     "triviaqa": triviaqa.TriviaQA,
+     "arc_easy": arc.ARCEasy,
+     "arc_challenge": arc.ARCChallenge,
+-    # "quac": quac.QuAC, # not implemented yet
++    "quac": quac.QuAC,
+     "logiqa": logiqa.LogiQA,
+     "hellaswag": hellaswag.HellaSwag,
+     "swag": swag.SWAG,
+diff --git a/lm-evaluation-harness/lm_eval/tasks/quac.py b/lm-evaluation-harness/lm_eval/tasks/quac.py
+index d37384f..768021d 100644
+--- a/lm-evaluation-harness/lm_eval/tasks/quac.py
++++ b/lm-evaluation-harness/lm_eval/tasks/quac.py
+@@ -11,8 +11,10 @@ a teacher who answers the questions by providing short excerpts (spans) from the
+ Homepage: https://quac.ai/
+ """
+ import inspect
++import re
++import string
+ import lm_eval.datasets.quac.quac
+-from lm_eval.base import Task
++from lm_eval.base import Task, rf, mean
+ 
+ 
+ _CITATION = """
+@@ -25,6 +27,40 @@ _CITATION = """
+ """
+ 
+ 
++def _normalize_answer(text):
++    def remove_articles(value):
++        return re.sub(r"\b(a|an|the)\b", " ", value)
++
++    def white_space_fix(value):
++        return " ".join(value.split())
++
++    def remove_punc(value):
++        exclude = set(string.punctuation)
++        return "".join(ch for ch in value if ch not in exclude)
++
++    return white_space_fix(remove_articles(remove_punc(text.lower())))
++
++
++def _compute_exact(gold, pred):
++    return float(_normalize_answer(gold) == _normalize_answer(pred))
++
++
++def _compute_f1(gold, pred):
++    gold_tokens = _normalize_answer(gold).split()
++    pred_tokens = _normalize_answer(pred).split()
++    common = set(gold_tokens) & set(pred_tokens)
++    num_same = sum(min(gold_tokens.count(tok), pred_tokens.count(tok)) for tok in common)
++
++    if not gold_tokens and not pred_tokens:
++        return 1.0
++    if not gold_tokens or not pred_tokens or num_same == 0:
++        return 0.0
++
++    precision = num_same / len(pred_tokens)
++    recall = num_same / len(gold_tokens)
++    return 2 * precision * recall / (precision + recall)
++
++
+ class QuAC(Task):
+     VERSION = 0
+     DATASET_PATH = inspect.getfile(lm_eval.datasets.quac.quac)
+@@ -75,7 +111,14 @@ class QuAC(Task):
+         return doc["paragraph"]
+ 
+     def doc_to_target(self, doc):
+-        return doc["answer"]
++        return " " + doc["answer"]
++
++    @staticmethod
++    def compute_scores(gold, pred):
++        return {
++            "em": _compute_exact(gold, pred),
++            "f1": _compute_f1(gold, pred),
++        }
+ 
+     def construct_requests(self, doc, ctx):
+         """Uses RequestFactory to construct Requests and returns an iterable of
+@@ -88,8 +131,7 @@ class QuAC(Task):
+             language description, as well as the few shot examples, and the question
+             part of the document for `doc`.
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return rf.greedy_until(ctx, {"until": ["\n"]})
+ 
+     def process_results(self, doc, results):
+         """Take a single document and the LM results and evaluates, returning a
+@@ -101,8 +143,12 @@ class QuAC(Task):
+         :param results:
+             The results of the requests created in construct_requests.
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        pred = results[0].strip().split("\n")[0]
++        scores = self.compute_scores(doc["answer"], pred)
++        return {
++            "f1": scores["f1"],
++            "em": scores["em"],
++        }
+ 
+     def aggregation(self):
+         """
+@@ -110,8 +156,10 @@ class QuAC(Task):
+             A dictionary where keys are the names of submetrics and values are
+             functions that aggregate a list of metrics
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return {
++            "f1": mean,
++            "em": mean,
++        }
+ 
+     def higher_is_better(self):
+         """
+@@ -119,5 +167,7 @@ class QuAC(Task):
+             A dictionary where keys are the names of submetrics and values are
+             whether a higher value of the submetric is better
+         """
+-        # TODO: implement evaluation.
+-        raise NotImplementedError("Evaluation not implemented")
++        return {
++            "f1": True,
++            "em": True,
++        }
