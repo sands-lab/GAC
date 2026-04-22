@@ -70,7 +70,7 @@
 
 \author{Qilong Pan}
 \affiliation{
-  \institution{HUMAIN}
+  \institution{KAUST}
   \country{}
 }
 
@@ -618,7 +618,6 @@ Extending to more varieties (larger scales, MoE architectures, etc.) would test 
 Newer GPUs such as Blackwell impose stricter alignment~\citep{nvidia_tensor_core_evolution2024,nvidia_hopper_whitepaper,flashattention3};
 Specialized devices, e.g., DGX Spark and Jetson Nano, add further constraints.
 
-
 \noindent \textbf{Latency coverage.}
 We report prefill latency at batch${=}1$, $S{=}1024$.
 Covering a wider range of batch sizes and sequence lengths, as well as autoregressive decode latency, would give a fuller performance picture.
@@ -628,10 +627,17 @@ Our benchmarks use vanilla HuggingFace PyTorch models without any inference-time
 Validating GAC under optimized serving engines (e.g., vLLM~\citep{vllm}, TensorRT~\citep{tensorrt}) and DL compilers (e.g., TVM) is needed to confirm alignment gains carry over to production stacks.
 
 
+\clearpage
+%% ===========================================
+%% ACKNOWLEDGEMENT
+%% ===========================================
+\section*{Acknowledgement}
+Generative AI tools were used to assist with drafting and editing portions of the manuscript, supporting aspects of experimental execution, and generating figures. All content, results, and interpretations were thoroughly reviewed and validated by the authors.
+
 %% ===========================================
 %% REFERENCES
 %% ===========================================
-\clearpage
+
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
